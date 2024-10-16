@@ -21,7 +21,7 @@ CREATE TABLE item_cardapio (
     id_item SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     tipo VARCHAR(50) NOT NULL CHECK (tipo IN ('Bebida', 'Prato')),
-    preco DECIMAL(10, 2) NOT NULL
+    preco DECIMAL(10, 2) NOT NULL CHECK (preco >= 0)
 );
 
 -- Criação da tabela de pedidos
