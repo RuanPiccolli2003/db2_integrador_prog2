@@ -1,42 +1,27 @@
-import { View, Text} from "react-native-web";
-import { StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Coffee from './Components/coffee';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View } from 'react-native';
 
-function Pagina_Home(){
-  return(
-<View style={styles.NavigationContainer}>
-    
-</View>
-  ) 
+
+const getFullName = (FirstName, secondName, ThirdName) => {
+  return firstName + '' + secondName + ' ' + ThirdName
 }
 
-const Stack = createNativeStackNavigator()
 
-function App(){
-  return(
+export default function App() {
+  return (
+    <Coffee>
 
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Tela Principal" component={Pagina_Home}/>
-      </Stack.Navigator>
-    </NavigationContainer>
-
-  )
+    </Coffee>
+   
+  );
 }
-
 
 const styles = StyleSheet.create({
-  NavigationContainer: {
-    flex: 1,
-    backgroundColor: '#DE7CC6',
-    alignItems: 'center',
+  container: {
+    flex: 5,
+    backgroundColor: '#fff',
+    alignItems: 'right',
     justifyContent: 'center',
   },
 });
-
-
-
-
-
-export default App
