@@ -7,12 +7,27 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 function Pagina_Home(){
   return(
     <View style={styles.NavigationContainer}>
-    </View>
+	<div>
+        	<FormularioTexto label="Nome" labelClass="form-label" inputType="text" inputId="name" inputName="name" inputClass="form-control" inputRequired="true" />
+        	<FormularioTexto label="E-mail" labelClass="form-label" inputType="email" inputId="email" inputName="email" inputClass="form-control" inputRequired="true" />
+        	<FormularioTexto label="Senha" labelClass="form-label" inputType="password" inputId="password" inputName="password" inputClass="form-control" inputRequired="true" />
+	</div>
+</View>
   );
 };
 
 const Stack = createNativeStackNavigator();
 
+function FormularioTexto({label,labelClass,inputType,inputId,inputName,inputClass,inputRequired}){
+  return (
+    <>
+      <div class="form-group">
+        <label class={labelClass} for={inputId}>{label}</label><br/>
+        <input type={inputType} class={inputClass} id={inputId} name={inputName} required={inputRequired} />
+      </div>
+    </>
+  )
+}
 
 export default function App() {
   return (
