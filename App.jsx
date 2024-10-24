@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';import { Input } from 'react-native-elements';
 import { Pressable } from "react-native";
+import paginaPrincipal from "./Telas/MenuPrincipal";
 
 
 
@@ -30,6 +31,7 @@ function Pagina_Home(){
     <Button color="crimson"
     style={styles.botao}
     title="Pressione"
+    onPress={() => navigation.navigate('paginaPrincipal')}
     />
     </View>
    
@@ -39,7 +41,6 @@ function Pagina_Home(){
 }
 
 const Stack = createNativeStackNavigator()
-const Drawer = createDrawerNavigator();
 
 function App(){
   return(
@@ -50,6 +51,26 @@ function App(){
       </Stack.Navigator>
     </NavigationContainer>
   )
+}
+
+const minhaStack = () =>{
+  return(
+
+<NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="principal"
+          component={paginaPrincipal}
+          options={{title: 'Welcome'}}
+        />
+        <Stack.Screen name="Profile" component={paginaPrincipal} />
+      </Stack.Navigator>
+    </NavigationContainer>
+
+
+  )
+
+
 }
 
 
@@ -89,7 +110,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     padding:10,
     
-    
 
   },
 
@@ -100,29 +120,6 @@ const styles = StyleSheet.create({
 
 
 });
-
-function MyDrawer() {
-  return (
-  
-    <Drawer.Navigator>
-      <Drawer.Screen name="Feed" component={Feed} />
-      <Drawer.Screen name="Article" component={Article} />
-    </Drawer.Navigator>
-  );
-}
-
-function barra_navegacao(){
-  return(
-<NavigationContainer>
-<Stack.Navigator>
-      <Stack.Screen name="Tela Principal" component={Pagina_Home}/>
-</Stack.Navigator>
-</NavigationContainer>
-
-  )
-
-}
-
 
 
 
