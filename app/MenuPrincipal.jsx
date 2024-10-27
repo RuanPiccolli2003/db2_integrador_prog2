@@ -1,12 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from "@react-navigation/native";
-import { Button } from 'react-native-web';
-import styles from './Estilos';
+import styles from './Design/Estilos';
 import Stack from "../Export/stack";
 import Drawer from '../Export/drawer';
-
+import Cadastro_itens from './CadastroItens';
+import Cadastro_Usuarios from './CadastroUsuarios';
+import Relatorio_Diaria from './RelatorioDiaria';
+import Envio_Ordens from './EnviarOrdens';
+import Abrir_Comanda from './AbrirComanda';
+import Adicionar_itens_comand from './AdicionarItensComanda';
+import fechamento_comanda from './FecharComanda';
 
 //pagina do menu principal
 
@@ -15,9 +19,9 @@ import Drawer from '../Export/drawer';
 
 function Home() {
   return (
-    <View style={styles.NavigationContainer}>
+    <View>
       <View>
-
+          
       </View>
       <StatusBar style="auto" />
     </View>
@@ -28,13 +32,30 @@ function Home() {
 
 export function App_Menu_Principal(){
     return(
+      
       <NavigationContainer style={styles.head}>
-        <Drawer.Navigator initialRouteName='Home'>
+        <Drawer.Navigator 
+        screenOptions={{
+        drawerStyle: {
+          backgroundColor: 'white',
+          borderRadius: 10,
+        }
+        }}  
+        initialRouteName='Home'>
 
         <Drawer.Screen name='Menu Principal' component={Home}/>
+        <Drawer.Screen name='Cadastro de Usuarios' component={Cadastro_Usuarios}/>
+        <Drawer.Screen name='Cadastro de Itens' component={Cadastro_itens}/>
+        <Drawer.Screen name='Relatorios' component={Relatorio_Diaria}/>
+        <Drawer.Screen name='Envio de ordens' component={Envio_Ordens}/>
+        <Drawer.Screen name='Abertura de comandas' component={Abrir_Comanda}/>
+        <Drawer.Screen name='adição de intens em comandas' component={Adicionar_itens_comand}/>
+        <Drawer.Screen name='fechar comandas' component={fechamento_comanda}/>
+        
         </Drawer.Navigator>
         
       </NavigationContainer>
+     
     )
   }
   

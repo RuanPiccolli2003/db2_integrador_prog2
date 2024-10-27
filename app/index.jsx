@@ -2,13 +2,11 @@
 import { View, Text, Button} from "react-native-web";
 import { StyleSheet,TextInput } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Input } from 'react-native-elements';
 import { Pressable } from "react-native";
 import Home from "./MenuPrincipal";
 import { Link,router } from "expo-router";
-import styles from "./Estilos";
+import styles from "./Design/Estilos";
 import Stack from "../Export/stack";
 
 //pagina de login

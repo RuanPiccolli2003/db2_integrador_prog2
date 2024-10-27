@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E9967A',
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 10
   },
 
   InputArea:{
