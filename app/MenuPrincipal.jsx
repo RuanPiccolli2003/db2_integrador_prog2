@@ -4,13 +4,21 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from "@react-navigation/native";
 import { Button } from 'react-native-web';
 import styles from './Estilos';
+import Stack from "../Export/stack";
+import Drawer from '../Export/drawer';
+
+
+//pagina do menu principal
+
+
 
 
 function Home() {
   return (
-    <View style={styles.container}>
-      <Text>Menu Principal</Text>
-    
+    <View style={styles.NavigationContainer}>
+      <View>
+
+      </View>
       <StatusBar style="auto" />
     </View>
   );
@@ -18,17 +26,18 @@ function Home() {
 
 
 
-function App(){
+export function App_Menu_Principal(){
     return(
       <NavigationContainer style={styles.head}>
-        <Stack.Navigator>
-          <Stack.Screen name="  " component={Home}/>
-         
-        </Stack.Navigator>
+        <Drawer.Navigator initialRouteName='Home'>
+
+        <Drawer.Screen name='Menu Principal' component={Home}/>
+        </Drawer.Navigator>
+        
       </NavigationContainer>
     )
   }
   
 
 
-export default Home
+export default App_Menu_Principal

@@ -3,15 +3,20 @@ import { View, Text, Button} from "react-native-web";
 import { StyleSheet,TextInput } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';import { Input } from 'react-native-elements';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Input } from 'react-native-elements';
 import { Pressable } from "react-native";
 import Home from "./MenuPrincipal";
 import { Link,router } from "expo-router";
 import styles from "./Estilos";
+import Stack from "../Export/stack";
+
+//pagina de login
+//precisa validar a senha e deixar como tipo "password"
 
 
 
-function Pagina_Home(){
+function Login(){
   function navegar(){
     router.replace("/MenuPrincipal")
 
@@ -40,7 +45,7 @@ function Pagina_Home(){
     /> 
     <Button color="crimson"
     style={styles.botao}
-    title="Pressione"
+    title="Entrar"
     onPress={navegar}
     />
     </View>
@@ -50,15 +55,14 @@ function Pagina_Home(){
   ) 
 }
 
-const Stack = createNativeStackNavigator()
 
-function App(){
+
+function App_Login(){
   return(
-    <NavigationContainer style={styles.head}>
-
+    <NavigationContainer>
       <Stack.Navigator>
         
-        <Stack.Screen name="  " component={Pagina_Home}/>
+        <Stack.Screen name="Login" component={Login}/>
         
        
       </Stack.Navigator>
@@ -72,4 +76,4 @@ function App(){
 
 
 
-export default App
+export default App_Login

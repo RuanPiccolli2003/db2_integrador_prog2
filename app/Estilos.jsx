@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
 
+//estilo em que todas as paginas irão ter
 
 const styles = StyleSheet.create({
   NavigationContainer: {
     flex: 1,
-    backgroundColor: '#BE5B5B',
+    backgroundColor: '#E9967A',
     alignItems: 'center',
     justifyContent: 'center',
   },
