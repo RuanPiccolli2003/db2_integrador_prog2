@@ -7,10 +7,19 @@ import { Pressable } from "react-native";
 import Home from "./MenuPrincipal";
 import { Link,router } from "expo-router";
 import styles from "./Design/Estilos";
-import Stack from "../Export/stack";
+import Stack from "./Export/stack";
 
 //pagina de login
 //precisa validar a senha e deixar como tipo "password"
+
+
+export const unstable_settings = {
+  // Ensure any route can link back to `/`
+  initialRouteName: 'index.jsx',
+
+
+  
+};
 
 
 
@@ -37,6 +46,7 @@ function Login(){
     />
 
     <TextInput
+    secureTextEntry={true}
     style={styles.Input2}
     placeholder="insira a sua senha"
     placeholderTextColor="grey"

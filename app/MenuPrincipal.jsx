@@ -2,8 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import styles from './Design/Estilos';
-import Stack from "../Export/stack";
-import Drawer from '../Export/drawer';
+import Stack from "./Export/stack";
+import Drawer from './Export/drawer';
 import Cadastro_itens from './CadastroItens';
 import Cadastro_Usuarios from './CadastroUsuarios';
 import Relatorio_Diaria from './RelatorioDiaria';
@@ -11,6 +11,7 @@ import Envio_Ordens from './EnviarOrdens';
 import Abrir_Comanda from './AbrirComanda';
 import Adicionar_itens_comand from './AdicionarItensComanda';
 import fechamento_comanda from './FecharComanda';
+import { Box, Button, NativeBaseProvider } from 'native-base';
 
 //pagina do menu principal
 
@@ -42,14 +43,16 @@ export function App_Menu_Principal(){
         }
         }}  
         initialRouteName='Home'>
-
+        
+       
         <Drawer.Screen name='Menu Principal' component={Home}/>
+       
         <Drawer.Screen name='Cadastro de Usuarios' component={Cadastro_Usuarios}/>
         <Drawer.Screen name='Cadastro de Itens' component={Cadastro_itens}/>
         <Drawer.Screen name='Relatorios' component={Relatorio_Diaria}/>
         <Drawer.Screen name='Envio de ordens' component={Envio_Ordens}/>
         <Drawer.Screen name='Abertura de comandas' component={Abrir_Comanda}/>
-        <Drawer.Screen name='adição de intens em comandas' component={Adicionar_itens_comand}/>
+        <Drawer.Screen name='adição de itens em comandas' component={Adicionar_itens_comand}/>
         <Drawer.Screen name='fechar comandas' component={fechamento_comanda}/>
         
         </Drawer.Navigator>
@@ -58,6 +61,9 @@ export function App_Menu_Principal(){
      
     )
   }
+  
+
+
   
 
 
