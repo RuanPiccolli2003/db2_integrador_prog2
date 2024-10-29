@@ -1,25 +1,19 @@
 
-import { View, Text, Button} from "react-native-web";
+import { View, Text} from "react-native-web";
 import { StyleSheet,TextInput } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { Input } from 'react-native-elements';
 import { Pressable } from "react-native";
 import Home from "./MenuPrincipal";
 import { Link,router } from "expo-router";
 import styles from "./Design/Estilos";
 import Stack from "./Export/stack";
+import {Box, Heading, NativeBaseProvider, VStack, Input, Button} from 'native-base';
 
 //pagina de login
 //precisa validar a senha e deixar como tipo "password"
 
 
-export const unstable_settings = {
-  // Ensure any route can link back to `/`
-  initialRouteName: 'index.jsx',
 
-
-  
-};
 
 
 
@@ -35,28 +29,46 @@ function Login(){
 
   
 <View style={styles.NavigationContainer}>
-  <View style={styles.InputArea}>
-   
 
-
-  <TextInput
-    style={styles.Input2}
-    placeholder="insira o nome do usuario"
-    placeholderTextColor="grey"
-    />
-
-    <TextInput
-    secureTextEntry={true}
-    style={styles.Input2}
-    placeholder="insira a sua senha"
-    placeholderTextColor="grey"
-    /> 
-    <Button color="crimson"
-    style={styles.botao}
-    title="Entrar"
-    onPress={navegar}
-    />
-    </View>
+            
+            <NativeBaseProvider>
+              <Heading margin={10}
+              alignContent={'center'}>
+                  Entrar
+              </Heading>
+              <Box alignItems="center">
+        <Input backgroundColor={'blue.100'}  focusOutlineColor={true} mx="3" placeholder="Digite o usuario" w="250%" h="50"
+        
+        />
+         
+  
+        <Input 
+        backgroundColor={'blue.100'}
+        secureTextEntry={true} 
+         mx="3" placeholder="criar senha" 
+         w="250%" h="50"
+          marginTop={5}
+          />
+  
+        <Input 
+        
+        backgroundColor={'blue.100'} 
+        secureTextEntry={'grey.100'}  
+        mx="3" placeholder="Digite a senha" w="250%" h="50" 
+        marginTop={5}
+        />
+        
+        <Button 
+        onPress={navegar}
+        m={5}
+        title="Submeter">
+          submeter
+        </Button>
+      </Box>
+      </NativeBaseProvider>
+  
+              
+          
    
 </View>
 

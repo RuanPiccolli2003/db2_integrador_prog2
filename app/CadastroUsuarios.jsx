@@ -1,5 +1,6 @@
 import { Text,View} from "react-native-web";
 import {Box, Heading, NativeBaseProvider, VStack, Input, Button} from "native-base"
+import styles from "./Design/Estilos";
 
 
 
@@ -7,13 +8,12 @@ import {Box, Heading, NativeBaseProvider, VStack, Input, Button} from "native-ba
 export default function Cadastro_Usuarios(){
     return(
         <View style={{flex: 1, alignItems: 'center',justifyContent: 'center'}}>
-            
           <NativeBaseProvider>
             <Heading margin={10}>
                 Cadastro
             </Heading>
             <Box alignItems="center">
-      <Input focusOutlineColor={true} mx="3" placeholder="nome completo do usuario" w="250%" h="50"
+      <Input mx="3" placeholder="nome completo do usuario" w="250%" h="50"
       borderColor={'grey'}
       />
        
