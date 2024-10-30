@@ -9,6 +9,7 @@ import styles from "./Design/Estilos";
 import Stack from "./Export/stack";
 import {Box, Heading, NativeBaseProvider, VStack, Input, Button} from 'native-base';
 
+
 //pagina de login
 //precisa validar a senha e deixar como tipo "password"
 
@@ -58,14 +59,25 @@ function Login(){
         marginTop={5}
         />
         
+      
         <Button 
+        bg={"red.500"}
+        width={100}
         onPress={navegar}
         m={5}
         title="Submeter">
           submeter
         </Button>
+        
+
+      Não possui uma conta <Link href={'/CadastroUsuarios'} >Cadastre-se</Link>
+      
       </Box>
+     
       </NativeBaseProvider>
+      
+  
+
   
               
           

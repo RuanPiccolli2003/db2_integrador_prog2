@@ -1,50 +1,106 @@
 import { Text,View} from "react-native-web";
-import {Box, Heading, NativeBaseProvider, VStack, Input, Button} from "native-base"
+import {Box, Heading, NativeBaseProvider, VStack, Input, Button,login} from "native-base"
 import styles from "./Design/Estilos";
-
+import { NavigationContainer } from "@react-navigation/native";
+import Stack from "./Export/stack";
+import Modal from "react-native-modal";
+import { StyleSheet,TextInput } from "react-native";
 
 
 //colocar o formulario para o cadastro de usuarios
 export default function Cadastro_Usuarios(){
+  
     return(
-        <View style={{flex: 1, alignItems: 'center',justifyContent: 'center'}}>
-          <NativeBaseProvider>
-            <Heading margin={10}>
-                Cadastro
-            </Heading>
-            <Box alignItems="center">
-      <Input mx="3" placeholder="nome completo do usuario" w="250%" h="50"
-      borderColor={'grey'}
-      />
-       
-
-      <Input  secureTextEntry={true} 
-       mx="3" placeholder="criar senha" 
-       w="250%" h="50"
-        marginTop={5}
-        borderColor={'grey'}/>
-
-      <Input secureTextEntry={'grey.100'}  
-      mx="3" placeholder="repita a senha" w="250%" h="50" 
-      marginTop={5}
-      borderColor={'grey'}/>
       
-      <Button m={5}>
-        Cadastrar
-      </Button>
-    </Box>
-    </NativeBaseProvider>
+      <NativeBaseProvider>
+        
+      <View styles={styles.view}
+>
+      
+        <Modal
+        h="50"
+        marginTop={10}
+        style={styles.container}
+        isVisible={true}
+        animationType="fade">
+        <Heading
+        margin={5}>
+  
+        Cadastrar Usuario
+       </Heading>
+      
+       
+        <Input
+        borderColor={'grey'}
+        h="50"
+        margin={5}
+        placeholder="Nome Completo"
+        w="50%"
+        marginTop={10}>
+        </Input>
+       
+        <Input 
+        borderColor={'grey'}
+        h="50"
+        padding={5}
+        margin={5}
+        placeholder="Senha"
+        w="45%"
+        marginTop={10}>
+        </Input>
 
-            
-        </View>
+        <Input 
+        borderColor={'grey'}
+        h="50"
+        padding={5}
+        margin={5}
+        placeholder="digite a senha novamente"
+        w="45%"
+        marginTop={10}
+        marginBottom={10}>
+        </Input>
 
 
+        <Input 
+        borderColor={'grey'}
+        h="50"
+        padding={5}
+        margin={5}
+        placeholder="Insira o seu emaiil"
+        w="45%"
+       >
+   
+        </Input>
 
+
+       
+       
+      </Modal>
+      
+  
+      </View>
+     </NativeBaseProvider>
+        
+       
 
     )
 
     
 }
+
+function App_cadUser(){
+  return(
+    <NavigationContainer>
+      <Stack.Navigator>
+        
+        <Stack.Screen name="Lasdasdasd" component={Cadastro_Usuarios}/>
+        
+       
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
+
 
 
 

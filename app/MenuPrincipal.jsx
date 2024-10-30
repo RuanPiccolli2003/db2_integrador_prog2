@@ -47,7 +47,7 @@ export function App_Menu_Principal(){
        
         <Drawer.Screen name='Menu Principal' component={Home}/>
        
-        <Drawer.Screen name='Cadastro de Usuarios' component={Cadastro_Usuarios}/>
+      
         <Drawer.Screen name='Cadastro de Itens' component={Cadastro_itens}/>
         <Drawer.Screen name='Relatorios' component={Relatorio_Diaria}/>
         <Drawer.Screen name='Envio de ordens' component={Envio_Ordens}/>
