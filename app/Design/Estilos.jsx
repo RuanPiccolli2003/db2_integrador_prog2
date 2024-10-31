@@ -1,4 +1,4 @@
-import { Card, Center, Container, Flex } from "native-base";
+import { Card, Center, Container, Flex, Row } from "native-base";
 import { StyleSheet } from "react-native";
 import { ScreenWidth } from "react-native-elements/dist/helpers";
 
@@ -12,32 +12,24 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     
   },
-  conteudo:{
-    flex: 1,
-    justifyContent: 'center',
-    alignItems:  'center',
-    alignContent: 'center',
-    
-  },
-  container:{
-    backgroundColor: "white",
-    borderRadius: 15,
-    justifyContent: "top",
-    alignItems: "left",
-    alignContent: "center",
-    
-  },
-  input:{
-    backgroundColor: "red"
 
-
+  formulario:{
+    width: "49%",
+    alignItems: "center",
+    justifyContent: "center"
   },
-
-  B_mod:{
   
-    width: "15%"
+  inp:{
+    
+    
+  },
+
+  visua:{
+  padding: "5",
+  alignItems: "center",
 
   }
+  
   
   
   
