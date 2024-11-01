@@ -8,7 +8,7 @@ export default function Adicionar_itens_comand(){
             <Text>adicionar itens em comandas</Text>
         </View>
 
-
+        
 
 
 

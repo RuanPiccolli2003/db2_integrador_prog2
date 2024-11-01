@@ -36,32 +36,33 @@ function Login(){
               <Heading margin={10}
               alignContent={'center'}>
                   Entrar
+                  
               </Heading>
               <Box alignItems="center">
-        <Input backgroundColor={'blue.100'}  focusOutlineColor={true} mx="3" placeholder="Digite o usuario" w="250%" h="50"
+          
+        <Input 
+       
+        placeholderTextColor={"black"}
+        backgroundColor={'blue.100'}  
+        focusOutlineColor={true} mx="3" 
+        placeholder="Digite o usuario" w="250%" h="50"
         
         />
          
   
         <Input 
-        backgroundColor={'blue.100'}
-        secureTextEntry={true} 
-         mx="3" placeholder="criar senha" 
-         w="250%" h="50"
-          marginTop={5}
-          />
-  
-        <Input 
         
+        placeholderTextColor={"black"}
         backgroundColor={'blue.100'} 
-        secureTextEntry={'grey.100'}  
-        mx="3" placeholder="Digite a senha" w="250%" h="50" 
+        secureTextEntry={true}  
+        mx="3" placeholder="Digite a senha"
+         w="250%" h="50" 
         marginTop={5}
         />
         
-      
+        
         <Button 
-       
+        
         bg={"red.500"}
         width={100}
         onPress={navegar}
@@ -69,7 +70,7 @@ function Login(){
         title="Submeter">
           submeter
         </Button>
-        
+       
 
       Não possui uma conta <Link href={'/CadastroUsuarios'} >Cadastre-se</Link>
       
@@ -92,14 +93,14 @@ function Login(){
 
 function App_Login(){
   return(
-    <NavigationContainer>
+    
       <Stack.Navigator>
         
         <Stack.Screen name="Login" component={Login}/>
         
        
       </Stack.Navigator>
-    </NavigationContainer>
+    
   )
 }
 

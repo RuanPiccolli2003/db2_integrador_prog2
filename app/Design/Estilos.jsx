@@ -14,28 +14,19 @@ const styles = StyleSheet.create({
   },
 
   formulario:{
-    width: "49%",
+    width: "100%",
     alignItems: "center",
     justifyContent: "center"
   },
   
-  inp:{
-    
-    
-  },
-
+  
+  
   visua:{
   padding: "5",
   alignItems: "center",
 
-  }
-  
-  
-  
-  
-  
+  },
 
-  
   
 
 

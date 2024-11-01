@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer } from "@react-navigation/native";
+import { Link, NavigationContainer } from "@react-navigation/native";
 import styles from './Design/Estilos';
 import Stack from "./Export/stack";
 import Drawer from './Export/drawer';
@@ -45,10 +45,10 @@ export function App_Menu_Principal(){
         initialRouteName='Home'>
         
        
-        <Drawer.Screen name='Menu Principal' component={Home}/>
+        <Drawer.Screen
+
+        name='Cadastro de Itens' component={Cadastro_itens}/>
        
-      
-        <Drawer.Screen name='Cadastro de Itens' component={Cadastro_itens}/>
         <Drawer.Screen name='Relatorios' component={Relatorio_Diaria}/>
         <Drawer.Screen name='Envio de ordens' component={Envio_Ordens}/>
         <Drawer.Screen name='Abertura de comandas' component={Abrir_Comanda}/>
