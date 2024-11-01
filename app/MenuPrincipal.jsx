@@ -34,7 +34,7 @@ function Home() {
 export function App_Menu_Principal(){
     return(
       
-      <NavigationContainer style={styles.head}>
+     
         <Drawer.Navigator 
         screenOptions={{
         drawerStyle: {
@@ -57,7 +57,7 @@ export function App_Menu_Principal(){
         
         </Drawer.Navigator>
         
-      </NavigationContainer>
+     
      
     )
   }

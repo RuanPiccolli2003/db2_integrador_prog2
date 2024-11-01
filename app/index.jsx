@@ -1,8 +1,7 @@
 
-import { View, Text} from "react-native-web";
+import { View, Text} from "react-native";
 import { StyleSheet,TextInput } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { Pressable } from "react-native";
 import Home from "./MenuPrincipal";
 import { Link,router } from "expo-router";
 import styles from "./Design/Estilos";

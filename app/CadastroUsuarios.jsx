@@ -1,9 +1,8 @@
-import { Text,View} from "react-native-web";
+import { Text,View} from "react-native";
 import {Box, Heading, NativeBaseProvider, VStack, Input, Button,login} from "native-base"
 import styles from "./Design/Estilos";
 import { NavigationContainer } from "@react-navigation/native";
 import Stack from "./Export/stack";
-import Modal from "react-native-modal";
 import { StyleSheet,TextInput } from "react-native";
 import { useForm } from "react-hook-form";
 import { Pressable } from "react-native";
@@ -26,9 +25,7 @@ margin={10}
         
        </Heading>
       
-        <form
-        
-        style={styles.formulario}>
+      
         
       
       
@@ -93,7 +90,7 @@ margin={10}
       
       </View>
       
-      </form>
+    
   
      
       
@@ -110,14 +107,14 @@ margin={10}
 
 export default function App_cadUser(){
   return(
-    <NavigationContainer>
+    
       <Stack.Navigator>
         
         <Stack.Screen name="Cadastro" component={Cadastro_Usuarios}/>
         
        
       </Stack.Navigator>
-    </NavigationContainer>
+    
   )
 }
 

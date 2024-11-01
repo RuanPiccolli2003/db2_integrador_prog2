@@ -1,5 +1,5 @@
 import { Box, NativeBaseProvider } from "native-base";
-import { Text,View } from "react-native-web";
+import { Text,View } from "react-native";
 
 
 //colocar o formulario para o cadastro de itens

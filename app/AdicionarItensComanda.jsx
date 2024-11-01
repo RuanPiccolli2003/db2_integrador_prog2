@@ -1,4 +1,4 @@
-import { Text,View } from "react-native-web";
+import { Text,View } from "react-native";
 
 
 //colocar o formulario para o cadastro de itens
@@ -8,7 +8,7 @@ export default function Adicionar_itens_comand(){
             <Text>adicionar itens em comandas</Text>
         </View>
 
-        
+
 
 
 
