@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View , Image} from 'react-native';
 import { Link, NavigationContainer } from "@react-navigation/native";
 import styles from './Design/Estilos';
 import Stack from "./Export/stack";
@@ -20,11 +20,14 @@ import { Box, Button, NativeBaseProvider } from 'native-base';
 
 function Home() {
   return (
-    <View>
-      <View>
-          
+    <View style={styles.container}>
+      <Image 
+      style={styles.img}
+      source={require('./imagens/food.png')}></Image>
+     
+      <View style={styles.footer}>
+        
       </View>
-      <StatusBar style="auto" />
     </View>
   );
 }
@@ -45,10 +48,8 @@ export function App_Menu_Principal(){
         initialRouteName='Home'>
         
        
-        <Drawer.Screen
-
-        name='Cadastro de Itens' component={Cadastro_itens}/>
-       
+        <Drawer.Screen name='Menu Principal' component={Home}/>
+        <Drawer.Screen name='Cadastro de itens' component={Cadastro_itens}/>
         <Drawer.Screen name='Relatorios' component={Relatorio_Diaria}/>
         <Drawer.Screen name='Envio de ordens' component={Envio_Ordens}/>
         <Drawer.Screen name='Abertura de comandas' component={Abrir_Comanda}/>

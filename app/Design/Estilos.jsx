@@ -26,10 +26,28 @@ const styles = StyleSheet.create({
   alignItems: "center",
 
   },
+img:{
+  width: "100%",
+  height: "85%"
+},
+container:{
+  flex: 1,
 
-  
+
+},
+footer:{
+  backgroundColor: "#56070c",
+  height: "100%"
+},
 
 
+
+
+
+camp:{
+justifyContent: "center",
+alignContent: 'center'
+}
 
 
 });
