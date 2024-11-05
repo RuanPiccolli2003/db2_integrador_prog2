@@ -65,4 +65,3 @@ const Comanda = banco.define('comanda',{
 
 module.exports = Comanda
 
-CREATE INDEX  ON comanda (status);

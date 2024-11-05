@@ -39,5 +39,7 @@ const Pedido = banco.define('pedido',{
 
 })
 
+//lembrar de colocar os indexes
 
-CREATE INDEX idx_pedido_status ON pedido (status);
+
+//CREATE INDEX idx_pedido_status ON pedido (status);
