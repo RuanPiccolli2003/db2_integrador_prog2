@@ -2,6 +2,7 @@ import express from "express";
 import conexao from "../Model/conexao_db.js"
 import usuario from "../Controller/UsuarioController.js"
 import cors from "cors";
+import nome from "../Controller/UsuarioController.js"
 
 
 try {
@@ -13,7 +14,6 @@ try {
 
 const app = express();
 app.use(express.json());
-app.use(cors());
 const PORT = 3000;
 
 
@@ -37,9 +37,9 @@ app.post("/teste-parametros/:rp1/:rp2", (request, response) => {
     response.status(200).send(request.body.titulo);
 });
 
-app.get("/usuario", usuario.listar);
+app.get("/usuario", nome.listar);
 app.get("/usuario/:id_usuario", usuario.selecionar);
-app.post("/usuario", usuario.criar);
+app.post("/usuario", nome.criar);
 app.put("/usuario/:id_usuario", usuario.alterar);
 app.delete("/usuario/:id_usuario", usuario.excluir);
 

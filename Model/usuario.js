@@ -20,5 +20,8 @@ export default conexao.define('usuario', {
     senha: {
         type: Sequelize.STRING, // Changed from VARCHAR to STRING
         allowNull: false
-    }
-});
+    },
+}, {
+    freezeTableName: true,
+    timestamps: false, // Adiciona as colunas createdAt e updatedAt automaticamente necessário por algum motivo
+}); 
