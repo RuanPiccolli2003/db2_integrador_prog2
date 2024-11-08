@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
 import conexao from '../banco/conexao_db.js';
+import conexao_dbAzure from "../banco/conexao_dbAzure.js";
 
 export default conexao.define('usuario', {
     id_usuario: {
@@ -9,19 +10,19 @@ export default conexao.define('usuario', {
         primaryKey: true
     },
     nome: {
-        type: Sequelize.STRING, // Changed from VARCHAR to STRING
+        type: Sequelize.STRING, 
         allowNull: false
     },
     email: {
-        type: Sequelize.STRING, // Changed from VARCHAR to STRING
+        type: Sequelize.STRING, 
         allowNull: false,
         unique: true
     },
     senha: {
-        type: Sequelize.STRING, // Changed from VARCHAR to STRING
+        type: Sequelize.STRING, 
         allowNull: false
     },
 }, {
     freezeTableName: true,
-    timestamps: false, // Adiciona as colunas createdAt e updatedAt automaticamente necessário por algum motivo
+    timestamps: false, 
 }); 

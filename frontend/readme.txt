@@ -11,3 +11,6 @@ Body: Json:
     "email": "",
     "senha": ""
 }
+
+Iniciar o expo: Entrar no diretorio do frontend e utilizar o comando npm run web
+Iniciar o backend: Entrar no diretorio do backend e utilizar o comando node server.js

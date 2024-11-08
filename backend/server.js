@@ -1,5 +1,6 @@
 import express from "express";
 import conexao from "../backend/banco/conexao_db.js"
+import conexao_dbAzure from "../backend/banco/conexao_dbAzure.js"
 import usuario from "./Controller/UsuarioController.js"
 import cors from "cors";
 import nome from "./Controller/UsuarioController.js"
@@ -7,10 +8,18 @@ import nome from "./Controller/UsuarioController.js"
 
 try {
     await conexao.authenticate();
-    console.log('Connection has been established successfully.');
+    console.log('Conectado ao banco de dados Local:');
 } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    console.error('Indisponivel a conexao com o banco de dados local:', error);
 }
+
+/*try {
+    await conexao_dbAzure.authenticate();
+    console.log('Conectado ao banco de dados Azure:');
+} catch (error) {
+    console.error('Indisponivel a conexao com o banco de dados Azure:', error);
+}
+*/
 
 const app = express();
 app.use(express.json());
