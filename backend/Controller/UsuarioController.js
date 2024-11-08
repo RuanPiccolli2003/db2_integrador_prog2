@@ -12,11 +12,13 @@ async function listar(req, res) {
 /* Insominia GET: http://localhost:3000/usuario */
 
 async function selecionar(req, res) {
-    await nome
+    await usuario
         .findByPk(req.params.id_usuario)
         .then(resultado => { res.status(200).json(resultado) })
         .catch(erro => { res.status(500).json(erro) });
 }
+
+// Insominia GET: http://localhost:3000/usuario/Id do usuario
 
 async function criar(req, res) {
     if (!req.body.nome)
@@ -43,11 +45,13 @@ async function criar(req, res) {
 
 async function alterar(req, res) {
     if (!req.body.nome)
-        res.status(500).send("Parametro categoria é obrigatório.");
+        res.status(500).send("Parametro nome é obrigatório.");
 
-    await nome
+    await usuario
         .update({
-            nome: req.body.nome
+            nome: req.body.nome,
+            email: req.body.email,
+            senha: req.body.senha
         },
             {
                 where: {
@@ -58,8 +62,17 @@ async function alterar(req, res) {
         .catch(erro => { res.status(500).json(erro) });
 }
 
+/*Insominia PUT: http://localhost:3000/usuario/Id do usuario
+Body Json: 
+{
+	"nome": "",
+	"email": "",
+	"senha": ""
+}
+*/
+
 async function excluir(req, res) {
-    await nome
+    await usuario
         .destroy(
             {
                 where: {
@@ -69,5 +82,7 @@ async function excluir(req, res) {
         .then(resultado => { res.status(200).json(resultado) })
         .catch(erro => { res.status(500).json(erro) });
 }
+
+// Insominia Delete: http://localhost:3000/usuario/Id do usuario
 
 export default { listar, selecionar, criar, alterar, excluir };
