@@ -1,0 +1,51 @@
+{
+  "name": "teste",
+  "version": "1.0.0",
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@expo/metro-runtime": "~3.2.3",
+    "@react-navigation/drawer": "^6.7.2",
+    "@react-navigation/native-stack": "^6.11.0",
+    "@sequelize/postgres": "^7.0.0-alpha.43",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "expo": "^51.0.38",
+    "expo-cli": "^6.3.10",
+    "expo-constants": "~16.0.2",
+    "expo-linking": "~6.3.1",
+    "expo-router": "~3.5.23",
+    "expo-status-bar": "~1.12.1",
+    "express": "^4.21.1",
+    "native-base": "^3.4.28",
+    "nodemon": "^3.1.7",
+    "normalize-css-color": "^1.0.2",
+    "pg": "^8.13.1",
+    "pg-hstore": "^2.3.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.53.1",
+    "react-native": "0.74.5",
+    "react-native-elements": "^3.4.3",
+    "react-native-gesture-handler": "~2.16.1",
+    "react-native-modal": "^13.0.1",
+    "react-native-reanimated": "~3.10.1",
+    "react-native-safe-area-context": "^3.3.2",
+    "react-native-screens": "3.31.1",
+    "react-native-svg": "^12.1.1",
+    "react-native-web": "~0.19.10",
+    "react-navigation": "^5.0.0",
+    "react-text-mask": "^5.5.0",
+    "sequelize": "^6.37.5",
+    "sequelizepg": "^1.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0"
+  },
+  "private": true
+}

@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import conexao from '../Model/conexao_db.js';
+import conexao from '../banco/conexao_db.js';
 
 export default conexao.define('usuario', {
     id_usuario: {

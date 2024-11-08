@@ -1,8 +1,8 @@
 import express from "express";
-import conexao from "../Model/conexao_db.js"
-import usuario from "../Controller/UsuarioController.js"
+import conexao from "../backend/banco/conexao_db.js"
+import usuario from "./Controller/UsuarioController.js"
 import cors from "cors";
-import nome from "../Controller/UsuarioController.js"
+import nome from "./Controller/UsuarioController.js"
 
 
 try {
