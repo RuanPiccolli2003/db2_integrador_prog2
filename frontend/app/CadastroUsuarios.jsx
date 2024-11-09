@@ -1,123 +1,118 @@
-import { Text,View} from "react-native";
-import {Box, Heading, NativeBaseProvider, VStack, Input, Button,login} from "native-base"
-import styles from "./Design/Estilos";
+import { Text, View } from "react-native";
+import { Box, Heading, NativeBaseProvider, VStack, Input, Button } from "native-base";
+import { useState } from "react";
+import axios from "axios";
+import styles from "./Design/Estilos"; 
 import { NavigationContainer } from "@react-navigation/native";
 import Stack from "./Export/stack";
-import { StyleSheet,TextInput } from "react-native";
-import { useForm } from "react-hook-form";
-import { Pressable } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 
-//colocar o formulario para o cadastro de usuarios
-function Cadastro_Usuarios(){
-  
-    return(
-      
-    <View 
-    style={styles.NavigationContainer}>
+function Cadastro_Usuarios() {
+  const navigation = useNavigation();
+
+  const [nome, setNome] = useState("");
+  const [senha, setSenha] = useState("");
+  const [email, setEmail] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const cadastrarUsuario = async () => {
+    if (senha !== confirmarSenha) {
+      alert("As senhas não coincidem.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post('http://192.168.0.102:3000/usuario', {
+        nome: nome,
+        senha: senha,
+        email: email,
+      });
+
+      alert("Usuário cadastrado com sucesso!");
+      console.log(response.data);
+      navigation.navigate('Cadastro_Usuarios');
+    } catch (error) {
+      alert("Erro ao cadastrar usuário.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  return (
+    <View style={styles.NavigationContainer}>
       <NativeBaseProvider style={styles.base}>
-        
-  
-<Heading
-margin={10}
-        >
-  
-        Cadastrar Usuario
-        
-       </Heading>
-      
-      
-        
-      
-      
-      <Input 
-        style={styles.inp}
-        backgroundColor={'blue.100'}
-        placeholderTextColor={"black"}
-        justifyContent={"center"}
-        h="50"
-        marginTop={5}
-        
-        placeholder="Nome Completo">
+        <Heading margin={10}>Cadastrar Usuario</Heading>
 
-        </Input>
-       
-        <Input 
-        secureTextEntry={true}    
-        style={styles.inp}
-        placeholderTextColor={"black"}
-        backgroundColor={'blue.100'}
-        justifyContent={"center"}
-      
-        h="50"
-        marginTop={5}
-        placeholder="Senha">
-        </Input>
+        <Input
+          style={styles.inp}
+          backgroundColor={'blue.100'}
+          placeholderTextColor={"black"}
+          justifyContent={"center"}
+          h="50"
+          marginTop={5}
+          placeholder="Nome Completo"
+          value={nome}
+          onChangeText={setNome}
+        />
 
-        <Input       
-        placeholderTextColor={"black"}
-        backgroundColor={'blue.100'}      
-        h="50"
-        marginTop={5}
-        secureTextEntry={true} 
-        placeholder="Digite a senha novamente" >
-                                                 
-        </Input>
+        <Input
+          secureTextEntry={true}
+          style={styles.inp}
+          placeholderTextColor={"black"}
+          backgroundColor={'blue.100'}
+          justifyContent={"center"}
+          h="50"
+          marginTop={5}
+          placeholder="Senha"
+          value={senha}
+          onChangeText={setSenha}
+        />
 
+        <Input
+          secureTextEntry={true}
+          placeholderTextColor={"black"}
+          backgroundColor={'blue.100'}
+          h="50"
+          marginTop={5}
+          placeholder="Digite a senha novamente"
+          value={confirmarSenha}
+          onChangeText={setConfirmarSenha}
+        />
 
-        <Input 
+        <Input
+          placeholderTextColor={"black"}
+          backgroundColor={'blue.100'}
+          h="50"
+          marginTop={5}
+          placeholder="Insira o seu email"
+          value={email}
+          onChangeText={setEmail}
+        />
 
-        placeholderTextColor={"black"}
-        backgroundColor={'blue.100'}   
-        h="50"
-       
-        marginTop={5}
-        placeholder="Insira o seu emaiil"
-       
-       >
-   
-        </Input>
-      
-        <View>
-        
         <Button
-      
-        alignSelf={"center"}
-        width={100}
-        marginTop={5}
-        backgroundColor={"red.500"}>
-        Cadastrar
-      </Button>
-      
-      </View>
-      
-    
-  
-     
-      
-     </NativeBaseProvider>
-
-     </View>
-        
-       
-
-    )
-
-    
+          alignSelf={"center"}
+          width={100}
+          marginTop={5}
+          backgroundColor={"red.500"}
+          onPress={cadastrarUsuario}
+          isLoading={loading}
+          isLoadingText="Cadastrando..."
+        >
+          Cadastrar
+        </Button>
+      </NativeBaseProvider>
+    </View>
+  );
 }
 
-export default function App_cadUser(){
-  return(
-    
-      <Stack.Navigator>
-        
-        <Stack.Screen name="Cadastro" component={Cadastro_Usuarios}/>
-        
-       
-      </Stack.Navigator>
-    
-  )
+export default function App_cadUser() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Cadastro" component={Cadastro_Usuarios} />
+    </Stack.Navigator>
+  );
 }
-
-
-
-

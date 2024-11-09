@@ -20,10 +20,11 @@ try {
     console.error('Indisponivel a conexao com o banco de dados Azure:', error);
 }
 */
-
 const app = express();
+app.use(cors());
 app.use(express.json());
 const PORT = 3000;
+
 
 
 app.get('/teste', (request, response) => {
