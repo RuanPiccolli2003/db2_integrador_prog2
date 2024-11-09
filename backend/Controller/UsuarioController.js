@@ -1,6 +1,10 @@
 import nome from "../Model/usuario.js";
 import usuario from "../Model/usuario.js";
 
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
+
 
 async function listar(req, res) {
     await usuario
@@ -85,4 +89,39 @@ async function excluir(req, res) {
 
 // Insominia Delete: http://localhost:3000/usuario/Id do usuario
 
-export default { listar, selecionar, criar, alterar, excluir };
+async function login(req, res) {
+    const { email, senha } = req.body;
+
+    if (!email || !senha) {
+        return res.status(400).send("Email e senha são obrigatórios.");
+    }
+
+    try {
+        // Verifica se o usuário existe no banco
+        const usuarioExistente = await usuario.findOne({ where: { email } });
+
+        if (!usuarioExistente) {
+            return res.status(400).send("Email ou senha inválidos.");
+        }
+
+        // Compara a senha informada com a senha armazenada
+        const senhaCorreta = await bcrypt.compare(senha, usuarioExistente.senha);
+
+        if (!senhaCorreta) {
+            return res.status(400).send("Email ou senha inválidos.");
+        }
+
+        // Criação de um token JWT (se estiver utilizando JWT)
+        const token = jwt.sign({ id_usuario: usuarioExistente.id_usuario }, 'seuSegredo', { expiresIn: '1h' });
+
+        res.status(200).json({
+            mensagem: "Login bem-sucedido.",
+            token: token
+        });
+
+    } catch (erro) {
+        res.status(500).json(erro);
+    }
+}
+
+export default { listar, selecionar, criar, alterar, excluir, login };

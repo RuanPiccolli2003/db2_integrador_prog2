@@ -53,6 +53,9 @@ app.post("/usuario", nome.criar);
 app.put("/usuario/:id_usuario", usuario.alterar);
 app.delete("/usuario/:id_usuario", usuario.excluir);
 
+app.post("/login", usuario.login);
+
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   })

@@ -1,8 +1,8 @@
+import bcrypt from "bcryptjs";
 import { Sequelize } from 'sequelize';
 import conexao from '../banco/conexao_db.js';
-import conexao_dbAzure from "../banco/conexao_dbAzure.js";
 
-export default conexao.define('usuario', {
+const usuario = conexao.define('usuario', {
     id_usuario: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -25,4 +25,18 @@ export default conexao.define('usuario', {
 }, {
     freezeTableName: true,
     timestamps: false, 
-}); 
+});
+
+usuario.beforeCreate(async (usuario, options) => {
+    const salt = await bcrypt.genSalt(10);
+    usuario.senha = await bcrypt.hash(usuario.senha, salt);
+});
+
+usuario.beforeUpdate(async (usuario, options) => {
+    if (usuario.senha) {
+        const salt = await bcrypt.genSalt(10);
+        usuario.senha = await bcrypt.hash(usuario.senha, salt);
+    }
+});
+
+export default usuario;

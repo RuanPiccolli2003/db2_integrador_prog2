@@ -1,112 +1,91 @@
+import React, { useState } from 'react';
+import { View } from 'react-native';
+import { NativeBaseProvider, Box, Heading, Input, Button, Text as NativeBaseText } from 'native-base';
+import Axios from 'axios';
+import { Link, router } from 'expo-router'; 
 
-import { View, Text} from "react-native";
-import { StyleSheet,TextInput } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import Home from "./MenuPrincipal";
-import { Link,router } from "expo-router";
-import styles from "./Design/Estilos";
-import Stack from "./Export/stack";
-import {Box, Heading, NativeBaseProvider, VStack, Input, Button} from 'native-base';
+import styles from './Design/Estilos'; 
 
+function Login() {
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [erro, setErro] = useState('');
 
-//pagina de login
-//precisa validar a senha e deixar como tipo "password"
+  const handleLogin = async () => {
+    if (!email || !senha) {
+      setErro("Por favor, preencha todos os campos.");
+      return;
+    }
 
+    try {
+      const response = await Axios.post('http://192.168.0.102:3000/login', { email, senha });
 
+      if (response.status === 200) {
+        const { token } = response.data;
+        router.replace("/MenuPrincipal");
+      }
+    } catch (error) {
+      if (error.response) {
+        setErro(error.response.data); 
+      } else {
+        setErro("Erro ao tentar realizar o login. Tente novamente.");
+      }
+    }
+  };
 
-
-
-
-function Login(){
-  function navegar(){
-    router.replace("/MenuPrincipal")
-
-  }
-
-
-
-  return(
-
-  
-<View style={styles.NavigationContainer}>
-
-            
-            <NativeBaseProvider>
-              <Heading margin={10}
-              alignContent={'center'}>
-                  Entrar
-                  
-              </Heading>
-              <Box alignItems="center">
+  return (
+    <View style={styles.NavigationContainer}>
+      <NativeBaseProvider>
+        <Heading margin={10} alignContent={'center'}>
+          Entrar
+        </Heading>
+        <Box alignItems="center">
+          {erro ? (
+            <NativeBaseText color="red.500" mb={2}>
+              {erro}
+            </NativeBaseText>
+          ) : null}
           
-        <Input 
-       
-        placeholderTextColor={"black"}
-        backgroundColor={'blue.100'}  
-        focusOutlineColor={true} mx="3" 
-        placeholder="Digite o usuario" w="250%" h="50"
-        
-        />
-         
-  
-        <Input 
-        
-        placeholderTextColor={"black"}
-        backgroundColor={'blue.100'} 
-        secureTextEntry={true}  
-        mx="3" placeholder="Digite a senha"
-         w="250%" h="50" 
-        marginTop={5}
-        />
-        
-        
-        <Button 
-        
-        bg={"red.500"}
-        width={100}
-        onPress={navegar}
-        m={5}
-        title="Submeter">
-          submeter
-        </Button>
-       
+          <Input
+            placeholderTextColor={"black"}
+            backgroundColor={'blue.100'}
+            focusOutlineColor={true}
+            mx="3"
+            placeholder="Digite o usuario"
+            w="250%"
+            h="50"
+            value={email}
+            onChangeText={setEmail}
+          />
+          
+          <Input
+            placeholderTextColor={"black"}
+            backgroundColor={'blue.100'}
+            secureTextEntry={true}
+            mx="3"
+            placeholder="Digite a senha"
+            w="250%"
+            h="50"
+            marginTop={5}
+            value={senha}
+            onChangeText={setSenha}
+          />
 
-      Não possui uma conta <Link href={'/CadastroUsuarios'} >Cadastre-se</Link>
-      
-      </Box>
-     
+          <Button
+            bg={"red.500"}
+            width={100}
+            onPress={handleLogin}
+            m={5}
+            title="Submeter"
+          >
+            Submeter
+          </Button>
+
+          Não possui uma conta <Link href={'/CadastroUsuarios'}>Cadastre-se</Link>
+        </Box>
       </NativeBaseProvider>
-      
-  
-
-  
-              
-          
-   
-</View>
-
-  ) 
+    </View>
+  );
 }
 
-
-
-function App_Login(){
-  return(
-    
-      <Stack.Navigator>
-        
-        <Stack.Screen name="Login" component={Login}/>
-        
-       
-      </Stack.Navigator>
-    
-  )
-}
-
-
-
-
-
-
-
-export default App_Login
+export default Login;
