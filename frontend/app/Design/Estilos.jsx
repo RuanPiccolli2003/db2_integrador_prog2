@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
   },
 
   formulario:{
+    
     width: "100%",
     alignItems: "center",
     justifyContent: "center"
@@ -43,13 +44,27 @@ footer:{
   height: "100%"
 },
 
-
-
-
-
 camp:{
 justifyContent: "center",
 alignContent: 'center'
+},
+
+cotacao:{
+  placeholderTextColor: "black",
+  height: 50,
+  marginRight: 5,
+  borderRadius: 2,
+  width: "25%",
+  backgroundColor: '#d2f2f2',
+  paddingLeft: 5,
+  
+},
+curr: {
+  margin: 20,
+  flexDirection: 'row',
+  marginBottom: '10',
+ 
+
 }
 
 

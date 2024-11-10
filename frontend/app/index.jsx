@@ -58,6 +58,7 @@ function Login() {
             onChangeText={setEmail}
           />
           
+          
           <Input
             placeholderTextColor={"black"}
             backgroundColor={'blue.100'}
