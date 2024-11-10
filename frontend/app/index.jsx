@@ -15,7 +15,7 @@ function Login() {
 
   const handleLogin = async () => {
     if (!email || !senha) {
-      setErro("Por favor, preencha todos os campos.");
+      alert("Por favor, preencha todos os campos.");
       return;
     }
 
@@ -28,9 +28,9 @@ function Login() {
       }
     } catch (error) {
       if (error.response) {
-        setErro(error.response.data); 
+        alert(error.response.data); 
       } else {
-        setErro("Erro ao tentar realizar o login. Tente novamente.");
+        alert("Erro ao tentar realizar o login. Tente novamente.");
       }
     }
   };
@@ -79,6 +79,7 @@ function Login() {
             onPress={handleLogin}
             m={5}
             title="Submeter"
+            
           >
             Submeter
           </Button>

@@ -96,7 +96,7 @@ function Cadastro_Usuarios() {
 
         <Button
           alignSelf={"center"}
-          width={100}
+          width={120}
           marginTop={5}
           backgroundColor={"red.500"}
           onPress={cadastrarUsuario}
