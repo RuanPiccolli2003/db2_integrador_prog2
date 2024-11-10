@@ -3,8 +3,10 @@ import { View } from 'react-native';
 import { NativeBaseProvider, Box, Heading, Input, Button, Text as NativeBaseText } from 'native-base';
 import Axios from 'axios';
 import { Link, router } from 'expo-router'; 
-
 import styles from './Design/Estilos'; 
+
+export const meuIPv4 = '192.168.0.102';
+
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -18,7 +20,7 @@ function Login() {
     }
 
     try {
-      const response = await Axios.post('http://192.168.0.102:3000/login', { email, senha });
+      const response = await Axios.post(`http://${meuIPv4}:3000/login`, { email, senha });
 
       if (response.status === 200) {
         const { token } = response.data;
@@ -51,7 +53,7 @@ function Login() {
             backgroundColor={'blue.100'}
             focusOutlineColor={true}
             mx="3"
-            placeholder="Digite o usuario"
+            placeholder="Digite o email"
             w="250%"
             h="50"
             value={email}

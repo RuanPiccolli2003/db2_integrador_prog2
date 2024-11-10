@@ -97,21 +97,18 @@ async function login(req, res) {
     }
 
     try {
-        // Verifica se o usuário existe no banco
         const usuarioExistente = await usuario.findOne({ where: { email } });
 
         if (!usuarioExistente) {
             return res.status(400).send("Email ou senha inválidos.");
         }
 
-        // Compara a senha informada com a senha armazenada
         const senhaCorreta = await bcrypt.compare(senha, usuarioExistente.senha);
 
         if (!senhaCorreta) {
             return res.status(400).send("Email ou senha inválidos.");
         }
 
-        // Criação de um token JWT (se estiver utilizando JWT)
         const token = jwt.sign({ id_usuario: usuarioExistente.id_usuario }, 'seuSegredo', { expiresIn: '1h' });
 
         res.status(200).json({

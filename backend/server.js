@@ -47,9 +47,9 @@ app.post("/teste-parametros/:rp1/:rp2", (request, response) => {
     response.status(200).send(request.body.titulo);
 });
 
-app.get("/usuario", nome.listar);
+app.get("/usuario", usuario.listar);
 app.get("/usuario/:id_usuario", usuario.selecionar);
-app.post("/usuario", nome.criar);
+app.post("/usuario", usuario.criar);
 app.put("/usuario/:id_usuario", usuario.alterar);
 app.delete("/usuario/:id_usuario", usuario.excluir);
 
