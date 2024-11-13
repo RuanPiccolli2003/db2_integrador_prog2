@@ -1,124 +1,108 @@
-import { TextField,View,Text } from "react-native";
-import { NativeBaseProvider , Heading, Input, Button} from "native-base";
+import React, { useState } from "react";
+import { View, Text } from "react-native";
+import { NativeBaseProvider, Heading, Input, Button } from "native-base";
 import styles from "./Design/Estilos";
-import CurrencyMaskInput from 'react-native-currency-input';
-import React from "react";
-import InputSpinner from "react-native-input-spinner";
+import CurrencyInput from 'react-native-currency-input';
+import axios from 'axios';
+import { meuIPv4 } from "./index";
+import { useNavigation } from '@react-navigation/native';
 
+function Cadastro_item() {
+  const navigation = useNavigation();
 
+  const [nome, setNome] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [preco, setPreco] = useState("");
+  const [quantidade, setQuantidade] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-//colocar o formulario para o cadastro de itens
+  const cadastrarItem = async () => {
+    if (tipo.toLowerCase() !== 'bebida' && tipo.toLowerCase() !== 'prato') {
+      alert("Tipo deve ser Bebida ou Prato");
+      return;
+    }
 
+    setLoading(true);
+    try {
+      const response = await axios.post(`http://${meuIPv4}:3000/itemcardapio`, {
+        nome: nome,
+        tipo: tipo,
+        preco: preco,
+        quantidade: quantidade,
+      });
 
+      alert("Item cadastrado com sucesso!");
+      console.log(response.data);
+      navigation.navigate('Cadastro_Itens');
+    } catch (error) {
+      alert("Erro ao cadastrar o item");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//criar um input monetario para o valor dos itens
-// criar 
+  return (
+    <View style={styles.NavigationContainer}>
+      <NativeBaseProvider style={styles.base}>
+        <Heading margin={10}>Cadastrar Item</Heading>
 
-export default function Cadastro_itens(){
-    const [value,setValue] = React.useState(0.00)
-
-    return(
-        
-            
-        <View 
-        
-
-        
-        
-        style={{flex: 1, alignItems: 'center',}}>
-            <NativeBaseProvider>
-
-            
-            <Heading margin={5}
-            alignItems={'center'}
-            >
-                <Text>Cadastrar Itens</Text>
-       <hr />
-            </Heading>
-            <Heading 
-            fontSize={'sm'}
-            margin={5}>
-                <Text>Item - 1</Text>
-        
-                
-            </Heading>
-            <Input 
-            backgroundColor={'blue.100'}
-            placeholderTextColor={"black"}
-            marginTop={5}
-            marginLeft={5}
-            marginRight={5}
-            h={"50"}
-            placeholder="Nome do item"
-            margin={5}
-            >
-                
-            </Input>
-            <Heading 
-            fontSize={'sm'}
-            margin={5}>
-                <Text>Valor / quantidade</Text>
-                
-            </Heading>
-            <View style={styles.curr}>
-               
-            <CurrencyMaskInput
-            style={styles.cotacao}
-            value={value}
-            onChangeValue={setValue}
-            prefix="R$ "
-            delimiter="."
-            separator=","
-            precision={2}
-            minValue={0}
-            onChangeText={(formattedValue) => {
-            
-          }}
-        
+        <Input
+          style={styles.inp}
+          backgroundColor={'blue.100'}
+          placeholderTextColor={"black"}
+          justifyContent={"center"}
+          h="50"
+          marginTop={5}
+          placeholder="Nome do Item"
+          value={nome}
+          onChangeText={setNome}
         />
-        
-        
-         
-        <InputSpinner
-        max={10}
-        min={1}
-        showBorder={true}
-        colorMax={"crimson"}
-	    colorMin={"#40c5f4"}
-        rounded={false}
-        style={{marginLeft: 'auto'}}>
-            
-        </InputSpinner>
-       
-       
-        
 
+        <Input
+          style={styles.inp}
+          backgroundColor={'blue.100'}
+          placeholderTextColor={"black"}
+          justifyContent={"center"}
+          h="50"
+          marginTop={5}
+          placeholder="Tipo (Bebida ou Prato)"
+          value={tipo}
+          onChangeText={setTipo}
+        />
 
-        </View>
+        <CurrencyInput
+          style={styles.cotacao}
+          backgroundColor={'blue.100'}
+          placeholderTextColor={"black"}
+          justifyContent={"center"}
+          h="50"
+          marginTop={5}
+          placeholder="Valor R$ 0,00"
+          value={preco}
+          onChangeValue={setPreco}
+          delimiter="."
+          separator=","
+          precision={2}
+          prefix="R$ "
+        />
 
-
-<Button style={{width: '30%', alignItems: 'flex-start', 
-            marginLeft:  'auto', marginRight: 'auto', 
-            marginTop: 'auto', marginBottom: 'auto'}}>
-               
-Cadastrar itens
-
-</Button>
-
-
-</NativeBaseProvider>
-
-
-         
-
-         
-          
-        
-        </View>
-        
-    
-
-  
-    )
+        <Button
+          style={{
+            width: '30%',
+            alignItems: 'center',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            marginTop: 20,
+          }}
+          isLoading={loading}
+          onPress={cadastrarItem}
+        >
+          Cadastrar Item
+        </Button>
+      </NativeBaseProvider>
+    </View>
+  );
 }
 
+export default Cadastro_item;
