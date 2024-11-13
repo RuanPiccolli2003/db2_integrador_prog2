@@ -49,12 +49,12 @@ export function App_Menu_Principal(){
         
        
         <Drawer.Screen name='Menu Principal' component={Home}/>
-        <Drawer.Screen name='Cadastro de itens' component={Cadastro_itens}/>
+        <Drawer.Screen name='Abrir comandas' component={Abrir_Comanda}/>
+        <Drawer.Screen name='Fechar comandas' component={fechamento_comanda}/>
+        <Drawer.Screen name='Adicionar itens em comandas' component={Adicionar_itens_comand}/>
+        <Drawer.Screen name='Enviar Ordens a cozinha' component={Envio_Ordens}/>
+        <Drawer.Screen name='Cadastrar Itens' component={Cadastro_itens}/>
         <Drawer.Screen name='Relatorios' component={Relatorio_Diaria}/>
-        <Drawer.Screen name='Envio de ordens' component={Envio_Ordens}/>
-        <Drawer.Screen name='Abertura de comandas' component={Abrir_Comanda}/>
-        <Drawer.Screen name='adição de itens em comandas' component={Adicionar_itens_comand}/>
-        <Drawer.Screen name='fechar comandas' component={fechamento_comanda}/>
         
         </Drawer.Navigator>
         

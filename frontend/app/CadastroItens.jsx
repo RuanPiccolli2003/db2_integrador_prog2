@@ -96,76 +96,6 @@ export default function Cadastro_itens(){
 
         </View>
 
-        
-        
-       
-        
-
-<Heading margin={5}
-alignItems={'center'}
->
- 
-    
-</Heading>
-<Heading 
-fontSize={'sm'}
-margin={5}>
-    <Text>Item - 2</Text>
-    
-</Heading>
-<Input 
-backgroundColor={'blue.100'}
-placeholderTextColor={"black"}
-marginTop={5}
-marginLeft={5}
-marginRight={5}
-h={"50"}
-placeholder="Nome do item"
-margin={5}
->
-    
-</Input>
-<Heading 
-fontSize={'sm'}
-margin={5}>
-    <Text>Valor / quantidade</Text>
-    
-</Heading>
-<View style={styles.curr}>
-   
-<CurrencyMaskInput
-style={styles.cotacao}
-value={value}
-onChangeValue={setValue}
-prefix="R$ "
-delimiter="."
-separator=","
-precision={2}
-minValue={0}
-onChangeText={(formattedValue) => {
-
-}}
-
-/>
-
-
-
-<InputSpinner
-color="crimson"
-max={10}
-min={1}
-showBorder={true}
-rounded={false}
-style={{marginLeft: 'auto'}}>
-
-</InputSpinner>
-
-
-
-
-</View>
-
-
 
 <Button style={{width: '30%', alignItems: 'flex-start', 
             marginLeft:  'auto', marginRight: 'auto', 
@@ -186,10 +116,7 @@ Cadastrar itens
         
         </View>
         
-
-        
-        
-      
+    
 
   
     )

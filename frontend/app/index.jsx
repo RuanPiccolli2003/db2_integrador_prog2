@@ -5,13 +5,13 @@ import Axios from 'axios';
 import { Link, router } from 'expo-router'; 
 import styles from './Design/Estilos'; 
 
-export const meuIPv4 = '192.168.0.102';
+export const meuIPv4 = '191.52.131.36';
 
 
 function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [erro, setErro] = useState('');
+  const [erro, alert] = useState('');
 
   const handleLogin = async () => {
     if (!email || !senha) {
@@ -60,7 +60,6 @@ function Login() {
             onChangeText={setEmail}
           />
           
-          
           <Input
             placeholderTextColor={"black"}
             backgroundColor={'blue.100'}
@@ -80,7 +79,6 @@ function Login() {
             onPress={handleLogin}
             m={5}
             title="Submeter"
-            
           >
             Submeter
           </Button>

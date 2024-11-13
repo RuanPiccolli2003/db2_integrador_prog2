@@ -1,10 +1,13 @@
 import express from "express";
+import cors from "cors";
+
 import conexao from "../backend/banco/conexao_db.js"
 import conexao_dbAzure from "../backend/banco/conexao_dbAzure.js"
+
 import usuario from "./Controller/UsuarioController.js"
-import cors from "cors";
 import nome from "./Controller/UsuarioController.js"
 
+import item_cardapio from "./Controller/ItemCardapioController.js";
 
 try {
     await conexao.authenticate();
@@ -54,6 +57,12 @@ app.put("/usuario/:id_usuario", usuario.alterar);
 app.delete("/usuario/:id_usuario", usuario.excluir);
 
 app.post("/login", usuario.login);
+
+app.get("/itemcardapio", item_cardapio.listar);
+app.get("/itemcardapio/:id_item", item_cardapio.selecionar);
+app.post("/itemcardapio", item_cardapio.criar);
+app.put("/itemcardapio/:id_item", item_cardapio.alterar);
+app.delete("/itemcardapio/:id_item", item_cardapio.excluir);
 
 
 app.listen(PORT, () => {
