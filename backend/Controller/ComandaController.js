@@ -20,6 +20,18 @@ async function selecionar(req, res) {
 
 async function criar(req, res) {
 
+    if (!req.body.status) {
+        req.body.status = 'Aberta';
+      }
+
+    if (!req.body.data_abertura) {
+        req.body.data_abertura = new Date();
+    }
+
+    if (!req.body.data_fechamento) {
+        req.body.data_fechamento = null; 
+    }
+
     await comanda
         .create({
             id_usuario: req.body.id_usuario,
@@ -73,4 +85,4 @@ async function excluir(req, res) {
         .catch(erro => { res.status(500).json(erro) });
 }
 */
-export default { listar, selecionar, criar, alterar, excluir };
+export default { listar, selecionar, criar };
