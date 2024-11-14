@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 dotenv.config();
 
+
 const azureBDconfig = {
     username: process.env.DB_AZURE_USERNAME,
     host: process.env.DB_AZURE_HOST,

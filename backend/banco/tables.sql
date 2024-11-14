@@ -10,10 +10,12 @@ CREATE TABLE usuario (
 CREATE TABLE comanda (
     id_comanda SERIAL PRIMARY KEY,
     id_usuario INT NOT NULL,
+    id_item INT,
     status VARCHAR(50) NOT NULL DEFAULT 'Aberta' CHECK (status IN ('Aberta', 'Fechada')),
     data_abertura TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     data_fechamento TIMESTAMP,
-    CONSTRAINT fk_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE
+    CONSTRAINT fk_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE,
+    CONSTRAINT fk_nome FOREIGN KEY (id_item) REFERENCES item_cardapio(id_item) ON DELETE CASCADE
 );
 
 -- Criação da tabela de itens do cardápio

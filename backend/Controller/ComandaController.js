@@ -32,12 +32,17 @@ async function criar(req, res) {
         req.body.data_fechamento = null; 
     }
 
+    if (!req.body.id_item) {
+        req.body.id_item = null; 
+    }
+
     await comanda
         .create({
             id_usuario: req.body.id_usuario,
             status: req.body.status,
             data_abertura: req.body.data_abertura,
-            data_fechamento: req.body.data_fechamento
+            data_fechamento: req.body.data_fechamento,
+            id_item: req.body.id_item
         })
         .then(resultado => { res.status(200).json(resultado) })
         .catch(erro => { res.status(500).json(erro) });
@@ -54,19 +59,22 @@ async function criar(req, res) {
 }
 */
 
-/*
+
 
 async function alterar(req, res) {
-    if (!req.body.comanda)
-        res.status(500).send("Parametro categoria é obrigatório.");
+    if (!req.body.id_usuario)
+        res.status(500).send("Parametro Id comanda é obrigatório.");
 
     await comanda
         .update({
-            comanda: req.body.comanda
+            id_usuario: req.body.id_usuario,
+            status: req.body.status,
+            data_abertura: req.body.data_abertura,
+            data_fechamento: req.body.data_fechamento,
         },
             {
                 where: {
-                    idcomanda: req.params.idcomanda
+                    id_comanda: req.params.id_comanda
                 }
             })
         .then(resultado => { res.status(200).json(resultado) })
@@ -78,11 +86,11 @@ async function excluir(req, res) {
         .destroy(
             {
                 where: {
-                    idcomanda: req.params.idcomanda
+                    id_comanda: req.params.id_comanda
                 }
             })
         .then(resultado => { res.status(200).json(resultado) })
         .catch(erro => { res.status(500).json(erro) });
 }
-*/
-export default { listar, selecionar, criar };
+
+export default { listar, selecionar, criar, alterar, excluir };

@@ -69,6 +69,8 @@ app.delete("/itemcardapio/:id_item", item_cardapio.excluir);
 app.get("/comanda", comanda.listar);
 app.get("/comanda/:id_comanda", comanda.selecionar);
 app.post("/comanda", comanda.criar);
+app.put("/comanda/:id_comanda", comanda.alterar);
+app.delete("/comanda/:id_comanda", comanda.excluir)
 
 
 app.listen(PORT, () => {

@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize';
 import conexao from '../banco/conexao_db.js';
 import conexao_dbAzure from "../banco/conexao_dbAzure.js";
 
+
 const comanda = conexao.define('comanda', {
   id_comanda: {
     type: Sequelize.INTEGER,
@@ -35,6 +36,16 @@ const comanda = conexao.define('comanda', {
     type: Sequelize.DATE,
     allowNull: true,
   },
+  id_item: {
+    type: Sequelize.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'item_cardapios', 
+      key: 'id_item',
+    },
+    onDelete: 'CASCADE',
+    
+  }
 }, {
     freezeTableName: true, 
   timestamps: false, 
