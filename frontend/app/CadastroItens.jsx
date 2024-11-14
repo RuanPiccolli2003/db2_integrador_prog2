@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text } from "react-native";
-import { NativeBaseProvider, Heading, Input, Button } from "native-base";
+import { NativeBaseProvider, Heading, Input, Button, Select, CheckIcon  } from "native-base";
 import styles from "./Design/Estilos";
 import CurrencyInput from 'react-native-currency-input';
 import axios from 'axios';
@@ -53,31 +53,43 @@ function Cadastro_item() {
           placeholderTextColor={"black"}
           justifyContent={"center"}
           h="50"
-          marginTop={5}
+          marginTop={5}  
+          marginBottom={5}
           placeholder="Nome do Item"
           value={nome}
           onChangeText={setNome}
+          overflow='hidden'
         />
 
-        <Input
+        <Select
           style={styles.inp}
           backgroundColor={'blue.100'}
           placeholderTextColor={"black"}
           justifyContent={"center"}
           h="50"
-          marginTop={5}
-          placeholder="Tipo (Bebida ou Prato)"
-          value={tipo}
-          onChangeText={setTipo}
-        />
+          marginTop={5}  
+          marginBottom={5} 
+          placeholder="Tipo: Selecionar"
+          selectedValue={tipo}
+          onValueChange={setTipo}
+          overflow='hidden'
+          _selectedItem={{
+            bg: "blue.200",
+            endIcon: <CheckIcon size="5" />,
+          }}
+        >
+          <Select.Item label="Bebida" value="Bebida" />
+          <Select.Item label="Prato" value="Prato" /> 
+        </Select>
 
         <CurrencyInput
-          style={styles.cotacao}
+          style={styles.inp}  
           backgroundColor={'blue.100'}
           placeholderTextColor={"black"}
           justifyContent={"center"}
           h="50"
-          marginTop={5}
+          marginTop={5}  
+          marginBottom={5} 
           placeholder="Valor R$ 0,00"
           value={preco}
           onChangeValue={setPreco}
@@ -89,11 +101,11 @@ function Cadastro_item() {
 
         <Button
           style={{
-            width: '30%',
+            width: '50%',
             alignItems: 'center',
             marginLeft: 'auto',
             marginRight: 'auto',
-            marginTop: 20,
+            marginTop: 30,
           }}
           isLoading={loading}
           onPress={cadastrarItem}

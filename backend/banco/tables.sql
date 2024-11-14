@@ -10,7 +10,7 @@ CREATE TABLE usuario (
 CREATE TABLE comanda (
     id_comanda SERIAL PRIMARY KEY,
     id_usuario INT NOT NULL,
-    status VARCHAR(50) NOT NULL CHECK (status IN ('Aberta', 'Fechada')),
+    status VARCHAR(50) NOT NULL DEFAULT 'Aberta' CHECK (status IN ('Aberta', 'Fechada')),
     data_abertura TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     data_fechamento TIMESTAMP,
     CONSTRAINT fk_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE

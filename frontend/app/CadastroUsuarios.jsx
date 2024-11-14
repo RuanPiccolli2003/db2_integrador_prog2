@@ -58,6 +58,7 @@ function Cadastro_Usuarios() {
           placeholder="Nome Completo"
           value={nome}
           onChangeText={setNome}
+          overflow='hidden'
         />
 
         <Input
@@ -71,6 +72,7 @@ function Cadastro_Usuarios() {
           placeholder="Senha"
           value={senha}
           onChangeText={setSenha}
+          overflow='hidden'
         />
 
         <Input

@@ -9,6 +9,8 @@ import nome from "./Controller/UsuarioController.js"
 
 import item_cardapio from "./Controller/ItemCardapioController.js";
 
+import comanda from "./Controller/ComandaController.js"
+
 try {
     await conexao.authenticate();
     console.log('Conectado ao banco de dados Local:');
@@ -63,6 +65,10 @@ app.get("/itemcardapio/:id_item", item_cardapio.selecionar);
 app.post("/itemcardapio", item_cardapio.criar);
 app.put("/itemcardapio/:id_item", item_cardapio.alterar);
 app.delete("/itemcardapio/:id_item", item_cardapio.excluir);
+
+app.get("/comanda", comanda.listar);
+app.get("/comanda/:id_comanda", comanda.selecionar);
+app.post("/comanda", comanda.criar);
 
 
 app.listen(PORT, () => {

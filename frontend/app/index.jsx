@@ -5,7 +5,7 @@ import Axios from 'axios';
 import { Link, router } from 'expo-router'; 
 import styles from './Design/Estilos'; 
 
-export const meuIPv4 = '191.52.131.36';
+export const meuIPv4 = '192.168.0.102';
 
 
 function Login() {

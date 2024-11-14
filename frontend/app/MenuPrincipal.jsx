@@ -23,7 +23,7 @@ function Home() {
     <View style={styles.container}>
       <Image 
       style={styles.img}
-      source={require('./imagens/food.png')}></Image>
+      source={require('./imagens/Restaurante3.jpg')}></Image>
      
       <View style={styles.footer}>
         

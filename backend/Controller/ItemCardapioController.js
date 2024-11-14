@@ -37,7 +37,7 @@ async function criar(req, res) {
 /*Insominia: Post: http://localhost:3000/itemcardapio - Body: Json: 
 {
 	"nome": "",
-	"tipo": "",
+	"tipo": "", (Bebida ou Prato)
 	"preco": ""
 }
     */

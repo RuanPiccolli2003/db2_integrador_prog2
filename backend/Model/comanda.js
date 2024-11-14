@@ -1,42 +1,43 @@
-import banco from "./usuario";
-import sequelize from "./conexao_db";
-const Sequelize = require('sequelize')
+import { Sequelize } from 'sequelize';
+import conexao from '../banco/conexao_db.js';
+import conexao_dbAzure from "../banco/conexao_dbAzure.js";
 
-const Comanda = banco.define('comanda',{
-    id_comanda:{
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
-            allowNUll: false,
-            primaryKey: true
+const comanda = conexao.define('comanda', {
+  id_comanda: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  id_usuario: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'usuarios', 
+      key: 'id_usuario',
     },
-            id_usuario:{
-                type: Sequelize.INTEGER,
-                foreignKey:{
-                    allowNull: false
-               }
+    onDelete: 'CASCADE', 
+  },
+  status: {
+    type: Sequelize.STRING(50),
+    allowNull: false,
+    defaultValue: 'Aberta', 
+    validate: {
+      isIn: [['Aberta', 'Fechada']], 
     },
-            status: {
-                type: Sequelize.VARCHAR,
-                allowNUll: false,
-                    idx_comanda_status: [
-                        {
-                        field:['status']                        
-                        }
-                    ]
-    },
-            senha:{
-                type: Sequelize.VARCHAR,
-                allowNUll: false
-    },
-            data_abertura:{
-                type: Sequelize.DATE,
-                allowNUll: false                
-    },
-            data_fechamento:{
-                tyoe: Sequelize.DATE,
-                allowNUll: true
-     }
-})
+  },
+  data_abertura: {
+    type: Sequelize.DATE,
+    allowNull: false,
+    defaultValue: Sequelize.NOW,
+  },
+  data_fechamento: {
+    type: Sequelize.DATE,
+    allowNull: true,
+  },
+}, {
+    freezeTableName: true, 
+  timestamps: false, 
+});
 
-module.exports = Comanda
-
+export default comanda;
