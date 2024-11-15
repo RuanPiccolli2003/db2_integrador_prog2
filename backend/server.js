@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 
 import conexao from "../backend/banco/conexao_db.js"
-import conexao_dbAzure from "../backend/banco/conexao_dbAzure.js"
 
 import usuario from "./Controller/UsuarioController.js"
 import nome from "./Controller/UsuarioController.js"
@@ -11,20 +10,17 @@ import item_cardapio from "./Controller/ItemCardapioController.js";
 
 import comanda from "./Controller/ComandaController.js"
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 try {
     await conexao.authenticate();
-    console.log('Conectado ao banco de dados Local:');
+    console.log(`Conectado ao banco de dados Azure ${process.env.USAR_BD_AZURE}:`);
 } catch (error) {
     console.error('Indisponivel a conexao com o banco de dados local:', error);
 }
 
-/*try {
-    await conexao_dbAzure.authenticate();
-    console.log('Conectado ao banco de dados Azure:');
-} catch (error) {
-    console.error('Indisponivel a conexao com o banco de dados Azure:', error);
-}
-*/
+
 const app = express();
 app.use(cors());
 app.use(express.json());

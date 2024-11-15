@@ -10,15 +10,13 @@ const Pedido = banco.define('pedido',{
             autoIncrement: true,
             allowNull: false,
             primaryKey: true
-
     },
 
         id_comanda:{
                 type: Sequelize.INTEGER,
                 foreignKey:{
                     allowNull: false
-                }
-            
+                }        
     },
 
         id_item:{

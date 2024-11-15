@@ -1,6 +1,5 @@
 import { Sequelize } from 'sequelize';
 import conexao from '../banco/conexao_db.js';
-import conexao_dbAzure from "../banco/conexao_dbAzure.js";
 
 
 

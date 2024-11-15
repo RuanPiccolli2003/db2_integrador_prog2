@@ -32,17 +32,12 @@ async function criar(req, res) {
         req.body.data_fechamento = null; 
     }
 
-    if (!req.body.id_item) {
-        req.body.id_item = null; 
-    }
-
     await comanda
         .create({
             id_usuario: req.body.id_usuario,
             status: req.body.status,
             data_abertura: req.body.data_abertura,
             data_fechamento: req.body.data_fechamento,
-            id_item: req.body.id_item
         })
         .then(resultado => { res.status(200).json(resultado) })
         .catch(erro => { res.status(500).json(erro) });
@@ -72,7 +67,6 @@ async function alterar(req, res) {
             status: req.body.status,
             data_abertura: req.body.data_abertura,
             data_fechamento: req.body.data_fechamento,
-            id_item: req.body.id_item,
         },
             {
                 where: {

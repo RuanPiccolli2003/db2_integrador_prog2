@@ -57,7 +57,7 @@ function Cadastro_Usuarios() {
           marginTop={5}
           placeholder="Nome Completo"
           value={nome}
-          onChangeText={setNome}
+          onChangeText={setNome}  
           overflow='hidden'
         />
 
