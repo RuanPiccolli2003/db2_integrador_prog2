@@ -16,14 +16,7 @@ CREATE TABLE comanda (
     CONSTRAINT fk_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE,
 );
 
-CREATE TABLE consumoComanda (
-    id_consumoComanda SERIAL PRIMARY KEY,
-    id_comanda INT NOT NULL,
-    id_item INT NOT NULL,
-    quantidadeItem INT NOT NULL,
-    CONSTRAINT fk_comanda FOREIGN KEY (id_comanda) REFERENCES comanda(id_comanda) ON DELETE CASCADE,
-    CONSTRAINT fk_item FOREIGN KEY (id_item) REFERENCES item_cardapio(id_item) ON DELETE CASCADE,
-)
+
 -- Criação da tabela de itens do cardápio
 CREATE TABLE item_cardapio (
     id_item SERIAL PRIMARY KEY,
@@ -38,7 +31,8 @@ CREATE TABLE pedido (
     id_comanda INT NOT NULL,
     id_item INT NOT NULL,
     quantidade INT NOT NULL CHECK (quantidade > 0),
-    status VARCHAR(50) NOT NULL CHECK (status IN ('Produzido', 'Entregue')),
+    somaprecototal DECIMAL (10, 2) NOT NULL CHECK (preco >= 0),
+    status VARCHAR(50) NOT NULL CHECK (status IN ('Produzindo', 'Entregue')),
     destino VARCHAR(50) NOT NULL CHECK (destino IN ('Copa', 'Cozinha')),
     CONSTRAINT fk_comanda FOREIGN KEY (id_comanda) REFERENCES comanda(id_comanda) ON DELETE CASCADE,
     CONSTRAINT fk_item FOREIGN KEY (id_item) REFERENCES item_cardapio(id_item) ON DELETE CASCADE

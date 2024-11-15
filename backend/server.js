@@ -10,14 +10,21 @@ import item_cardapio from "./Controller/ItemCardapioController.js";
 
 import comanda from "./Controller/ComandaController.js"
 
+import pedido from "./Controller/PedidoController.js"
+
 import dotenv from 'dotenv';
 dotenv.config();
 
+
 try {
     await conexao.authenticate();
-    console.log(`Conectado ao banco de dados Azure ${process.env.USAR_BD_AZURE}:`);
+    if (process.env.USAR_BD_AZURE === 'true') {
+        console.log('Conectado ao banco de dados Azure.');
+    } else {
+        console.log('Conectado ao banco de dados local.');
+    }
 } catch (error) {
-    console.error('Indisponivel a conexao com o banco de dados local:', error);
+    console.error('Erro ao conectar ao banco de dados:', error);
 }
 
 
@@ -68,6 +75,12 @@ app.post("/comanda", comanda.criar);
 app.put("/comanda/:id_comanda", comanda.alterar);
 app.delete("/comanda/:id_comanda", comanda.excluir);
 app.put("/comanda/fecharcomanda/:id_comanda", comanda.fecharComanda);
+
+app.get("/pedido", pedido.listar);
+app.get("/pedido/:id_pedido", pedido.selecionar);
+app.post("/pedido", pedido.criar);
+app.put("/pedido/:id_pedido", pedido.alterar);
+app.delete("/pedido/:id_pedido", pedido.excluir);
 
 
 app.listen(PORT, () => {
