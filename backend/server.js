@@ -70,7 +70,8 @@ app.get("/comanda", comanda.listar);
 app.get("/comanda/:id_comanda", comanda.selecionar);
 app.post("/comanda", comanda.criar);
 app.put("/comanda/:id_comanda", comanda.alterar);
-app.delete("/comanda/:id_comanda", comanda.excluir)
+app.delete("/comanda/:id_comanda", comanda.excluir);
+app.put("/comanda/fecharcomanda/:id_comanda", comanda.fecharComanda);
 
 
 app.listen(PORT, () => {

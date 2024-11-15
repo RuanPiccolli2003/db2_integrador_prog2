@@ -55,7 +55,8 @@ async function criar(req, res) {
   "id_usuario": "1",
   "status": "Aberta",
   "data_abertura": "2024-11-14 15:30:00",
-  "data_fechamento": "2024-11-14 15:30:00"
+  "data_fechamento": "2024-11-14 15:30:00",
+  "id_item": ""
 }
 */
 
@@ -63,7 +64,7 @@ async function criar(req, res) {
 
 async function alterar(req, res) {
     if (!req.body.id_usuario)
-        res.status(500).send("Parametro Id comanda é obrigatório.");
+        res.status(500).send("Parametro Id do usuario é obrigatório.");
 
     await comanda
         .update({
@@ -71,6 +72,7 @@ async function alterar(req, res) {
             status: req.body.status,
             data_abertura: req.body.data_abertura,
             data_fechamento: req.body.data_fechamento,
+            id_item: req.body.id_item,
         },
             {
                 where: {
@@ -93,4 +95,23 @@ async function excluir(req, res) {
         .catch(erro => { res.status(500).json(erro) });
 }
 
-export default { listar, selecionar, criar, alterar, excluir };
+async function fecharComanda(req, res) {
+    if (!req.body.id_usuario)
+        res.status(500).send("Parametro Id comanda é obrigatório.");
+    
+    await comanda
+        .update({
+            id_usuario: req.body.id_usuario,
+            status: req.body.status = 'Fechada',
+            data_fechamento: req.body.data_fechamento,
+        },
+            {
+                where: {
+                    id_comanda: req.params.id_comanda
+                }
+            })
+        .then(resultado => { res.status(200).json(resultado) })
+        .catch(erro => { res.status(500).json(erro) });
+}
+
+export default { listar, selecionar, criar, alterar, excluir, fecharComanda };
