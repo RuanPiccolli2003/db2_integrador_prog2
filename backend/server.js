@@ -12,6 +12,8 @@ import comanda from "./Controller/ComandaController.js"
 
 import pedido from "./Controller/PedidoController.js"
 
+import ordem from "./Controller/OrdemController.js"
+
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -82,6 +84,11 @@ app.post("/pedido", pedido.criar);
 app.put("/pedido/:id_pedido", pedido.alterar);
 app.delete("/pedido/:id_pedido", pedido.excluir);
 
+app.get("/ordem", ordem.listar);
+app.get("/ordem/:id_ordem", ordem.selecionar);
+app.post("/ordem", ordem.criar);
+app.put("/ordem/:id_ordem", ordem.alterar);
+app.delete("/ordem/:id_ordem", ordem.excluir);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

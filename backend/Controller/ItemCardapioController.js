@@ -22,7 +22,7 @@ async function selecionar(req, res) {
 async function criar(req, res) {
     if (!req.body.nome)
         res.status(500).send("Parametro nome é obrigatório.");
-
+    
     await item_cardapio
         .create({
             nome: req.body.nome,

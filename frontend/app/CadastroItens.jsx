@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text } from "react-native";
-import { NativeBaseProvider, Heading, Input, Button, Select, CheckIcon  } from "native-base";
+import { NativeBaseProvider, Heading, Input, Button, Select, CheckIcon } from "native-base";
 import styles from "./Design/Estilos";
 import CurrencyInput from 'react-native-currency-input';
 import axios from 'axios';
@@ -45,67 +45,76 @@ function Cadastro_item() {
   return (
     <View style={styles.NavigationContainer}>
       <NativeBaseProvider style={styles.base}>
-        <Heading margin={10}>Cadastrar Item</Heading>
+        <Heading marginTop={10} marginBottom={10} textAlign="center">Cadastrar Item</Heading>
 
         <Input
           style={styles.inp}
-          backgroundColor={'blue.100'}
-          placeholderTextColor={"black"}
-          justifyContent={"center"}
+          backgroundColor="blue.100"
+          placeholderTextColor="black"
+          justifyContent="center"
           h="50"
-          marginTop={5}  
+          marginTop={5}
           marginBottom={5}
           placeholder="Nome do Item"
           value={nome}
           onChangeText={setNome}
-          overflow='hidden'
+          overflow="hidden"
         />
 
         <Select
           style={styles.inp}
-          backgroundColor={'blue.100'}
-          placeholderTextColor={"black"}
-          justifyContent={"center"}
+          backgroundColor="blue.100"
+          placeholderTextColor="black"
+          justifyContent="center"
           h="50"
-          marginTop={5}  
-          marginBottom={5} 
+          marginTop={5}
+          marginBottom={5}
           placeholder="Tipo: Selecionar"
           selectedValue={tipo}
           onValueChange={setTipo}
-          overflow='hidden'
+          overflow="hidden"
           _selectedItem={{
             bg: "blue.200",
             endIcon: <CheckIcon size="5" />,
           }}
         >
           <Select.Item label="Bebida" value="Bebida" />
-          <Select.Item label="Prato" value="Prato" /> 
+          <Select.Item label="Prato" value="Prato" />
         </Select>
 
         <CurrencyInput
-          style={styles.inp}  
-          backgroundColor={'blue.100'}
-          placeholderTextColor={"black"}
-          justifyContent={"center"}
+          style={{
+            ...styles.inp,
+            borderWidth: 1,         
+            borderColor: '#ebf8ff',
+            paddingLeft: 10,        
+            paddingRight: 10,      
+            backgroundColor: '#ebf8ff',
+            height: 50,            
+            width: 200,
+          }}
+          placeholderTextColor="black"
+          justifyContent="center"
           h="50"
-          marginTop={5}  
-          marginBottom={5} 
+          marginTop={5}
+          marginBottom={5}
           placeholder="Valor R$ 0,00"
+          keyboardType="numeric"
           value={preco}
           onChangeValue={setPreco}
           delimiter="."
           separator=","
           precision={2}
           prefix="R$ "
+          overflow="hidden"
         />
-
+        
         <Button
           style={{
             width: '50%',
-            alignItems: 'center',
             marginLeft: 'auto',
             marginRight: 'auto',
-            marginTop: 30,
+            marginTop: 20,
           }}
           isLoading={loading}
           onPress={cadastrarItem}

@@ -1,6 +1,7 @@
 import pedido from "../Model/pedido.js"
 import item_cardapio from "../Model/itemCardapio.js";
 import ItemCardapioController from "./ItemCardapioController.js";
+import comanda from "../Model/comanda.js";
 
 
 
@@ -33,6 +34,24 @@ async function criar(req, res) {
             req.body.status = 'Produzindo';
         }
 
+        const comandaAberta = await comanda.findByPk(req.body.id_comanda);
+    
+        if (!comandaAberta) {
+            return res.status(404).send("Comanda não encontrada.");
+        }
+
+        if (comandaAberta.status === 'Fechada') {
+            return res.status(400).send("Não é possível adicionar itens a uma comanda fechada.");
+        }
+
+        if (!req.body.destino) {
+            if (item.tipo === 'Bebida') {
+                req.body.destino = 'Copa';
+            } else if (item.tipo === 'Prato') {
+                req.body.destino = 'Cozinha';
+            }
+        }    
+
         const totalPedido = item.preco * req.body.quantidade;
 
         const novoPedido = await pedido.create({
@@ -46,7 +65,7 @@ async function criar(req, res) {
 
         res.status(200).json(novoPedido);
     } catch (erro) {
-        res.status(500).json({ error: 'Erro ao criar pedido', details: erro });
+        res.status(500).json({ error: 'Erro ao criar pedido', details: erro.message });
     }
 }
 

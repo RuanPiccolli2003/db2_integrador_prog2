@@ -38,6 +38,14 @@ CREATE TABLE pedido (
     CONSTRAINT fk_item FOREIGN KEY (id_item) REFERENCES item_cardapio(id_item) ON DELETE CASCADE
 );
 
+CREATE TABLE ordem (
+    id_ordem SERIAL PRIMARY KEY,
+    id_pedido INT NOT NULL,
+    id_item INT NOT NULL,
+    CONSTRAINT fk_id_pedido FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido) ON DELETE CASCADE,
+    CONSTRAINT fk_id_item FOREIGN KEY (id_item) REFERENCES item_cardapio(id_item) ON DELETE CASCADE
+);
+
 -- Índices para otimização
 CREATE INDEX idx_comanda_status ON comanda (status);
 CREATE INDEX idx_pedido_status ON pedido (status);
