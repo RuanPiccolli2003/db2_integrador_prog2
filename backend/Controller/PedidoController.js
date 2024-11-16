@@ -1,4 +1,8 @@
 import pedido from "../Model/pedido.js"
+import item_cardapio from "../Model/itemCardapio.js";
+import ItemCardapioController from "./ItemCardapioController.js";
+
+
 
 async function listar(req, res) {
     await pedido
@@ -19,25 +23,33 @@ async function selecionar(req, res) {
 // Insominia GET: http://localhost:3000/pedido/Id da pedido
 
 async function criar(req, res) {
+    try {
+        const item = await item_cardapio.findByPk(req.body.id_item);
+        if (!item) {
+            return res.status(404).json({ error: 'Item não encontrado' });
+        }
 
-    if (!req.body.status) {
-        req.body.status = 'Produzindo';
-      }
-    
+        if (!req.body.status) {
+            req.body.status = 'Produzindo';
+        }
 
+        const totalPedido = item.preco * req.body.quantidade;
 
-    await pedido
-        .create({
+        const novoPedido = await pedido.create({
             id_comanda: req.body.id_comanda,
             id_item: req.body.id_item,
             quantidade: req.body.quantidade,
-            somaprecototal: req.body.somaprecototal,
+            somaprecototal: totalPedido,
             status: req.body.status,
             destino: req.body.destino,
-        })
-        .then(resultado => { res.status(200).json(resultado) })
-        .catch(erro => { res.status(500).json(erro) });
+        });
+
+        res.status(200).json(novoPedido);
+    } catch (erro) {
+        res.status(500).json({ error: 'Erro ao criar pedido', details: erro });
+    }
 }
+
 
 //Insominia POST: http://localhost:3000/pedido
 

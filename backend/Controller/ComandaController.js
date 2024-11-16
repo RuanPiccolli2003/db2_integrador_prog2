@@ -90,9 +90,15 @@ async function excluir(req, res) {
 }
 
 async function fecharComanda(req, res) {
-    if (!req.body.id_usuario)
-        res.status(500).send("Parametro Id comanda é obrigatório.");
     
+    if (!req.body.id_usuario) {
+        res.status(500).send("Parametro Id comanda é obrigatório.");
+    }
+
+    if (!req.body.data_fechamento) {
+        req.body.data_fechamento = new Date();
+    }
+
     await comanda
         .update({
             id_usuario: req.body.id_usuario,
