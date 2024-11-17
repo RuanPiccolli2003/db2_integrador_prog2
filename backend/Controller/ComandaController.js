@@ -1,8 +1,10 @@
     import comanda from "../Model/comanda.js"
 
     async function listar(req, res) {
+        const status = req.query.status;
+        const filter = status ? {status} : {};
         await comanda
-            .findAll()
+            .findAll({ where: filter })
             .then(resultado => { res.status(200).json(resultado) })
             .catch(erro => { res.status(500).json(erro) });
     }

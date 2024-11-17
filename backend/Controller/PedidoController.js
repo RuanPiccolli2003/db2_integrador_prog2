@@ -2,7 +2,7 @@ import pedido from "../Model/pedido.js"
 import item_cardapio from "../Model/itemCardapio.js";
 import ItemCardapioController from "./ItemCardapioController.js";
 import comanda from "../Model/comanda.js";
-
+import { criarOrdem } from "../Controller/OrdemController.js";
 
 
 async function listar(req, res) {
@@ -63,7 +63,12 @@ async function criar(req, res) {
             destino: req.body.destino,
         });
 
-        res.status(200).json(novoPedido);
+        const novaOrdem = await criarOrdem(novoPedido.id_pedido);
+
+        res.status(200).json({
+            pedido: novoPedido,
+            ordem: novaOrdem
+        });
     } catch (erro) {
         res.status(500).json({ error: 'Erro ao criar pedido', details: erro.message });
     }

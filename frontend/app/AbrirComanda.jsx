@@ -23,10 +23,10 @@ const AbrirComanda = () => {
       const response = await axios.post(`http://${meuIPv4}:3000/comanda`, {
         id_usuario: idUsuario,
       });
-
-      navigation.navigate('ComandasList');
-
       alert('Comanda aberta com sucesso!');
+      setIdUsuario("");
+      navigation.navigate('AbrirComandas');
+
     } catch (err) {
       setError('Erro ao abrir a comanda. Tente novamente.');
     } finally {

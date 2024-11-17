@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native'; 
 import { meuIPv4 } from './index';
 
 const FecharComanda = () => {
@@ -9,7 +9,25 @@ const FecharComanda = () => {
   const [id_comanda, setId_comanda] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
+
+  const route = useRoute();
+  const { id_comanda: comandaId } = route.params || {};
+
+  useEffect(() => {
+    if (comandaId) {
+      setId_comanda(comandaId);
+    }
+  }, [comandaId]);
+
+  useEffect(() => {
+    const limparCampos = navigation.addListener('blur', () => {
+      setId_usuario("");
+      setId_comanda("");
+    });
+
+    return limparCampos;
+  }, [navigation]);
 
   const FecharComanda = async () => {
     if (!id_usuario) {
@@ -18,8 +36,8 @@ const FecharComanda = () => {
     }
 
     if (!id_comanda) {
-        setError('Por favor, informe o ID da comanda');
-        return;
+      setError('Por favor, informe o ID da comanda');
+      return;
     }
 
     setLoading(true);
@@ -31,9 +49,9 @@ const FecharComanda = () => {
         id_comanda: id_comanda,
       });
 
-      navigation.navigate('ComandasList');
-
       alert('Comanda fechada com sucesso!');
+      setId_usuario("");
+      navigation.navigate('Gerenciar Comandas');
     } catch (err) {
       setError('Erro ao fechar a comanda. Tente novamente.');
     } finally {
@@ -43,7 +61,7 @@ const FecharComanda = () => {
 
   return (
     <View style={styles.NavigationContainer}>
-      <Text style={styles.title}>Fechar Comanda</Text>
+      <Text style={styles.title}>Fechar Comanda: {id_comanda}</Text>
 
       {error && <Text style={styles.error}>{error}</Text>}
 
@@ -55,11 +73,12 @@ const FecharComanda = () => {
         onChangeText={setId_usuario}
       />
 
-    <TextInput
+      <TextInput
         style={styles.input}
-        placeholder="ID da comanda"
+        placeholder={`Comanda: ${id_comanda}`}
         keyboardType="numeric"
         value={id_comanda}
+        readOnly
         onChangeText={setId_comanda}
       />
 

@@ -33,6 +33,10 @@ function Cadastro_Usuarios() {
 
       alert("Usuário cadastrado com sucesso!");
       console.log(response.data);
+      setNome("");
+      setSenha("");
+      setConfirmarSenha("");
+      setEmail("");
       navigation.navigate('Cadastro_Usuarios');
     } catch (error) {
       alert("Erro ao cadastrar usuário.");

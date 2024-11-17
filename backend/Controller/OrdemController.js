@@ -55,4 +55,16 @@ async function alterar(req, res) {
         
     }
 
+    export async function criarOrdem(id_pedido) {
+        try {
+            const novaOrdem = await ordem.create({
+                id_pedido: id_pedido,
+            });
+
+            return novaOrdem
+        } catch (erro) {
+            throw new Error('Erro ao criar ordem: ' + erro.message);
+        }
+    }
+
 export default { listar, selecionar, criar, alterar, excluir};

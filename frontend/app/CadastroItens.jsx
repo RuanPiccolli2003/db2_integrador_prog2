@@ -33,7 +33,10 @@ function Cadastro_item() {
 
       alert("Item cadastrado com sucesso!");
       console.log(response.data);
-      navigation.navigate('Cadastro_Itens');
+      setNome("");
+      setTipo("");
+      setPreco(0);
+      navigation.navigate('Cadastrar Itens');
     } catch (error) {
       alert("Erro ao cadastrar o item");
       console.error(error);
