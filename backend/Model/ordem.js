@@ -22,4 +22,6 @@ const ordem = conexao.define('ordem', {
   timestamps: false, 
 });
 
+
+
 export default ordem;

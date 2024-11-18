@@ -28,14 +28,15 @@ const ComandaPrincipal = () => {
 
         const focusListener = navigation.addListener('focus', () => {
             buscarComandas();
+            setPaginaAtual(1);
             setModalVisivel(false);
         });
 
-        return focusListener;
+        return () => focusListener();
     }, [navigation]); //Tem que escrever código até para o programa lembrar que tem que usar os botao pqp
 
 
-    
+
     useEffect(() => {
         if (pesquisa === '') {
             setComandasBarraDePesquisa(comandas);
@@ -52,10 +53,11 @@ const ComandaPrincipal = () => {
             setModalVisivel(false);
         });
 
-        return focusListener; 
+        return focusListener;
     }, [navigation]); // Para quando clicar e sair da pagina ele funcione novamente os botoes e não fique travado o modal no expo, porco dio nene que tem que ajustar até o reset dos botao
 
-    
+
+
     const ultimaComanda = paginaAtual * comandasPorPagina;
     const primeiraComanda = ultimaComanda - comandasPorPagina;
     const comandasPaginaAtual = comandasBarraDePesquisa.slice(primeiraComanda, ultimaComanda);
@@ -127,7 +129,7 @@ const ComandaPrincipal = () => {
                         onPress={() => abrirModal(item)}
                         onLongPress={() => abrirModal(item)}
                     >
-                        <Text>ID: {item.id_comanda}</Text>
+                        <Text>Comanda: {item.id_comanda}</Text>
                         <Text>Status: {item.status}</Text>
                         <Text>Data de Abertura: {formatarDataHora(item.data_abertura)}</Text>
                     </TouchableOpacity>
@@ -150,13 +152,33 @@ const ComandaPrincipal = () => {
                     <View style={styles.modalContent}>
                         <Text>Opções para Comanda: {comandaSelecionada?.id_comanda}</Text>
                         <View style={styles.modalButtonsContainer}>
-                            <Button title="Fechar Comanda" onPress={() => navigation.navigate('Fechar comandas', {
-                                id_comanda: comandaSelecionada?.id_comanda
-                            })} 
+                            <Button
+                                title="Visualizar Comanda"
+                                onPress={() => {
+                                    setModalVisivel(false);
+                                    navigation.navigate('Visualizar Comanda Completa', {
+                                        id_comanda: comandaSelecionada?.id_comanda
+                                    });
+                                }}
                             />
-                            <Button title="Adicionar Itens" onPress={() => navigation.navigate('Adicionar itens em comandas', {
-                                id_comanda: comandaSelecionada?.id_comanda
-                            })} />
+                            <Button
+                                title="Fechar Comanda"
+                                onPress={() => {
+                                    setModalVisivel(false);
+                                    navigation.navigate('Fechar comandas', {
+                                        id_comanda: comandaSelecionada?.id_comanda
+                                    });
+                                }}
+                            />
+                            <Button
+                                title="Adicionar Itens"
+                                onPress={() => {
+                                    setModalVisivel(false);
+                                    navigation.navigate('Adicionar itens em comandas', {
+                                        id_comanda: comandaSelecionada?.id_comanda
+                                    });
+                                }}
+                            />
                             <Button title="Alterar Comanda" onPress={alterarComanda} />
                             <Button title="Voltar" onPress={() => setModalVisivel(false)} />
                         </View>

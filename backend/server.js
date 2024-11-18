@@ -77,6 +77,8 @@ app.post("/comanda", comanda.criar);
 app.put("/comanda/:id_comanda", comanda.alterar);
 app.delete("/comanda/:id_comanda", comanda.excluir);
 app.put("/comanda/fecharcomanda/:id_comanda", comanda.fecharComanda);
+app.get("/comandadetalhes/:id_comanda", comanda.listarComandaDetalhada);
+
 
 app.get("/pedido", pedido.listar);
 app.get("/pedido/:id_pedido", pedido.selecionar);
@@ -89,6 +91,13 @@ app.get("/ordem/:id_ordem", ordem.selecionar);
 app.post("/ordem", ordem.criar);
 app.put("/ordem/:id_ordem", ordem.alterar);
 app.delete("/ordem/:id_ordem", ordem.excluir);
+app.get("/ordemCopa", ordem.buscarComandasProduzindoCopa);
+app.get("/ordemCozinha", ordem.buscarComandasProduzindoCozinha);
+app.get("/ordemCozinhaAgrupadaPorComanda", ordem.buscarComandasProduzindoCozinhaAgrupadaPorComanda);
+app.get("/ordemCopaAgrupadaPorComanda", ordem.buscarComandasProduzindoCopaAgrupadaPorComanda);
+
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

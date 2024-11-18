@@ -54,6 +54,8 @@ const pedido = conexao.define('pedido', {
       freezeTableName: true, 
     timestamps: false, 
   });
+
+
   
   export default pedido;
 

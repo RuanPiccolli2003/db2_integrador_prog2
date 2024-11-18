@@ -25,8 +25,8 @@ const AbrirComanda = () => {
       });
       alert('Comanda aberta com sucesso!');
       setIdUsuario("");
-      navigation.navigate('AbrirComandas');
-
+      navigation.navigate('Gerenciar Comandas Abertas');
+ 
     } catch (err) {
       setError('Erro ao abrir a comanda. Tente novamente.');
     } finally {

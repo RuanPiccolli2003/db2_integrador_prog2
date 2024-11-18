@@ -29,6 +29,8 @@ const FecharComanda = () => {
     return limparCampos;
   }, [navigation]);
 
+
+
   const FecharComanda = async () => {
     if (!id_usuario) {
       setError('Por favor, informe o ID do usuário.');
@@ -42,6 +44,7 @@ const FecharComanda = () => {
 
     setLoading(true);
     setError('');
+
 
     try {
       const response = await axios.put(`http://${meuIPv4}:3000/comanda/fecharcomanda/${id_comanda}`, {

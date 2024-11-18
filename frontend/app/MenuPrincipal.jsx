@@ -12,6 +12,7 @@ import AbrirComanda from './AbrirComanda';
 import AdicionarItensComanda from './AdicionarItensComanda';
 import FecharComanda from './FecharComanda';
 import ComandaPrincipal from './Comanda';
+import VisualizarComandaCompleta from './VisualizarComandaCompleta'
 import { Box, Button, NativeBaseProvider } from 'native-base';
 
 
@@ -49,6 +50,7 @@ export function App_Menu_Principal(){
         <Drawer.Screen name='Ordens Cozinha' component={Ordens_Cozinha}/>
         <Drawer.Screen name='Cadastrar Itens' component={Cadastro_item}/>
         <Drawer.Screen name='Relatorios' component={Relatorio_Diaria}/>
+        <Drawer.Screen name='Visualizar Comanda Completa' component={VisualizarComandaCompleta}/>
       </Drawer.Navigator>
     </NavigationContainer>  
   );

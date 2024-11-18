@@ -90,8 +90,9 @@ async function criar(req, res) {
 
 
 async function alterar(req, res) {
-    if (!req.body.id_comanda)
-        res.status(500).send("Parametro Id da comanda é obrigatório.");
+    if (!req.body.id_comanda) {
+        return res.status(500).send("Parametro Id da comanda é obrigatório."); 
+    }
 
     await pedido
         .update({
@@ -102,13 +103,13 @@ async function alterar(req, res) {
             status: req.body.status,
             destino: req.body.destino,
         },
-            {
-                where: {
-                    id_pedido: req.params.id_pedido
-                }
-            })
-        .then(resultado => { res.status(200).json(resultado) })
-        .catch(erro => { res.status(500).json(erro) });
+        {
+            where: {
+                id_pedido: req.params.id_pedido
+            }
+        })
+        .then(resultado => { res.status(200).json(resultado); })
+        .catch(erro => { res.status(500).json(erro); });
 }
 
 async function excluir(req, res) {
@@ -122,6 +123,7 @@ async function excluir(req, res) {
         .then(resultado => { res.status(200).json(resultado) })
         .catch(erro => { res.status(500).json(erro) });
 }
+
 
 
 export default { listar, selecionar, criar, alterar, excluir };
