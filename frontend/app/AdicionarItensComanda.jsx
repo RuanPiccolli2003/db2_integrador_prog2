@@ -112,7 +112,7 @@ function AdicionarItensComanda() {
 
       alert("Item vinculado a comanda!");
       console.log(response.data);
-      setId_comanda("");
+      setId_comanda(id_comanda);
       setId_item("");
       setItemNome("");
       setQuantidade(1);
@@ -133,26 +133,7 @@ function AdicionarItensComanda() {
   return (
     <View style={styles.NavigationContainer}>
       <NativeBaseProvider style={styles.base}>
-        <Heading margin={10}>Adicionar itens a comanda: {id_comanda}</Heading>
-
-        <Input
-          style={styles.inp}
-          backgroundColor={'blue.100'}
-          placeholderTextColor={"black"}
-          justifyContent={"center"}
-          h="50"
-          marginTop={5}
-          marginBottom={5}
-          placeholder={`Comanda: ${id_comanda}`}
-          keyboardType="numerc"
-          value={id_comanda}
-          readOnly
-          onChangeText={(text) => {
-            const apenasInteiro = text.replace(/[^0-9]/g, '');
-            setId_comanda(apenasInteiro);
-          }}
-          overflow='hidden'
-        />
+        <Heading margin={10}>Adicionar itens comanda: {id_comanda}</Heading>
 
         <TouchableOpacity onPress={buscarItens}>
           <Input
@@ -165,7 +146,7 @@ function AdicionarItensComanda() {
             marginBottom={5}
             placeholder="Selecione o Item"
             keyboardType="numeric"
-            value={itemNome}
+            value={`Item: ${itemNome}`}
             isReadOnly
             overflow='hidden'
           />
@@ -196,7 +177,7 @@ function AdicionarItensComanda() {
           marginBottom={5}
           placeholder="Quantidade"
           keyboardType="numeric"
-          value={`${quantidade} Unidade(s)`}
+          value={`Unidade(s): ${quantidade}`}
           onChangeText={(text) => {
             const apenasInteiro = text.replace(/[^0-9]/g, '');
             setQuantidade(apenasInteiro);
@@ -213,7 +194,7 @@ function AdicionarItensComanda() {
           marginTop={5}
           marginBottom={5}
           placeholder="Total"
-          value={`R$ ${total}`}
+          value={`Preço Total: R$ ${total}`}
           isReadOnly={true}
           overflow='hidden'
         />
@@ -235,7 +216,7 @@ function AdicionarItensComanda() {
             endIcon: <CheckIcon size="5" />,
           }}
         >
-          <Select.Item label="Produzindo" value="Produzindo" />
+          <Select.Item label="Produzindo" value={"Produzindo"} />
           <Select.Item label="Entregue" value="Entregue" />
         </Select>
 

@@ -48,7 +48,7 @@ function Cadastro_item() {
   return (
     <View style={styles.NavigationContainer}>
       <NativeBaseProvider style={styles.base}>
-        <Heading marginTop={10} marginBottom={10} textAlign="center">Cadastrar Item</Heading>
+        <Heading marginTop={20} marginBottom={10} textAlign="center">Cadastrar Item</Heading>
 
         <Input
           style={styles.inp}
@@ -94,7 +94,7 @@ function Cadastro_item() {
             paddingRight: 10,      
             backgroundColor: '#ebf8ff',
             height: 50,            
-            width: 200,
+            width: 210,
           }}
           placeholderTextColor="black"
           justifyContent="center"
@@ -114,7 +114,7 @@ function Cadastro_item() {
         
         <Button
           style={{
-            width: '50%',
+            width: '100%',
             marginLeft: 'auto',
             marginRight: 'auto',
             marginTop: 20,

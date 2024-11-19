@@ -4,6 +4,11 @@ import axios from 'axios';
 import { meuIPv4 } from './index';
 import { TextInput } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import AbrirComanda from './AbrirComanda';
+import Drawer from './Export/drawer';
+
+
+
 
 const ComandaPrincipal = () => {
     const navigation = useNavigation();
@@ -117,7 +122,9 @@ const ComandaPrincipal = () => {
                     onChangeText={setPesquisa}
                     keyboardType="numeric"
                 />
-                <Button title="Abrir Comanda" onPress={() => navigation.navigate('Abrir comandas')} />
+                <Button title="Abrir Comanda" onPress={() => {
+                    navigation.navigate('Abrir comandas');
+                }} />
             </View>
 
             <FlatList
@@ -171,7 +178,7 @@ const ComandaPrincipal = () => {
                                 }}
                             />
                             <Button
-                                title="Adicionar Itens"
+                                title="Adicionar na Itens Comanda"
                                 onPress={() => {
                                     setModalVisivel(false);
                                     navigation.navigate('Adicionar itens em comandas', {
@@ -179,7 +186,6 @@ const ComandaPrincipal = () => {
                                     });
                                 }}
                             />
-                            <Button title="Alterar Comanda" onPress={alterarComanda} />
                             <Button title="Voltar" onPress={() => setModalVisivel(false)} />
                         </View>
                     </View>

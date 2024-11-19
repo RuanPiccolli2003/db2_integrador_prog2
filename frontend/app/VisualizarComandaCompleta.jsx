@@ -117,6 +117,7 @@ const VisualizarComandaCompleta = () => {
                     keyboardType="numeric"
                 />
             </View>
+            <Text style={styles.titleVisualizacao}> Pedidos da Comanda: {id_comanda}</Text>
 
             <FlatList
                 data={pedidosPaginaAtual}
@@ -161,7 +162,14 @@ const VisualizarComandaCompleta = () => {
                                 title="Finalizar Pedido"
                                 onPress={() => alterarPedidoParaEntregue(pedidoSelecionado?.id_pedido)}
                             />
-                            <Button title="Alterar Comanda" onPress={''} />
+                            <Button title="Alterar Comanda"
+                                onPress={() => {
+                                    setModalVisivel(false);
+                                    navigation.navigate('Alterar itens da comanda', {
+                                        id_pedido: pedidoSelecionado?.id_pedido,
+                                    });
+                                }}
+                            />
                             <Button title="Voltar" onPress={() => setModalVisivel(false)} />
                         </View>
                     </View>
@@ -225,6 +233,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'stretch',
         marginTop: 10,
+    },
+    titleVisualizacao: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 20,
     },
 });
 
