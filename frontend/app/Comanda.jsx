@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
+        backgroundColor: 'white' 
     },
     searchContainer: {
         flexDirection: 'row',
@@ -220,6 +221,7 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
         marginBottom: 5,
         borderRadius: 5,
+        backgroundColor: '#f3f3f3' 
     },
     paginationContainer: {
         flexDirection: 'row',

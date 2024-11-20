@@ -63,7 +63,7 @@ const FecharComanda = () => {
   };
 
   return (
-    <View style={styles.NavigationContainer}>
+    <View style={styles.container}>
       <Text style={styles.title}>Fechar Comanda: {id_comanda}</Text>
 
       {error && <Text style={styles.error}>{error}</Text>}
@@ -97,7 +97,6 @@ const FecharComanda = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     padding: 16,
   },
   title: {
@@ -108,12 +107,11 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   input: {
-    height: 40,
-    borderColor: '#ccc',
+    padding: 15,
     borderWidth: 1,
-    borderRadius: 4,
-    paddingLeft: 8,
-    marginBottom: 16,
+    borderColor: '#ccc',
+    marginBottom: 5,
+    borderRadius: 5,
   },
   error: {
     color: 'red',

@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
+    padding: 20,
   },
   formulario: {
     width: "100%",

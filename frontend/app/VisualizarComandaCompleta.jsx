@@ -162,10 +162,10 @@ const VisualizarComandaCompleta = () => {
                                 title="Finalizar Pedido"
                                 onPress={() => alterarPedidoParaEntregue(pedidoSelecionado?.id_pedido)}
                             />
-                            <Button title="Alterar Comanda"
+                            <Button title="Alterar Pedido"
                                 onPress={() => {
                                     setModalVisivel(false);
-                                    navigation.navigate('Alterar itens da comanda', {
+                                    navigation.navigate('Alterar item de comanda', {
                                         id_pedido: pedidoSelecionado?.id_pedido,
                                     });
                                 }}
@@ -183,6 +183,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
+        backgroundColor: 'white' 
     },
     searchContainer: {
         flexDirection: 'row',
