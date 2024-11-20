@@ -126,8 +126,12 @@ const VisualizarComandaCompleta = () => {
                     <TouchableOpacity
                         style={[
                             styles.card,
-                            item.status_pedido === 'Entregue' && { backgroundColor: '#d4edda' },
-                            item.status_pedido === 'Produzindo' && { backgroundColor: '#fff3cd' }
+                            item.status_pedido === 'Entregue' && { backgroundColor: '#FFEB3B' }, 
+                            item.status_pedido === 'Produzindo' && { backgroundColor: '#FFCC80' }, 
+                            item.status_pedido === 'Pronto' && { backgroundColor: '#C8E6C9' }, 
+                            item.status_pedido === 'Cancelado' && { backgroundColor: '#FFABAB' }, 
+                            item.status_pedido === 'Rejeitado' && { backgroundColor: '#E1BEE7' },
+                            item.status_pedido === 'Registrado' && { backgroundColor: '#E0F7FA' },
                         ]}
                         onPress={() => abrirModal(item)}
                         onLongPress={() => abrirModal(item)}
@@ -183,7 +187,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: 'white' 
+        backgroundColor: 'white'
     },
     searchContainer: {
         flexDirection: 'row',

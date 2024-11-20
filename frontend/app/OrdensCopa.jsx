@@ -167,7 +167,7 @@ const Ordens_Copa = () => {
                             styles.card,
                             item.status === 'Registrado' && { backgroundColor: '#E0F7FA' },
                             item.status === 'Pronto' && { backgroundColor: '#C8E6C9' },
-                            item.status === 'Produzindo' && { backgroundColor: '#FFF9C4' }
+                            item.status === 'Produzindo' && { backgroundColor: '#FFCC80' }
                         ]}
                         onPress={() => abrirModal(item)}
                         onLongPress={() => abrirModal(item)}
