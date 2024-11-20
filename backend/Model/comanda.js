@@ -29,7 +29,7 @@ const comanda = conexao.define('comanda', {
   data_abertura: {
     type: Sequelize.DATE,
     allowNull: false,
-    defaultValue: Sequelize.NOW,
+    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP AT TIME ZONE 'America/Sao_Paulo'"),
   },
   data_fechamento: {
     type: Sequelize.DATE,

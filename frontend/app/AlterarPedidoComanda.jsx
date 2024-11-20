@@ -7,6 +7,8 @@ import { meuIPv4 } from "./index";
 import styles from "./Design/Estilos"
 import { useNavigation, useRoute } from '@react-navigation/native';
 
+//NÃO ESTÁ FUNCIONANDO AINDA, CAMPO DE ITEM NÃO ESTÁ ABRINDO O MODAL
+
 const AlterarPedidoComanda = () => {
     const [id_pedido, setId_pedido] = useState('');
     const [id_comanda, setId_comanda] = useState('');

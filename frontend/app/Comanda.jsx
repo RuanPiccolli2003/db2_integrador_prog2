@@ -83,7 +83,7 @@ const ComandaPrincipal = () => {
 
     const formatarDataHora = (data) => {
         const dataObj = new Date(data);
-        const dataBrasileira = new Date(dataObj.getTime() - (3 * 60 * 60 * 1000));
+        const dataBrasileira = new Date(dataObj.getTime() - (21 * 60 * 60 * 1000));
 
         const dataFormatada = dataBrasileira.toLocaleDateString('pt-BR');
         const horaFormatada = dataBrasileira.toLocaleTimeString('pt-BR', { hour12: false });

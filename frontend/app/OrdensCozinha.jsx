@@ -1,69 +1,69 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Button, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Button, StyleSheet, Modal, TouchableOpacity, } from 'react-native';
 import axios from 'axios';
 import { meuIPv4 } from './index';
 import { TextInput } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 
 const Ordens_Cozinha = () => {
-    const navigation = useNavigation();
-    const [ordens, setOrdens] = useState([]);
-    const [ordensBarraDePesquisa, setOrdensBarraDePesquisa] = useState([]);
-    const [paginaAtual, setPaginaAtual] = useState(1);
-    const [ordensPorPagina] = useState(10);
+    const [loading, setLoading] = useState(false);
+    const [pedidos, setPedidos] = useState([]);
+    const [pedidosBarraDePesquisa, setPedidosBarraDePesquisa] = useState([]);
+    const [pedidosPorPagina] = useState(10);
     const [pesquisa, setPesquisa] = useState('');
     const [modalVisible, setModalVisivel] = useState(false);
-    const [ordemSelecionada, setOrdemSelecionada] = useState(null);
+    const [pedidoSelecionado, setPedidoSelecionado] = useState(null);
+    const [paginaAtual, setPaginaAtual] = useState(1);
+    const navigation = useNavigation();
+    const route = useRoute();
+    const [id_comanda, setId_comanda] = useState();
+
+
+
+    const buscarComandasCompletas = async () => {
+            try {
+                const response = await axios.get(`http://${meuIPv4}:3000/pedidoOrdenCozinha`);
+                id_comanda
+                setPedidos(response.data);
+            } catch (error) {
+                console.error('Erro ao buscar comandas', error);
+            }
+    };
 
     useEffect(() => {
-        const buscarOrdens = async () => {
-            try {
-                const response = await axios.get(`http://${meuIPv4}:3000/ordemCozinhaAgrupadaPorComanda`);
-                setOrdens(response.data);
-                setOrdensBarraDePesquisa(response.data);
-            } catch (error) {
-                console.error('Erro ao buscar ordens', error);
-            }
-        };
+        buscarComandasCompletas();
+    }, [])
 
-        const focusListener = navigation.addListener('focus', () => {
-            buscarOrdens();
+
+    useFocusEffect(
+        React.useCallback(() => {
+            buscarComandasCompletas();
             setPaginaAtual(1);
             setModalVisivel(false);
-        });
 
-        return focusListener;
-    }, [navigation]);
+            return () => {
+                setPedidos([]);
+                setPedidosBarraDePesquisa([]);
+            };
+        }, [])
+    );
 
     useEffect(() => {
         if (pesquisa === '') {
-            setOrdensBarraDePesquisa(ordens);
+            setPedidosBarraDePesquisa(pedidos);
         } else {
-            const resultadoPesquisa = ordens.filter(ordem =>
-                ordem.id_comanda.toString() === pesquisa
+            const resultadoPesquisa = pedidos.filter(pedido =>
+                pedido.id_pedido.toString() === pesquisa
             );
-            setOrdensBarraDePesquisa(resultadoPesquisa);
+            setPedidosBarraDePesquisa(resultadoPesquisa);
         }
-    }, [pesquisa, ordens]);
+    }, [pesquisa, pedidos]);
 
-    const ordensAgrupadasPorComanda = ordensBarraDePesquisa.reduce((acc, ordem) => {
-        if (!acc[ordem.id_comanda]) {
-            acc[ordem.id_comanda] = {
-                id_comanda: ordem.id_comanda,
-            };
-        }
+    const ultimoPedido = paginaAtual * pedidosPorPagina;
+    const primeiroPedido = ultimoPedido - pedidosPorPagina;
+    const pedidosPaginaAtual = pedidosBarraDePesquisa.slice(primeiroPedido, ultimoPedido);
 
-        return acc;
-    }, {});
-
-    console.log(ordensAgrupadasPorComanda);
-
-    const ordensAgrupadasArray = Object.values(ordensAgrupadasPorComanda);
-
-    const ultimaOrdem = paginaAtual * ordensPorPagina;
-    const primeiraOrdem = ultimaOrdem - ordensPorPagina;
-    const ordensPaginaAtual = ordensAgrupadasArray.slice(primeiraOrdem, ultimaOrdem);
-    const totalPaginas = Math.ceil(ordensAgrupadasArray.length / ordensPorPagina);
+    const totalPaginas = Math.ceil(pedidosBarraDePesquisa.length / pedidosPorPagina);
 
     const irProximaPagina = () => {
         if (paginaAtual < totalPaginas) {
@@ -77,32 +77,109 @@ const Ordens_Cozinha = () => {
         }
     };
 
-    const abrirModal = (ordem) => {
-        setOrdemSelecionada(ordem);
+    const abrirModal = (pedido) => {
+        setPedidoSelecionado(pedido);
+        setId_comanda(pedido.id_comanda);
         setModalVisivel(true);
     };
+
+    const formatarDataHora = (data) => {
+        const dataObj = new Date(data);
+        const dataBrasileira = new Date(dataObj.getTime() - (21 * 60 * 60 * 1000));
+
+        const dataFormatada = dataBrasileira.toLocaleDateString('pt-BR');
+        const horaFormatada = dataBrasileira.toLocaleTimeString('pt-BR', { hour12: false });
+
+        return `${dataFormatada} ${horaFormatada}`;
+    };
+
+    const alterarPedidoParaProduzindo = async (id_pedido) => {
+        if (id_pedido) {
+            try {
+                const response = await axios.put(`http://${meuIPv4}:3000/pedido/${id_pedido}`, {
+                    status: 'Produzindo',
+                    id_comanda: id_comanda
+                });
+                if (response.status === 200) {
+                    console.log('Pedido alterado para Produzindo com sucesso');
+                    buscarComandasCompletas();
+                    setModalVisivel(false);
+                }
+            } catch (error) {
+                console.error('Erro ao alterar o pedido para Produzindo', error);
+            }
+        }
+    };
+
+    const alterarPedidoParaPronto = async (id_pedido) => {
+        if (id_pedido) {
+            try {
+                const response = await axios.put(`http://${meuIPv4}:3000/pedido/${id_pedido}`, {
+                    status: 'Pronto',
+                    id_comanda: id_comanda
+                });
+                if (response.status === 200) {
+                    console.log('Pedido alterado para Pronto com sucesso');
+                    buscarComandasCompletas();
+                    setModalVisivel(false);
+                }
+            } catch (error) {
+                console.error('Erro ao alterar o pedido para Pronto', error);
+            }
+        }
+    };
+
+    const alterarPedidoParaRejeitado = async (id_pedido) => {
+        if (id_pedido) {
+            try {
+                const response = await axios.put(`http://${meuIPv4}:3000/pedido/${id_pedido}`, {
+                    status: 'Rejeitado',
+                    id_comanda: id_comanda
+                });
+                if (response.status === 200) {
+                    console.log('Pedido alterado para Rejeitado com sucesso');
+                    buscarComandasCompletas();
+                    setModalVisivel(false);
+                }
+            } catch (error) {
+                console.error('Erro ao alterar o pedido para Rejeitado', error);
+            }
+        }
+    };
+
 
     return (
         <View style={styles.container}>
             <View style={styles.searchContainer}>
                 <TextInput
                     style={styles.searchInput}
-                    placeholder="Buscar por ID da Comanda"
+                    placeholder="Buscar por ID do Pedido"
                     value={pesquisa}
                     onChangeText={setPesquisa}
                     keyboardType="numeric"
                 />
             </View>
-
             <FlatList
-                data={ordensPaginaAtual}
+                data={pedidosPaginaAtual}
                 keyExtractor={(item) => item.id_comanda.toString()}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        style={styles.card}
+                        style={[
+                            styles.card,
+                            item.status === 'Registrado' && { backgroundColor: '#E0F7FA' },
+                            item.status === 'Pronto' && { backgroundColor: '#C8E6C9' },
+                            item.status === 'Produzindo' && { backgroundColor: '#FFF9C4' }
+                        ]}
                         onPress={() => abrirModal(item)}
+                        onLongPress={() => abrirModal(item)}
                     >
-                        <Text>Comanda: {item.id_comanda}</Text>
+                        <Text>Pedido: {item.id_pedido}</Text>
+                        <Text>Status: {item.status}</Text>
+                        <Text>Destino: {item.destino}</Text>
+                        <Text>Item: {item.nome_item}</Text>
+                        <Text>Quantidade: {`${item.quantidade} Unidade(s)`}</Text>
+                        <Text>Total do Pedido: {`R$ ${item.somaprecototal}`}</Text>
+                        <Text>Data Abertura: {formatarDataHora(item.data_abertura_pedido)}</Text>
                     </TouchableOpacity>
                 )}
             />
@@ -121,16 +198,19 @@ const Ordens_Cozinha = () => {
             >
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
-                        <Text>Opções para Comanda: {ordemSelecionada?.id_comanda}</Text>
+                        <Text>Opções para o Pedido: {pedidoSelecionado?.id_pedido}</Text>
                         <View style={styles.modalButtonsContainer}>
                             <Button
-                                title="Ver Ordem Cozinha Completa"
-                                onPress={() => {
-                                    setModalVisivel(false);
-                                    navigation.navigate('TodasOrdensComanda', {
-                                        id_comanda: ordemSelecionada?.id_comanda
-                                    });
-                                }}
+                                title="Produzindo"
+                                onPress={() => alterarPedidoParaProduzindo(pedidoSelecionado?.id_pedido)}
+                            />
+                            <Button 
+                                title="Pronto"
+                                onPress={() => alterarPedidoParaPronto(pedidoSelecionado?.id_pedido)}
+                            />
+                            <Button 
+                                title="Rejeitado"
+                                onPress={() => alterarPedidoParaRejeitado(pedidoSelecionado?.id_pedido)}
                             />
                             <Button title="Voltar" onPress={() => setModalVisivel(false)} />
                         </View>
@@ -145,6 +225,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
+        backgroundColor: 'white' 
     },
     searchContainer: {
         flexDirection: 'row',
@@ -161,10 +242,10 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     card: {
-        padding: 20,
+        padding: 10,
         borderWidth: 1,
         borderColor: '#ddd',
-        marginBottom: 10,
+        marginBottom: 5,
         borderRadius: 5,
     },
     paginationContainer: {
@@ -195,6 +276,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'stretch',
         marginTop: 10,
+    },
+    titleVisualizacao: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 20,
     },
 });
 

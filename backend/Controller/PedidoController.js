@@ -3,6 +3,7 @@ import item_cardapio from "../Model/itemCardapio.js";
 import ItemCardapioController from "./ItemCardapioController.js";
 import comanda from "../Model/comanda.js";
 import { criarOrdem } from "../Controller/OrdemController.js";
+import conexao from "../banco/conexao_db.js";
 
 
 async function listar(req, res) {
@@ -31,11 +32,10 @@ async function criar(req, res) {
         }
 
         if (!req.body.status) {
-            req.body.status = 'Produzindo';
+            req.body.status = 'Registrado';
         }
 
         const comandaAberta = await comanda.findByPk(req.body.id_comanda);
-    
         if (!comandaAberta) {
             return res.status(404).send("Comanda não encontrada.");
         }
@@ -44,13 +44,17 @@ async function criar(req, res) {
             return res.status(400).send("Não é possível adicionar itens a uma comanda fechada.");
         }
 
+        if (!req.body.data_abertura_pedido) {
+            req.body.data_abertura_pedido = new Date();
+        }
+
         if (!req.body.destino) {
             if (item.tipo === 'Bebida') {
                 req.body.destino = 'Copa';
             } else if (item.tipo === 'Prato') {
                 req.body.destino = 'Cozinha';
             }
-        }    
+        }
 
         const totalPedido = item.preco * req.body.quantidade;
 
@@ -58,23 +62,17 @@ async function criar(req, res) {
             id_comanda: req.body.id_comanda,
             id_item: req.body.id_item,
             quantidade: req.body.quantidade,
+            data_abertura_pedido: req.body.data_abertura_pedido,
             somaprecototal: totalPedido,
             status: req.body.status,
             destino: req.body.destino,
         });
 
-        const novaOrdem = await criarOrdem(novoPedido.id_pedido);
-
-        res.status(200).json({
-            pedido: novoPedido,
-            ordem: novaOrdem
-        });
+        res.status(200).json(novoPedido);
     } catch (erro) {
-        res.status(500).json({ error: 'Erro ao criar pedido', details: erro.message });
+        res.status(500).json({ error: erro.message });
     }
 }
-
-
 //Insominia POST: http://localhost:3000/pedido
 
 /*
@@ -102,6 +100,7 @@ async function alterar(req, res) {
             somaprecototal: req.body.somaprecototal,
             status: req.body.status,
             destino: req.body.destino,
+            data_abertura_pedido: req.body.data_abertura_pedido,
         },
         {
             where: {
@@ -124,6 +123,63 @@ async function excluir(req, res) {
         .catch(erro => { res.status(500).json(erro) });
 }
 
+async function buscarPedidosProduzindoCopa(req, res) {
+    const query = `
+        SELECT 
+            pedido.id_comanda,
+            pedido.id_pedido,
+            pedido.id_item,
+            item_cardapio.nome AS nome_item,
+            pedido.quantidade,
+            pedido.status,
+            pedido.destino,
+            pedido.somaprecototal,			
+            pedido.data_abertura_pedido
+        FROM 
+            pedido
+        JOIN 
+            item_cardapio ON pedido.id_item = item_cardapio.id_item
+        WHERE 
+            pedido.status IN ('Registrado', 'Produzindo', 'Pronto')
+            AND pedido.destino = 'Copa';
+    `;
+    
+    try {
+        const [resultados] = await conexao.query(query);
+        res.status(200).json(resultados);
+    } catch (erro) {
+        res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
+    }
+}
+
+async function buscarPedidosProduzindoCozinha(req, res) {
+    const query = `
+         SELECT
+            pedido.id_pedido, 
+            pedido.id_comanda,
+            pedido.id_item,
+            item_cardapio.nome AS nome_item,
+            pedido.quantidade,
+            pedido.status,
+            somaprecototal,
+            pedido.destino,
+            pedido.data_abertura_pedido
+        FROM 
+            pedido
+        JOIN 
+            item_cardapio ON pedido.id_item = item_cardapio.id_item
+        WHERE 
+            pedido.status IN ('Registrado', 'Produzindo', 'Pronto')
+            AND pedido.destino = 'Cozinha';
+    `;
+    
+    try {
+        const [resultados] = await conexao.query(query);
+        res.status(200).json(resultados);
+    } catch (erro) {
+        res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
+    }
+}
 
 
-export default { listar, selecionar, criar, alterar, excluir };
+export default { listar, selecionar, criar, alterar, excluir, buscarPedidosProduzindoCopa, buscarPedidosProduzindoCozinha};

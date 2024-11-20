@@ -12,6 +12,7 @@ const config = UsarBancoDeDadosAzure
       host: process.env.DB_AZURE_HOST,
       port: process.env.DB_AZURE_PORT,
       dialect: process.env.DB_AZURE_DIALECT,
+      timezone: '-06:00',
       dialectOptions: {
         ssl: {
           require: process.env.DB_AZURE_SSL === 'true',
@@ -36,6 +37,7 @@ const conexao = new Sequelize(
     host: config.host,
     dialect: config.dialect,
     port: config.port,
+    timezone: '-06:00',
     dialectOptions: config.dialectOptions || {},
   }
 );

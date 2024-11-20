@@ -3,61 +3,66 @@ import conexao from '../banco/conexao_db.js';
 
 
 const pedido = conexao.define('pedido', {
-    id_pedido: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      allowNull: false,
-      primaryKey: true,
+  id_pedido: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  id_comanda: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'comandas',
+      key: 'id_comanda',
     },
-    id_comanda: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'comandas', 
-        key: 'id_comanda',
-      },
-      onDelete: 'CASCADE', 
+    onDelete: 'CASCADE',
+  },
+  id_item: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'items',
+      key: 'id_item',
     },
-    id_item: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'items', 
-          key: 'id_item',
-        },
-        onDelete: 'CASCADE', 
+    onDelete: 'CASCADE',
+  },
+  quantidade: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  },
+  somaprecototal: {
+    type: Sequelize.DECIMAL,
+    allowNUll: false
+  },
+  status: {
+    type: Sequelize.STRING(50),
+    allowNull: false,
+    defaultValue: 'Registrado',
+    validate: {
+      isIn: [['Registrado', 'Produzindo', 'Pronto', 'Entregue', 'Cancelado', 'Rejeitado']],
     },
-    quantidade: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+  },
+  destino: {
+    type: Sequelize.STRING(50),
+    allowNull: false,
+    validate: {
+      isIn: [['Copa', 'Cozinha']],
     },
-    somaprecototal:{
-        type: Sequelize.DECIMAL,
-        allowNUll: false
-    },
-    status: {
-      type: Sequelize.STRING(50),
-      allowNull: false,
-      defaultValue: 'Produzindo', 
-      validate: {
-        isIn: [['Produzindo', 'Entregue']], 
-      },
-    },
-    destino: {
-        type: Sequelize.STRING(50),
-        allowNull: false,
-        validate: {
-          isIn: [['Copa', 'Cozinha']], 
-        },
-    },
-  }, {
-      freezeTableName: true, 
-    timestamps: false, 
-  });
+  },
+  data_abertura_pedido: {
+    type: Sequelize.DATE,
+    allowNull: false,
+    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP AT TIME ZONE 'America/Sao_Paulo'"),
+  }
+}, {
+  freezeTableName: true,
+  timestamps: false,
+});
 
 
-  
-  export default pedido;
+
+export default pedido;
 
 //lembrar de colocar os indexes
 

@@ -85,17 +85,8 @@ app.get("/pedido/:id_pedido", pedido.selecionar);
 app.post("/pedido", pedido.criar);
 app.put("/pedido/:id_pedido", pedido.alterar);
 app.delete("/pedido/:id_pedido", pedido.excluir);
-
-app.get("/ordem", ordem.listar);
-app.get("/ordem/:id_ordem", ordem.selecionar);
-app.post("/ordem", ordem.criar);
-app.put("/ordem/:id_ordem", ordem.alterar);
-app.delete("/ordem/:id_ordem", ordem.excluir);
-app.get("/ordemCopa", ordem.buscarComandasProduzindoCopa);
-app.get("/ordemCozinha", ordem.buscarComandasProduzindoCozinha);
-app.get("/ordemCozinhaAgrupadaPorComanda", ordem.buscarComandasProduzindoCozinhaAgrupadaPorComanda);
-app.get("/ordemCopaAgrupadaPorComanda", ordem.buscarComandasProduzindoCopaAgrupadaPorComanda);
-
+app.get("/pedidoOrdenCopa", pedido.buscarPedidosProduzindoCopa);
+app.get("/pedidoOrdenCozinha", pedido.buscarPedidosProduzindoCozinha);
 
 
 

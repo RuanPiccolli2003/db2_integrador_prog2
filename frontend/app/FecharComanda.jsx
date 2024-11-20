@@ -54,7 +54,7 @@ const FecharComanda = () => {
 
       alert('Comanda fechada com sucesso!');
       setId_usuario("");
-      navigation.navigate('Gerenciar Comandas');
+      navigation.navigate('Gerenciar Comandas Abertas');
     } catch (err) {
       setError('Erro ao fechar a comanda. Tente novamente.');
     } finally {
