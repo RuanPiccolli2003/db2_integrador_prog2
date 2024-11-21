@@ -158,6 +158,24 @@ async function listarComandaDetalhada(req, res) {
     }
 }
 
+async function BuscarTotalComandasAbertasFechadas(req, res) {
+    const query = `
+    SELECT 
+    COUNT(*) FILTER (WHERE status = 'Aberta') AS comandas_abertas,
+    COUNT(*) FILTER (
+        WHERE status = 'Fechada' 
+        AND DATE(data_fechamento) = CURRENT_DATE
+    ) AS comandas_fechadas
+FROM comanda;       
+    `;
+
+    try {
+        const [resultados] = await conexao.query(query);
+        res.status(200).json(resultados);
+    } catch (erro) {
+        res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
+    }
+}
 
 
-export default { listarComandaDetalhada, listar, selecionar, criar, alterar, excluir, fecharComanda };
+export default { listarComandaDetalhada, listar, selecionar, criar, alterar, excluir, fecharComanda, BuscarTotalComandasAbertasFechadas };

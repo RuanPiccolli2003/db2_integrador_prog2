@@ -88,7 +88,7 @@ async function criar(req, res) {
 
 async function alterar(req, res) {
     if (!req.body.id_comanda) {
-        return res.status(500).send("Parametro Id da comanda é obrigatório."); 
+        return res.status(500).send("Parametro Id da comanda é obrigatório.");
     }
 
     await pedido
@@ -101,11 +101,11 @@ async function alterar(req, res) {
             destino: req.body.destino,
             data_abertura_pedido: req.body.data_abertura_pedido,
         },
-        {
-            where: {
-                id_pedido: req.params.id_pedido
-            }
-        })
+            {
+                where: {
+                    id_pedido: req.params.id_pedido
+                }
+            })
         .then(resultado => { res.status(200).json(resultado); })
         .catch(erro => { res.status(500).json(erro); });
 }
@@ -142,7 +142,7 @@ async function buscarPedidosProduzindoCopa(req, res) {
             pedido.status IN ('Registrado', 'Produzindo', 'Pronto')
             AND pedido.destino = 'Copa';
     `;
-    
+
     try {
         const [resultados] = await conexao.query(query);
         res.status(200).json(resultados);
@@ -171,7 +171,7 @@ async function buscarPedidosProduzindoCozinha(req, res) {
             pedido.status IN ('Registrado', 'Produzindo', 'Pronto')
             AND pedido.destino = 'Cozinha';
     `;
-    
+
     try {
         const [resultados] = await conexao.query(query);
         res.status(200).json(resultados);
@@ -181,4 +181,44 @@ async function buscarPedidosProduzindoCozinha(req, res) {
 }
 
 
-export default { listar, selecionar, criar, alterar, excluir, buscarPedidosProduzindoCopa, buscarPedidosProduzindoCozinha};
+
+async function BuscarPedidosAtrasados(req, res) {
+    const query = `
+    SELECT 
+        p.id_pedido, 
+        i.nome AS item, 
+        p.data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' AS data_abertura_pedido_br,
+        CURRENT_TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' - 
+            p.data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' AS tempo_aberto_br
+    FROM pedido p
+    JOIN item_cardapio i ON p.id_item = i.id_item
+    WHERE 
+        p.status = 'Produzindo' 
+        AND CURRENT_TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' - 
+            p.data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' > INTERVAL '30 minutes';
+`;
+try {
+    const [resultados] = await conexao.query(query);
+    res.status(200).json(resultados);
+} catch (erro) {
+    res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
+}
+}
+
+async function BuscarPedidosRejeitados(req, res) {
+    const query = `
+    SELECT COUNT(*) AS pedidos_rejeitados
+FROM pedido
+WHERE status = 'Rejeitado' 
+  AND DATE(data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo') = 
+      DATE(CURRENT_TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo');
+`;
+try {
+    const [resultados] = await conexao.query(query);
+    res.status(200).json(resultados);
+} catch (erro) {
+    res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
+}
+}
+
+export default { listar, selecionar, criar, alterar, excluir, buscarPedidosProduzindoCopa, buscarPedidosProduzindoCozinha, BuscarPedidosAtrasados };

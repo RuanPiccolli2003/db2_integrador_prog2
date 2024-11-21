@@ -77,6 +77,7 @@ app.put("/comanda/:id_comanda", comanda.alterar);
 app.delete("/comanda/:id_comanda", comanda.excluir);
 app.put("/comanda/fecharcomanda/:id_comanda", comanda.fecharComanda);
 app.get("/comandadetalhes/:id_comanda", comanda.listarComandaDetalhada);
+app.get("/comandaBuscarAbertaFechadaHoje", comanda.BuscarTotalComandasAbertasFechadas);
 
 
 app.get("/pedido", pedido.listar);
@@ -86,6 +87,7 @@ app.put("/pedido/:id_pedido", pedido.alterar);
 app.delete("/pedido/:id_pedido", pedido.excluir);
 app.get("/pedidoOrdenCopa", pedido.buscarPedidosProduzindoCopa);
 app.get("/pedidoOrdenCozinha", pedido.buscarPedidosProduzindoCozinha);
+app.get("/pedidoBuscarAtrasado", pedido.BuscarPedidosAtrasados);
 
 
 
