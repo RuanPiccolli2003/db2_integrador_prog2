@@ -15,7 +15,7 @@ import ComandaPrincipal from './Comanda';
 import VisualizarComandaCompleta from './VisualizarComandaCompleta'
 import { Box, Button, NativeBaseProvider } from 'native-base';
 import AlterarItensComanda from './AlterarPedidoComanda';
-import teste from './Telateste';
+import TelaHome from './Home';
 // 3 horas para descobrir como deixar os menus ocultos PQP
 
 function Home() {
@@ -45,7 +45,7 @@ function Home() {
         }}
         initialRouteName='Home'
       >
-        <Drawer.Screen name='Menu Principal' component={Home} />
+        <Drawer.Screen name='Menu Principal' component={TelaHome} />
         <Drawer.Screen name='Gerenciar Comandas Abertas' component={ComandaPrincipal} />
 
         <Drawer.Screen
@@ -91,8 +91,8 @@ function Home() {
         <Drawer.Screen name='Cadastrar Itens' component={Cadastro_item} />
         <Drawer.Screen name='Relatorios' component={Relatorio_Diaria} />
         <Drawer.Screen 
-        name='Teste' 
-        component={teste}
+        name='Tela Home' 
+        component={TelaHome}
         options={{
           drawerItemStyle: { display: 'none' },
         }

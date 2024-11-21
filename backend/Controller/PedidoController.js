@@ -185,17 +185,18 @@ async function buscarPedidosProduzindoCozinha(req, res) {
 async function BuscarPedidosAtrasados(req, res) {
     const query = `
     SELECT 
-        p.id_pedido, 
-        i.nome AS item, 
-        p.data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' AS data_abertura_pedido_br,
-        CURRENT_TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' - 
-            p.data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' AS tempo_aberto_br
-    FROM pedido p
-    JOIN item_cardapio i ON p.id_item = i.id_item
-    WHERE 
-        p.status = 'Produzindo' 
-        AND CURRENT_TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' - 
-            p.data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' > INTERVAL '30 minutes';
+    p.id_pedido, 
+    p.id_item,
+    i.nome AS nome_item,
+    p.data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' AS data_abertura_pedido_br,
+    CURRENT_TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' - 
+        (p.data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo') AS tempo_aberto_br
+FROM pedido p
+JOIN item_cardapio i ON p.id_item = i.id_item 
+WHERE 
+    p.status = 'Produzindo' 
+    AND CURRENT_TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' - 
+        (p.data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo') > INTERVAL '30 minutes';
 `;
 try {
     const [resultados] = await conexao.query(query);

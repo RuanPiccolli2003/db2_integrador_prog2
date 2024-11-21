@@ -5,7 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import { meuIPv4 } from './index';
 import axios from 'axios';
 
-function Teste() {
+//Consultas está funcionando para comandas, mas os demais está com problema por conta do fuso horario
+
+function TelaHome() {
   const navigation = useNavigation();
   const [comandasTotais, setComandasTotais] = useState({ abertas: 0, fechadas: 0 });
   const [comandas, setComandas] = useState([]);
@@ -26,15 +28,31 @@ function Teste() {
     }
   };
 
-  //DAQUI PRA BAIXO É APENAS TESTES PARA APARECER NA PAGINA INICIAL, SÓ PARA VER COMO FICAVA KKKKKKKKKKKKKKK
 
-  async function buscarPedidosAtrasados() {
-    const data = [
-      { id_pedido: 1, item: 'Pizza', tempo_aberto_br: '00:45:00' },
-      { id_pedido: 2, item: 'Hambúrguer', tempo_aberto_br: '00:40:00' },
-    ];
-    setPedidosAtrasados(data);
-  }
+  const buscarPedidosAtrasados = async () => {
+    try {
+      const response = await axios.get(`http://${meuIPv4}:3000/pedidoBuscarAtrasado`);
+      const data = response.data;
+
+      const pedidosComAtrasoFormatados = data.map(pedido => {
+        const { id_pedido, nome_item, tempo_aberto_br } = pedido;
+        const { hours, minutes } = tempo_aberto_br;  
+
+        return {
+          id_pedido,
+          nome_item,
+          tempo_aberto_br: `${hours}h ${minutes}m`,  
+        };
+      });
+
+      setPedidosAtrasados(pedidosComAtrasoFormatados);
+    } catch (error) {
+      console.error('Erro ao buscar pedidos atrasados:', error);
+    }
+  };
+
+    //DAQUI PRA BAIXO É APENAS TESTES PARA APARECER NA PAGINA INICIAL, SÓ PARA VER COMO FICAVA KKKKKKKKKKKKKKK 
+
 
   async function buscarOutrosDados() {
     const data = {
@@ -73,19 +91,19 @@ function Teste() {
       <ScrollView>
         <View style={styles.cardsContainer}>
           <View style={styles.card}>
-            <MaterialIcons name="receipt-long" size={30} color="#007bff" />
-            <Text style={styles.cardTitle}>Comandas</Text>
+            <MaterialIcons name="receipt-long" size={30} color="black" />
+            <Text style={styles.cardTitle}>Comandas:</Text>
             <Text style={styles.cardText}>Abertas: {comandasTotais.abertas}</Text>
             <Text style={styles.cardText}>Fechadas Hoje: {comandasTotais.fechadas}</Text>
           </View>
 
           <View style={styles.card}>
-            <MaterialIcons name="restaurant" size={30} color="#007bff" />
+            <MaterialIcons name="restaurant" size={30} color="black" />
             <Text style={styles.cardTitle}>Pedidos Atrasados</Text>
             {pedidosAtrasados.length > 0 ? (
               pedidosAtrasados.map((pedido) => (
                 <Text key={pedido.id_pedido} style={styles.cardText}>
-                  {pedido.item} - {pedido.tempo_aberto_br}
+                  Pedido #{pedido.id_pedido} - {pedido.nome_item} - Atraso: {pedido.tempo_aberto_br}
                 </Text>
               ))
             ) : (
@@ -94,19 +112,19 @@ function Teste() {
           </View>
 
           <View style={styles.card}>
-            <MaterialIcons name="attach-money" size={30} color="#007bff" />
+            <MaterialIcons name="attach-money" size={30} color="black" />
             <Text style={styles.cardTitle}>Total de Vendas</Text>
             <Text style={styles.cardText}>R$ {outrosDados.totalVendas.toFixed(2)}</Text>
           </View>
 
           <View style={styles.card}>
-            <MaterialIcons name="table-restaurant" size={30} color="#007bff" />
+            <MaterialIcons name="table-restaurant" size={30} color="black" />
             <Text style={styles.cardTitle}>Mesas Disponíveis</Text>
             <Text style={styles.cardText}>{outrosDados.mesasDisponiveis}</Text>
           </View>
 
           <View style={styles.card}>
-            <MaterialIcons name="group" size={30} color="#007bff" />
+            <MaterialIcons name="group" size={30} color="black" />
             <Text style={styles.cardTitle}>Clientes Ativos</Text>
             <Text style={styles.cardText}>{outrosDados.clientesAtivos}</Text>
           </View>
@@ -127,6 +145,7 @@ function Teste() {
           <Text style={styles.footerButtonText}>Copa { }</Text>
           <MaterialIcons name="local-bar" size={24} color="black" />
         </TouchableOpacity>
+
       </View>
     </View>
   );
@@ -214,4 +233,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Teste;
+export default TelaHome;
