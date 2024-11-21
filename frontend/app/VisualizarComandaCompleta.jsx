@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Button, StyleSheet, Modal, TouchableOpacity, } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, FlatList, Button, StyleSheet, Modal, TouchableOpacity, Animated } from 'react-native';
 import axios from 'axios';
 import { meuIPv4 } from './index';
 import { TextInput } from 'react-native-gesture-handler';
@@ -19,7 +19,7 @@ const VisualizarComandaCompleta = () => {
     const route = useRoute();
     const { id_comanda: comandaId } = route.params || {};
 
-
+    const borderAnimation = useRef(new Animated.Value(0)).current;
 
     const buscarComandasCompletas = async () => {
         if (comandaId) {
@@ -32,13 +32,43 @@ const VisualizarComandaCompleta = () => {
         }
     };
 
+    const animarBorda = () => {
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(borderAnimation, {
+                    toValue: 1,
+                    duration: 500,
+                    useNativeDriver: false,
+                }),
+                Animated.timing(borderAnimation, {
+                    toValue: 0,
+                    duration: 1000,
+                    useNativeDriver: false,
+                })
+            ])
+        ).start();
+    };
+
+    useEffect(() => {
+        animarBorda();
+    }, []);
+
+    const CorBordaPiscandoVerde = borderAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['green', 'transparent'],
+    });
+
+    const CorBordaPiscandoAzul = borderAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['blue', 'transparent'],
+    });
+
     useEffect(() => {
         if (comandaId) {
             setId_comanda(comandaId);
             buscarComandasCompletas();
         }
     }, [comandaId]);
-
 
     useFocusEffect(
         React.useCallback(() => {
@@ -65,6 +95,24 @@ const VisualizarComandaCompleta = () => {
         }
     }, [pesquisa, pedidos]);
 
+    useEffect(() => {
+        const ordemPrioridade = {
+            'Pronto': 1,
+            'Rejeitado': 2,
+            'Registrado': 3,
+            'Produzindo': 4,
+            'Entregue': 5,
+            'Cancelado': 6
+        };
+
+        const pedidosOrdenados = [...pedidos].sort((a, b) => {
+            return ordemPrioridade[a.status_pedido] - ordemPrioridade[b.status_pedido];
+        });
+
+        setPedidosBarraDePesquisa(pedidosOrdenados);
+    }, [pedidos]);
+
+
     const alterarPedidoParaEntregue = async (id_pedido) => {
         if (id_pedido) {
             try {
@@ -79,6 +127,24 @@ const VisualizarComandaCompleta = () => {
                 }
             } catch (error) {
                 console.error('Erro ao alterar o pedido para Entregue', error);
+            }
+        }
+    };
+
+    const alterarPedidoParaCancelado = async (id_pedido) => {
+        if (id_pedido) {
+            try {
+                const response = await axios.put(`http://${meuIPv4}:3000/pedido/${id_pedido}`, {
+                    status: 'Cancelado',
+                    id_comanda: comandaId
+                });
+                if (response.status === 200) {
+                    console.log('Pedido alterado para Cancelado com sucesso');
+                    buscarComandasCompletas();
+                    setModalVisivel(false);
+                }
+            } catch (error) {
+                console.error('Erro ao alterar o pedido para Cancelado', error);
             }
         }
     };
@@ -117,35 +183,43 @@ const VisualizarComandaCompleta = () => {
                     keyboardType="numeric"
                 />
             </View>
-            <Text style={styles.titleVisualizacao}> Pedidos da Comanda: {id_comanda}</Text>
-
             <FlatList
                 data={pedidosPaginaAtual}
                 keyExtractor={(item) => item.id_comanda.toString()}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        style={[
-                            styles.card,
-                            item.status_pedido === 'Entregue' && { backgroundColor: '#FFEB3B' }, 
-                            item.status_pedido === 'Produzindo' && { backgroundColor: '#FFCC80' }, 
-                            item.status_pedido === 'Pronto' && { backgroundColor: '#C8E6C9' }, 
-                            item.status_pedido === 'Cancelado' && { backgroundColor: '#FFABAB' }, 
-                            item.status_pedido === 'Rejeitado' && { backgroundColor: '#E1BEE7' },
-                            item.status_pedido === 'Registrado' && { backgroundColor: '#E0F7FA' },
-                        ]}
                         onPress={() => abrirModal(item)}
                         onLongPress={() => abrirModal(item)}
                     >
-                        <Text>Pedido: {item.id_pedido}</Text>
-                        <Text>Status: {item.status_pedido}</Text>
-                        <Text>Destino: {item.destino}</Text>
-                        <Text>Item: {item.nome_item}</Text>
-                        <Text>Quantidade: {`${item.quantidade} Unidade(s)`}</Text>
-                        <Text>Total do Pedido: {`R$ ${item.somaprecototal}`}</Text>
+                        <Animated.View
+                            style={[
+                                styles.card,
+                                item.status_pedido === 'Entregue' && { backgroundColor: '#90EE90' },
+                                item.status_pedido === 'Rejeitado' && { backgroundColor: '#FFFFE0' },
+                                item.status_pedido === 'Produzindo' && {
+                                    backgroundColor: 'transparent',
+                                    borderColor: CorBordaPiscandoAzul,
+                                    borderWidth: 2,
+                                },
+                                item.status_pedido === 'Pronto' && {
+                                    backgroundColor: 'transparent',
+                                    borderColor: CorBordaPiscandoVerde,
+                                    borderWidth: 4,
+                                },
+                                item.status_pedido === 'Cancelado' && { backgroundColor: '#FFABAB' },
+                                item.status_pedido === 'Registrado' && { backgroundColor: 'white' },
+                            ]}
+                        >
+                            <Text>Pedido: {item.id_pedido}</Text>
+                            <Text>Status: {item.status_pedido}</Text>
+                            <Text>Destino: {item.destino}</Text>
+                            <Text>Item: {item.nome_item}</Text>
+                            <Text>Quantidade: {`${item.quantidade} Unidade(s)`}</Text>
+                            <Text>Total do Pedido: {`R$ ${item.somaprecototal}`}</Text>
+                        </Animated.View>
                     </TouchableOpacity>
                 )}
             />
-
             <View style={styles.paginationContainer}>
                 <Button title="Anterior" onPress={irPaginaAnterior} />
                 <Text style={styles.pageIndicator}>Página {paginaAtual} de {totalPaginas}</Text>
@@ -174,6 +248,10 @@ const VisualizarComandaCompleta = () => {
                                     });
                                 }}
                             />
+                             <Button
+                                title="Cancelar Pedido"
+                                onPress={() => alterarPedidoParaCancelado(pedidoSelecionado?.id_pedido)}
+                            />
                             <Button title="Voltar" onPress={() => setModalVisivel(false)} />
                         </View>
                     </View>
@@ -196,19 +274,15 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     searchInput: {
-        height: 40,
-        borderColor: '#ccc',
         borderWidth: 1,
-        borderRadius: 5,
-        paddingLeft: 10,
+        padding: 10,
         width: '100%',
+        marginBottom: 10,
     },
     card: {
         padding: 10,
-        borderWidth: 1,
-        borderColor: '#ddd',
-        marginBottom: 5,
-        borderRadius: 5,
+        borderRadius: 8,
+        marginBottom: 10,
     },
     paginationContainer: {
         flexDirection: 'row',
@@ -218,6 +292,7 @@ const styles = StyleSheet.create({
     },
     pageIndicator: {
         fontSize: 16,
+        marginHorizontal: 10,
     },
     modalOverlay: {
         flex: 1,
@@ -229,21 +304,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
-        width: 300,
+        width: '80%',
         alignItems: 'center',
     },
     modalButtonsContainer: {
-        width: '100%',
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        alignItems: 'stretch',
         marginTop: 10,
-    },
-    titleVisualizacao: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
+        width: '100%',
+    }
 });
 
 export default VisualizarComandaCompleta;

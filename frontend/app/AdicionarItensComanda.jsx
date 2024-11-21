@@ -199,27 +199,6 @@ function AdicionarItensComanda() {
           overflow='hidden'
         />
 
-        <Select
-          style={styles.inp}
-          backgroundColor={'blue.100'}
-          placeholderTextColor={"black"}
-          justifyContent={"center"}
-          h="50"
-          marginTop={5}
-          marginBottom={5}
-          placeholder="Status: Selecionar"
-          selectedValue={status}
-          onValueChange={setStatus}
-          overflow='hidden'
-          _selectedItem={{
-            bg: "blue.200",
-            endIcon: <CheckIcon size="5" />,
-          }}
-        >
-          <Select.Item label="Produzindo" value={"Produzindo"} />
-          <Select.Item label="Entregue" value="Entregue" />
-        </Select>
-
         <Button
           style={{
             width: '50%',

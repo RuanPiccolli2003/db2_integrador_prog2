@@ -1,19 +1,18 @@
 import React, { useState } from "react";
-import { View, Text } from "react-native";
+import { View, StyleSheet, TextInput, } from "react-native";
 import { NativeBaseProvider, Heading, Input, Button, Select, CheckIcon } from "native-base";
-import styles from "./Design/Estilos";
 import CurrencyInput from 'react-native-currency-input';
 import axios from 'axios';
 import { meuIPv4 } from "./index";
 import { useNavigation } from '@react-navigation/native';
+import styles from "./Design/Estilos";
 
-function Cadastro_item() {
+function CadastroItem() {
   const navigation = useNavigation();
 
   const [nome, setNome] = useState("");
   const [tipo, setTipo] = useState("");
   const [preco, setPreco] = useState("");
-  const [quantidade, setQuantidade] = useState(1);
   const [loading, setLoading] = useState(false);
 
   const cadastrarItem = async () => {
@@ -28,14 +27,12 @@ function Cadastro_item() {
         nome: nome,
         tipo: tipo,
         preco: preco,
-        quantidade: quantidade,
       });
 
       alert("Item cadastrado com sucesso!");
-      console.log(response.data);
       setNome("");
       setTipo("");
-      setPreco(0);
+      setPreco("");
       navigation.navigate('Cadastrar Itens');
     } catch (error) {
       alert("Erro ao cadastrar o item");
@@ -48,36 +45,22 @@ function Cadastro_item() {
   return (
     <View style={styles.NavigationContainer}>
       <NativeBaseProvider style={styles.base}>
-        <Heading marginTop={20} marginBottom={10} textAlign="center">Cadastrar Item</Heading>
+        <Heading margin={10}>Cadastrar Item</Heading>
 
-        <Input
+        <TextInput
           style={styles.inp}
-          backgroundColor="blue.100"
-          placeholderTextColor="black"
-          justifyContent="center"
-          h="50"
-          marginTop={5}
-          marginBottom={5}
           placeholder="Nome do Item"
           value={nome}
           onChangeText={setNome}
-          overflow="hidden"
         />
 
         <Select
           style={styles.inp}
-          backgroundColor="blue.100"
-          placeholderTextColor="black"
-          justifyContent="center"
-          h="50"
-          marginTop={5}
-          marginBottom={5}
           placeholder="Tipo: Selecionar"
           selectedValue={tipo}
           onValueChange={setTipo}
-          overflow="hidden"
           _selectedItem={{
-            bg: "blue.200",
+            bg: "gray.200",
             endIcon: <CheckIcon size="5" />,
           }}
         >
@@ -86,41 +69,21 @@ function Cadastro_item() {
         </Select>
 
         <CurrencyInput
-          style={{
-            ...styles.inp,
-            borderWidth: 1,         
-            borderColor: '#ebf8ff',
-            paddingLeft: 10,        
-            paddingRight: 10,      
-            backgroundColor: '#ebf8ff',
-            height: 50,            
-            width: 210,
-          }}
-          placeholderTextColor="black"
-          justifyContent="center"
-          h="50"
-          marginTop={5}
-          marginBottom={5}
+          style={styles.inp}
           placeholder="Valor R$ 0,00"
-          keyboardType="numeric"
           value={preco}
           onChangeValue={setPreco}
           delimiter="."
           separator=","
           precision={2}
           prefix="R$ "
-          overflow="hidden"
         />
-        
+
         <Button
-          style={{
-            width: '100%',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            marginTop: 20,
-          }}
-          isLoading={loading}
           onPress={cadastrarItem}
+          isLoading={loading}
+          style={styles.button}
+          _text={{ fontWeight: "bold" }}
         >
           Cadastrar Item
         </Button>
@@ -129,4 +92,6 @@ function Cadastro_item() {
   );
 }
 
-export default Cadastro_item;
+
+
+export default CadastroItem;

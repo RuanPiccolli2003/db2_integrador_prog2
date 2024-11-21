@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 10,
     padding: 20,
+    backgroundColor: 'white' 
   },
   formulario: {
     width: "100%",
@@ -34,13 +35,12 @@ const styles = StyleSheet.create({
   },
   inp: {
     height: 50,
-    width: '100%',
+    width: '90%',
     marginTop: 10,  
     marginBottom: 10, 
     borderRadius: 10,
     backgroundColor: '#ebf8ff',  
-    paddingLeft: 10,
-    
+    paddingLeft: 10,    
   },
   cotacao: {
     height: 50,
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     margin: 20,
     flexDirection: 'row',
     marginBottom: '10',
-  }
+  },
 });
 
 export default styles;

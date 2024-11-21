@@ -12,7 +12,6 @@ import comanda from "./Controller/ComandaController.js"
 
 import pedido from "./Controller/PedidoController.js"
 
-import ordem from "./Controller/OrdemController.js"
 
 import dotenv from 'dotenv';
 dotenv.config();

@@ -35,7 +35,7 @@ const AbrirComanda = () => {
   };
 
   return (
-    <View style={styles.NavigationContainer}>
+    <View style={styles.container}>
       <Text style={styles.title}>Abrir Comanda</Text>
 
       {error && <Text style={styles.error}>{error}</Text>}
@@ -60,8 +60,8 @@ const AbrirComanda = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     padding: 16,
+    backgroundColor: 'white' 
   },
   title: {
     fontSize: 24,
@@ -71,12 +71,11 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   input: {
-    height: 40,
-    borderColor: '#ccc',
+    padding: 15,
     borderWidth: 1,
-    borderRadius: 4,
-    paddingLeft: 8,
-    marginBottom: 16,
+    borderColor: '#ccc',
+    marginBottom: 10,
+    borderRadius: 5,
   },
   error: {
     color: 'red',

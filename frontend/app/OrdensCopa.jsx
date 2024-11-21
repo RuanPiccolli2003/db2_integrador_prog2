@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Button, StyleSheet, Modal, TouchableOpacity, } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, FlatList, Button, StyleSheet, Modal, TouchableOpacity, Animated} from 'react-native';
 import axios from 'axios';
 import { meuIPv4 } from './index';
 import { TextInput } from 'react-native-gesture-handler';
@@ -18,6 +18,8 @@ const Ordens_Copa = () => {
     const route = useRoute();
     const [id_comanda, setId_comanda] = useState();
 
+    const borderAnimation = useRef(new Animated.Value(0)).current;
+
 
     const buscarComandasCompletas = async () => {
             try {
@@ -32,6 +34,37 @@ const Ordens_Copa = () => {
     useEffect(() => {
         buscarComandasCompletas();
     }, [])
+
+    const animarBorda = () => {
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(borderAnimation, {
+                    toValue: 1,
+                    duration: 500,
+                    useNativeDriver: false,
+                }),
+                Animated.timing(borderAnimation, {
+                    toValue: 0,
+                    duration: 1000,
+                    useNativeDriver: false,
+                })
+            ])
+        ).start();
+    };
+
+    useEffect(() => {
+        animarBorda();
+    }, []);
+
+    const CorBordaPiscandoAmarelo = borderAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['yellow', 'transparent'],
+    });
+
+    const CorBordaPiscandoAzul = borderAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['blue', 'transparent'],
+    });
 
 
     useFocusEffect(
@@ -57,6 +90,20 @@ const Ordens_Copa = () => {
             setPedidosBarraDePesquisa(resultadoPesquisa);
         }
     }, [pesquisa, pedidos]);
+
+    useEffect(() => {
+        const ordemPrioridade = {
+            'Registrado': 1,
+            'Produzindo': 2,
+            'Pronto': 3
+        };
+
+        const pedidosOrdenados = [...pedidos].sort((a, b) => {
+            return ordemPrioridade[a.status] - ordemPrioridade[b.status];
+        });
+
+        setPedidosBarraDePesquisa(pedidosOrdenados);
+    }, [pedidos]);
 
     const ultimoPedido = paginaAtual * pedidosPorPagina;
     const primeiroPedido = ultimoPedido - pedidosPorPagina;
@@ -163,15 +210,26 @@ const Ordens_Copa = () => {
                 keyExtractor={(item) => item.id_comanda.toString()}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        style={[
-                            styles.card,
-                            item.status === 'Registrado' && { backgroundColor: '#E0F7FA' },
-                            item.status === 'Pronto' && { backgroundColor: '#C8E6C9' },
-                            item.status === 'Produzindo' && { backgroundColor: '#FFCC80' }
-                        ]}
-                        onPress={() => abrirModal(item)}
+                    onPress={() => abrirModal(item)}
                         onLongPress={() => abrirModal(item)}
                     >
+                        <Animated.View
+                        style={[
+                            styles.card,
+                            item.status === 'Registrado' && {
+                                backgroundColor: 'transparent',
+                                borderColor: CorBordaPiscandoAmarelo,
+                                borderWidth: 2,
+                            },,
+                            item.status === 'Pronto' && { backgroundColor: '#C8E6C9' },
+                            item.status === 'Produzindo' && {
+                                backgroundColor: 'transparent',
+                                borderColor: CorBordaPiscandoAzul,
+                                borderWidth: 2,
+                            },
+                        ]}
+                        >
+                        
                         <Text>Pedido: {item.id_pedido}</Text>
                         <Text>Status: {item.status}</Text>
                         <Text>Destino: {item.destino}</Text>
@@ -179,6 +237,7 @@ const Ordens_Copa = () => {
                         <Text>Quantidade: {`${item.quantidade} Unidade(s)`}</Text>
                         <Text>Total do Pedido: {`R$ ${item.somaprecototal}`}</Text>
                         <Text>Data Abertura: {formatarDataHora(item.data_abertura_pedido)}</Text>
+                        </Animated.View>
                     </TouchableOpacity>
                 )}
             />

@@ -30,7 +30,7 @@ function Home() {
 }
 
 
-export function App_Menu_Principal() {
+ function App_Menu_Principal() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
@@ -93,5 +93,6 @@ export function App_Menu_Principal() {
     </NavigationContainer>
   );
 }
+
 
 export default App_Menu_Principal;

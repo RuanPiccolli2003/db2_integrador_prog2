@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: 'white' 
   },
   title: {
     fontSize: 24,
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderWidth: 1,
     borderColor: '#ccc',
-    marginBottom: 5,
+    marginBottom: 10,
     borderRadius: 5,
   },
   error: {

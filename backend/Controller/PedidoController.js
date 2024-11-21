@@ -2,7 +2,6 @@ import pedido from "../Model/pedido.js"
 import item_cardapio from "../Model/itemCardapio.js";
 import ItemCardapioController from "./ItemCardapioController.js";
 import comanda from "../Model/comanda.js";
-import { criarOrdem } from "../Controller/OrdemController.js";
 import conexao from "../banco/conexao_db.js";
 
 
