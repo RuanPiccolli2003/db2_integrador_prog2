@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, FlatList, Button, StyleSheet, Modal, TouchableOpacity, Animated} from 'react-native';
+import { View, Text, FlatList, Button, StyleSheet, Modal, TouchableOpacity, Animated } from 'react-native';
 import axios from 'axios';
 import { meuIPv4 } from './index';
 import { TextInput } from 'react-native-gesture-handler';
@@ -22,13 +22,13 @@ const Ordens_Copa = () => {
 
 
     const buscarComandasCompletas = async () => {
-            try {
-                const response = await axios.get(`http://${meuIPv4}:3000/pedidoOrdenCopa`);
-                id_comanda
-                setPedidos(response.data);
-            } catch (error) {
-                console.error('Erro ao buscar comandas', error);
-            }
+        try {
+            const response = await axios.get(`http://${meuIPv4}:3000/pedidoOrdenCopa`);
+            id_comanda
+            setPedidos(response.data);
+        } catch (error) {
+            console.error('Erro ao buscar comandas', error);
+        }
     };
 
     useEffect(() => {
@@ -72,10 +72,12 @@ const Ordens_Copa = () => {
             buscarComandasCompletas();
             setPaginaAtual(1);
             setModalVisivel(false);
+            animarBorda();
 
             return () => {
                 setPedidos([]);
                 setPedidosBarraDePesquisa([]);
+                borderAnimation.stopAnimation();
             };
         }, [])
     );
@@ -210,33 +212,33 @@ const Ordens_Copa = () => {
                 keyExtractor={(item) => item.id_comanda.toString()}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                    onPress={() => abrirModal(item)}
+                        onPress={() => abrirModal(item)}
                         onLongPress={() => abrirModal(item)}
                     >
                         <Animated.View
-                        style={[
-                            styles.card,
-                            item.status === 'Registrado' && {
-                                backgroundColor: 'transparent',
-                                borderColor: CorBordaPiscandoAmarelo,
-                                borderWidth: 2,
-                            },,
-                            item.status === 'Pronto' && { backgroundColor: '#C8E6C9' },
-                            item.status === 'Produzindo' && {
-                                backgroundColor: 'transparent',
-                                borderColor: CorBordaPiscandoAzul,
-                                borderWidth: 2,
-                            },
-                        ]}
+                            style={[
+                                styles.card,
+                                item.status === 'Registrado' && {
+                                    backgroundColor: 'transparent',
+                                    borderColor: CorBordaPiscandoAmarelo,
+                                    borderWidth: 2,
+                                }, ,
+                                item.status === 'Pronto' && { backgroundColor: '#C8E6C9' },
+                                item.status === 'Produzindo' && {
+                                    backgroundColor: 'transparent',
+                                    borderColor: CorBordaPiscandoAzul,
+                                    borderWidth: 2,
+                                },
+                            ]}
                         >
-                        
-                        <Text>Pedido: {item.id_pedido}</Text>
-                        <Text>Status: {item.status}</Text>
-                        <Text>Destino: {item.destino}</Text>
-                        <Text>Item: {item.nome_item}</Text>
-                        <Text>Quantidade: {`${item.quantidade} Unidade(s)`}</Text>
-                        <Text>Total do Pedido: {`R$ ${item.somaprecototal}`}</Text>
-                        <Text>Data Abertura: {formatarDataHora(item.data_abertura_pedido)}</Text>
+
+                            <Text>Pedido: {item.id_pedido}</Text>
+                            <Text>Status: {item.status}</Text>
+                            <Text>Destino: {item.destino}</Text>
+                            <Text>Item: {item.nome_item}</Text>
+                            <Text>Quantidade: {`${item.quantidade} Unidade(s)`}</Text>
+                            <Text>Total do Pedido: {`R$ ${item.somaprecototal}`}</Text>
+                            <Text>Data Abertura: {formatarDataHora(item.data_abertura_pedido)}</Text>
                         </Animated.View>
                     </TouchableOpacity>
                 )}
@@ -261,13 +263,13 @@ const Ordens_Copa = () => {
                             <Button
                                 title="Produzindo"
                                 onPress={() => alterarPedidoParaProduzindo(pedidoSelecionado?.id_pedido)}
-                                />
-                            <Button 
+                            />
+                            <Button
                                 title="Pronto"
                                 onPress={() => alterarPedidoParaPronto(pedidoSelecionado?.id_pedido)}
                             />
-                            <Button 
-                                title="Rejeitado"
+                            <Button
+                                title="Rejeitar"
                                 onPress={() => alterarPedidoParaRejeitado(pedidoSelecionado?.id_pedido)}
                             />
                             <Button title="Voltar" onPress={() => setModalVisivel(false)} />
@@ -283,7 +285,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: 'white' 
+        backgroundColor: 'white'
     },
     searchContainer: {
         flexDirection: 'row',

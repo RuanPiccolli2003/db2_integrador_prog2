@@ -243,7 +243,7 @@ const VisualizarComandaCompleta = () => {
                             <Button title="Alterar Pedido"
                                 onPress={() => {
                                     setModalVisivel(false);
-                                    navigation.navigate('Alterar item de comanda', {
+                                    navigation.navigate('Alterar itens da comanda', {
                                         id_pedido: pedidoSelecionado?.id_pedido,
                                     });
                                 }}
