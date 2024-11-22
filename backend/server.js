@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 
-import conexao from "../backend/banco/conexao_db.js"
+import conexao from "./banco/conexao_db.js"
 
 import usuario from "./Controller/UsuarioController.js"
 import nome from "./Controller/UsuarioController.js"
@@ -32,7 +32,7 @@ try {
 const app = express();
 app.use(cors());
 app.use(express.json());
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 
 
@@ -90,18 +90,11 @@ app.get("/pedidoOrdenCozinha", pedido.buscarPedidosProduzindoCozinha);
 app.get("/pedidoBuscarAtrasado", pedido.BuscarPedidosAtrasados);
 
 
-
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   })
 
 
-app.get("/", function(r){
-    
-
-
-})
-
-
-
-
+  app.get("/", (request, response) => {
+    response.status(200).send("Esta é a mensagem na tela!");
+});

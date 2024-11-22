@@ -38,12 +38,12 @@ function TelaHome() {
 
       const pedidosComAtrasoFormatados = data.map(pedido => {
         const { id_pedido, nome_item, tempo_aberto_br } = pedido;
-        const { hours, minutes } = tempo_aberto_br;  
+        const { days, hours, minutes } = tempo_aberto_br;  
 
         return {
           id_pedido,
           nome_item,
-          tempo_aberto_br: `${hours}h ${minutes}m`,  
+          tempo_aberto_br: `${days}d ${hours}h ${minutes}m`,  
         };
       });
 
