@@ -4,6 +4,7 @@ import { NativeBaseProvider, Heading, Input, Button, Select, CheckIcon } from "n
 import CurrencyInput from 'react-native-currency-input';
 import axios from 'axios';
 import { meuIPv4 } from "./index";
+import { dominioAzure} from './index';
 import { useNavigation } from '@react-navigation/native';
 import styles from "./Design/Estilos";
 
@@ -23,7 +24,7 @@ function CadastroItem() {
 
     setLoading(true);
     try {
-      const response = await axios.post(`http://${meuIPv4}:3000/itemcardapio`, {
+      const response = await axios.post(`${dominioAzure}/itemcardapio`, {
         nome: nome,
         tipo: tipo,
         preco: preco,

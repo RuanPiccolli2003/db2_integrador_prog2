@@ -6,6 +6,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import AbrirComanda from './AbrirComanda';
 import Drawer from './Export/drawer';
+import { dominioAzure} from './index';
 
 
 
@@ -23,7 +24,7 @@ const ComandaPrincipal = () => {
     useEffect(() => {
         const buscarComandas = async () => {
             try {
-                const response = await axios.get(`http://${meuIPv4}:3000/comanda?status=Aberta`);
+                const response = await axios.get(`${dominioAzure}/comanda?status=Aberta`);
                 setComandas(response.data);
                 setComandasBarraDePesquisa(response.data);
             } catch (error) {

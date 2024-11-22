@@ -4,6 +4,7 @@ import { NativeBaseProvider, Heading, Select, CheckIcon, Input, Button, Modal } 
 import CurrencyInput from 'react-native-currency-input';
 import axios from 'axios';
 import { meuIPv4 } from "./index";
+import { dominioAzure} from './index';
 import styles from "./Design/Estilos"
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -39,7 +40,7 @@ const AlterarPedidoComanda = () => {
 
     useEffect(() => {
         if (pedidoId) {
-            axios.get(`http://${meuIPv4}:3000/pedido/${pedidoId}`)
+            axios.get(`${dominioAzure}/pedido/${pedidoId}`)
                 .then(response => {
                     if (response.data) {
                         setId_item(response.data.id_item || "");
@@ -56,7 +57,7 @@ const AlterarPedidoComanda = () => {
 
     useEffect(() => {
         if (id_item) {
-            axios.get(`http://${meuIPv4}:3000/itemcardapio/${id_item}`)
+            axios.get(`${dominioAzure}/itemcardapio/${id_item}`)
                 .then(response => {
                     if (response.data) {
                         setPrecoItem(response.data.preco);
@@ -69,7 +70,7 @@ const AlterarPedidoComanda = () => {
 
     useEffect(() => {
         if (id_comanda) {
-            axios.get(`http://${meuIPv4}:3000/comanda/${id_comanda}`)
+            axios.get(`${dominioAzure}/comanda/${id_comanda}`)
                 .then(response => {
                     if (response.data) {
                         setComandaStatus(response.data.status || "");
@@ -86,7 +87,7 @@ const AlterarPedidoComanda = () => {
 
     const buscarItens = async () => {
         try {
-            const response = await axios.get(`http://${meuIPv4}:3000/itemcardapio`);
+            const response = await axios.get(`${dominioAzure}/itemcardapio`);
             setItens(response.data || []);
             setMostrarModal(true);
         } catch (error) {
@@ -108,7 +109,7 @@ const AlterarPedidoComanda = () => {
         setLoading(true);
 
         try {
-            await axios.put(`http://${meuIPv4}:3000/pedido/${pedidoId}`, {
+            await axios.put(`${dominioAzure}/pedido/${pedidoId}`, {
                 id_item,
                 quantidade,
                 status,

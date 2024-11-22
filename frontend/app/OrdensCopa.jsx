@@ -4,6 +4,8 @@ import axios from 'axios';
 import { meuIPv4 } from './index';
 import { TextInput } from 'react-native-gesture-handler';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
+import { dominioAzure} from './index';
+
 
 const Ordens_Copa = () => {
     const [loading, setLoading] = useState(false);
@@ -23,7 +25,7 @@ const Ordens_Copa = () => {
 
     const buscarComandasCompletas = async () => {
         try {
-            const response = await axios.get(`http://${meuIPv4}:3000/pedidoOrdenCopa`);
+            const response = await axios.get(`${dominioAzure}/pedidoOrdenCopa`);
             id_comanda
             setPedidos(response.data);
         } catch (error) {
@@ -144,7 +146,7 @@ const Ordens_Copa = () => {
     const alterarPedidoParaProduzindo = async (id_pedido) => {
         if (id_pedido) {
             try {
-                const response = await axios.put(`http://${meuIPv4}:3000/pedido/${id_pedido}`, {
+                const response = await axios.put(`${dominioAzure}/pedido/${id_pedido}`, {
                     status: 'Produzindo',
                     id_comanda: id_comanda
                 });
@@ -162,7 +164,7 @@ const Ordens_Copa = () => {
     const alterarPedidoParaPronto = async (id_pedido) => {
         if (id_pedido) {
             try {
-                const response = await axios.put(`http://${meuIPv4}:3000/pedido/${id_pedido}`, {
+                const response = await axios.put(`${dominioAzure}/pedido/${id_pedido}`, {
                     status: 'Pronto',
                     id_comanda: id_comanda
                 });
@@ -180,7 +182,7 @@ const Ordens_Copa = () => {
     const alterarPedidoParaRejeitado = async (id_pedido) => {
         if (id_pedido) {
             try {
-                const response = await axios.put(`http://${meuIPv4}:3000/pedido/${id_pedido}`, {
+                const response = await axios.put(`${dominioAzure}/pedido/${id_pedido}`, {
                     status: 'Rejeitado',
                     id_comanda: id_comanda
                 });

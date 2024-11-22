@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import { meuIPv4 } from './index';
+import { dominioAzure} from './index';
 
 const FecharComanda = () => {
   const [id_usuario, setId_usuario] = useState('');
@@ -47,7 +48,7 @@ const FecharComanda = () => {
 
 
     try {
-      const response = await axios.put(`http://${meuIPv4}:3000/comanda/fecharcomanda/${id_comanda}`, {
+      const response = await axios.put(`${dominioAzure}/comanda/fecharcomanda/${id_comanda}`, {
         id_usuario: id_usuario,
         id_comanda: id_comanda,
       });

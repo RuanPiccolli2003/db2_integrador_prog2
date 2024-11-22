@@ -2,6 +2,7 @@
     import { View, Text, FlatList, Button, StyleSheet, Modal, TouchableOpacity, Animated } from 'react-native';
     import axios from 'axios';
     import { meuIPv4 } from './index';
+    import { dominioAzure} from './index';
     import { TextInput } from 'react-native-gesture-handler';
     import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 
@@ -23,7 +24,7 @@
 
         const buscarComandasCompletas = async () => {
             try {
-                const response = await axios.get(`http://${meuIPv4}:3000/pedidoOrdenCozinha`);
+                const response = await axios.get(`${dominioAzure}/pedidoOrdenCozinha`);
                 id_comanda
                 setPedidos(response.data);
             } catch (error) {
@@ -145,7 +146,7 @@
         const alterarPedidoParaProduzindo = async (id_pedido) => {
             if (id_pedido) {
                 try {
-                    const response = await axios.put(`http://${meuIPv4}:3000/pedido/${id_pedido}`, {
+                    const response = await axios.put(`${dominioAzure}/pedido/${id_pedido}`, {
                         status: 'Produzindo',
                         id_comanda: id_comanda
                     });
@@ -163,7 +164,7 @@
         const alterarPedidoParaPronto = async (id_pedido) => {
             if (id_pedido) {
                 try {
-                    const response = await axios.put(`http://${meuIPv4}:3000/pedido/${id_pedido}`, {
+                    const response = await axios.put(`${dominioAzure}/pedido/${id_pedido}`, {
                         status: 'Pronto',
                         id_comanda: id_comanda
                     });
@@ -181,7 +182,7 @@
         const alterarPedidoParaRejeitado = async (id_pedido) => {
             if (id_pedido) {
                 try {
-                    const response = await axios.put(`http://${meuIPv4}:3000/pedido/${id_pedido}`, {
+                    const response = await axios.put(`${dominioAzure}/pedido/${id_pedido}`, {
                         status: 'Rejeitado',
                         id_comanda: id_comanda
                     });

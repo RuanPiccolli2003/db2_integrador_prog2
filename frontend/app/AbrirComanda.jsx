@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native'; 
 import { meuIPv4 } from './index';
+import { dominioAzure} from './index';
 
 const AbrirComanda = () => {
   const [idUsuario, setIdUsuario] = useState('');
@@ -20,7 +21,7 @@ const AbrirComanda = () => {
     setError('');
 
     try {
-      const response = await axios.post(`http://${meuIPv4}:3000/comanda`, {
+      const response = await axios.post(`${dominioAzure}/comanda`, {
         id_usuario: idUsuario,
       });
       alert('Comanda aberta com sucesso!');

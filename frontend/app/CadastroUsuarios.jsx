@@ -7,6 +7,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Stack from "./Export/stack";
 import { useNavigation } from '@react-navigation/native';
 import { meuIPv4 } from "./index";
+import { dominioAzure} from './index';
 
 function Cadastro_Usuarios() {
   const navigation = useNavigation();
@@ -25,7 +26,7 @@ function Cadastro_Usuarios() {
 
     setLoading(true);
     try {
-      const response = await axios.post(`http://${meuIPv4}:3000/usuario`, {
+      const response = await axios.post(`${dominioAzure}/usuario`, {
         nome: nome,
         senha: senha,
         email: email,

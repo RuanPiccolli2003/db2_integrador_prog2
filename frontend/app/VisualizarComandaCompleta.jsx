@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, FlatList, Button, StyleSheet, Modal, TouchableOpacity, Animated } from 'react-native';
 import axios from 'axios';
 import { meuIPv4 } from './index';
+import { dominioAzure} from './index';
 import { TextInput } from 'react-native-gesture-handler';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 
@@ -24,7 +25,7 @@ const VisualizarComandaCompleta = () => {
     const buscarComandasCompletas = async () => {
         if (comandaId) {
             try {
-                const response = await axios.get(`http://${meuIPv4}:3000/comandadetalhes/${comandaId}`);
+                const response = await axios.get(`${dominioAzure}/comandadetalhes/${comandaId}`);
                 setPedidos(response.data);
             } catch (error) {
                 console.error('Erro ao buscar comandas', error);
@@ -116,7 +117,7 @@ const VisualizarComandaCompleta = () => {
     const alterarPedidoParaEntregue = async (id_pedido) => {
         if (id_pedido) {
             try {
-                const response = await axios.put(`http://${meuIPv4}:3000/pedido/${id_pedido}`, {
+                const response = await axios.put(`${dominioAzure}/pedido/${id_pedido}`, {
                     status: 'Entregue',
                     id_comanda: comandaId
                 });
@@ -134,7 +135,7 @@ const VisualizarComandaCompleta = () => {
     const alterarPedidoParaCancelado = async (id_pedido) => {
         if (id_pedido) {
             try {
-                const response = await axios.put(`http://${meuIPv4}:3000/pedido/${id_pedido}`, {
+                const response = await axios.put(`${dominioAzure}/pedido/${id_pedido}`, {
                     status: 'Cancelado',
                     id_comanda: comandaId
                 });

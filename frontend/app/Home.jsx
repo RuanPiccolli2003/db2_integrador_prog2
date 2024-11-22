@@ -4,6 +4,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { meuIPv4 } from './index';
 import axios from 'axios';
+import { dominioAzure} from './index';
+
 
 //Consultas está funcionando para comandas, mas os demais está com problema por conta do fuso horario
 
@@ -17,7 +19,7 @@ function TelaHome() {
 
   const buscarTotalComandas = async () => {
     try {
-      const response = await axios.get(`http://${meuIPv4}:3000/comandaBuscarAbertaFechadaHoje`);
+      const response = await axios.get(`${dominioAzure}/comandaBuscarAbertaFechadaHoje`);
       const data = response.data[0];
       setComandasTotais({
         abertas: parseInt(data.comandas_abertas, 10),
@@ -31,7 +33,7 @@ function TelaHome() {
 
   const buscarPedidosAtrasados = async () => {
     try {
-      const response = await axios.get(`http://${meuIPv4}:3000/pedidoBuscarAtrasado`);
+      const response = await axios.get(`${dominioAzure}/pedidoBuscarAtrasado`);
       const data = response.data;
 
       const pedidosComAtrasoFormatados = data.map(pedido => {

@@ -5,7 +5,7 @@ import Axios from 'axios';
 import { Link, router } from 'expo-router'; 
 import styles from './Design/Estilos'; 
 
-export const meuIPv4 = '192.168.0.102';
+export const dominioAzure = 'https://integradorbancoprog2restaurante-grgsebahfmhuhsfx.brazilsouth-01.azurewebsites.net';
 
 
 function Login() {
@@ -20,7 +20,7 @@ function Login() {
     }
 
     try {
-      const response = await Axios.post(`http://${meuIPv4}:3000/login`, { email, senha });
+      const response = await Axios.post(`${dominioAzure}/login`, { email, senha });
 
       if (response.status === 200) {
         const { token } = response.data;

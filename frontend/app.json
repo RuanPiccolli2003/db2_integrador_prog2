@@ -1,14 +1,18 @@
 {
   "expo": {
-    "name": "teste",
-    "slug": "teste",
+    "name": "Restaurante Projeto Integrador",
+    "slug": "projetointegradobdprog2",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/food-and-restaurant.png",
     "userInterfaceStyle": "light",
-    "scheme": "teste",
+    "scheme": "projetointegradobdprog2",
     "sdkVersion": "52.0.0",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash.png",
@@ -20,9 +24,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/food-and-restaurant.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.dogref.projetointegradobdprog2"
     },
     "web": {
       "bundler": "metro",
@@ -30,6 +35,14 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "0e9bd466-0991-4d4d-a29e-f6f2b6f83b77"
+      }
+    }
   }
 }
