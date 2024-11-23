@@ -1,5 +1,9 @@
 Para verificar as requisições através do insominia para o backend, valida na pasta backend>ImportarRequisicaoInsominia.json e importar
-para o insominia para realizar os testes.
+para o insominia para realizar os testes. 
+
+Para testar no servidor basta trocar a URL pelo dominio ou pegar o dominio completo na index.jsx
+
+Para instalar as dependências utilizar npm install --force nos dois diretorios
 
 Iniciar o expo: Entrar no diretorio do frontend e utilizar o comando npm run web
 Iniciar o backend: Entrar no diretorio do backend e utilizar o comando node server.js
