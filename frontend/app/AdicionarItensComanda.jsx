@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Modal, FlatList, TouchableOpacity } from "react-native";
-import { NativeBaseProvider, Heading, Input, Button, Select, CheckIcon } from "native-base";
-import styles from "./Design/Estilos";
-import axios from 'axios';
-import { meuIPv4 } from "./index";
-import { dominioAzure} from './index';
+import { View, Text, Modal, FlatList, TouchableOpacity, StyleSheet } from "react-native";
+import { NativeBaseProvider, Heading, Input, Button } from "native-base";
+import axios from "axios";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { dominioAzure } from "./index";
 
 function AdicionarItensComanda() {
   const navigation = useNavigation();
@@ -14,15 +12,13 @@ function AdicionarItensComanda() {
   const [id_comanda, setId_comanda] = useState("");
   const [id_item, setId_item] = useState("");
   const [itemNome, setItemNome] = useState("");
-  const [quantidade, setQuantidade] = useState(1);
+  const [quantidade, setQuantidade] = useState("");
   const [precoItem, setPrecoItem] = useState(0);
   const [total, setTotal] = useState(0);
-  const [status, setStatus] = useState('');
-  const [destino, setDestino] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [comandaStatus, setComandaStatus] = useState('');
-  const [itens, setItens] = useState([]);
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [itens, setItens] = useState([]);
+  const [carrinho, setCarrinho] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const route = useRoute();
   const { id_comanda: comandaId } = route.params || {};
@@ -33,53 +29,10 @@ function AdicionarItensComanda() {
     }
   }, [comandaId]);
 
-
-  useEffect(() => {
-    if (id_item) {
-      axios.get(`${dominioAzure}/itemcardapio/${id_item}`)
-        .then(response => {
-          if (response.data && response.data.preco) {
-            setPrecoItem(response.data.preco);
-            setItemNome(response.data.nome);
-          }
-        })
-        .catch(error => {
-          console.error('Erro ao buscar o preço do item', error);
-        });
-    }
-  }, [id_item]);
-
-  useEffect(() => {
-    if (id_comanda) {
-      axios.get(`${dominioAzure}/comanda/${id_comanda}`)
-        .then(response => {
-          if (response.data && response.data.status) {
-            setComandaStatus(response.data.status);
-          }
-        })
-        .catch(error => {
-          console.error('Erro ao buscar status da comanda', error);
-        });
-    }
-  }, [id_comanda]);
-
   useEffect(() => {
     const totalPreco = quantidade ? precoItem * parseInt(quantidade, 10) : 0;
     setTotal(totalPreco.toFixed(2));
   }, [quantidade, precoItem]);
-
-  useEffect(() => {
-    const limparCampos = navigation.addListener('blur', () => {
-      setId_comanda("");
-      setItemNome("");
-      setQuantidade(1);
-      setPrecoItem(0);
-      setStatus("");
-    });
-
-    return limparCampos;
-  }, [navigation]);
-
 
   const buscarItens = async () => {
     try {
@@ -87,45 +40,59 @@ function AdicionarItensComanda() {
       setItens(response.data);
       setMostrarModal(true);
     } catch (error) {
-      console.error('Erro ao buscar itens', error);
+      console.error("Erro ao buscar itens", error);
     }
   };
 
-  const adicionaritem = async () => {
-    if (comandaStatus === 'Fechada') {
-      alert("Não é possível adicionar itens a uma comanda fechada");
+  const adicionarAoCarrinho = () => {
+    if (!id_item || !quantidade) {
+      alert("Selecione um item e quantidade válidos.");
       return;
     }
 
-    if (!id_comanda) {
-      alert("Deve informar o Id da comanda.");
+    const novoItem = {
+      id_item,
+      itemNome,
+      quantidade,
+      precoItem,
+      total: precoItem * quantidade,
+    };
+    setCarrinho([...carrinho, novoItem]);
+
+    setId_item("");
+    setItemNome("");
+    setQuantidade("");
+    setPrecoItem(0);
+    setTotal(0);
+  };
+
+  const removerDoCarrinho = (index) => {
+    const novoCarrinho = [...carrinho];
+    novoCarrinho.splice(index, 1);
+    setCarrinho(novoCarrinho);
+  };
+
+  const enviarPedidos = async () => {
+    if (carrinho.length === 0) {
+      alert("Adicione itens ao carrinho antes de enviar.");
       return;
     }
 
     setLoading(true);
     try {
-      const response = await axios.post(`${dominioAzure}/pedido`, {
-        id_comanda,
-        id_item,
-        quantidade,
-        status,
-        destino,
-      });
-
-      alert("Item vinculado a comanda!");
-      console.log(response.data);
-      setId_comanda(id_comanda);
-      setId_item("");
-      setItemNome("");
-      setQuantidade(1);
-      setPrecoItem(0);
-      setTotal(0);
-      setStatus('');
-      setDestino('');
-      setMostrarModal(false);
-      navigation.navigate('Adicionar itens em comandas');
+      await Promise.all(
+        carrinho.map((item) =>
+          axios.post(`${dominioAzure}/pedido`, {
+            id_comanda,
+            id_item: item.id_item,
+            quantidade: item.quantidade,
+          })
+        )
+      );
+      alert("Pedidos enviados com sucesso!");
+      setCarrinho([]);
     } catch (error) {
-      alert("Erro ao vincular item a comanda");
+      alert("Erro ao enviar pedidos.");
       console.error(error);
     } finally {
       setLoading(false);
@@ -133,50 +100,51 @@ function AdicionarItensComanda() {
   };
 
   return (
-    <View style={styles.NavigationContainer}>
-      <NativeBaseProvider style={styles.base}>
-        <Heading margin={10}>Adicionar itens comanda: {id_comanda}</Heading>
+    <NativeBaseProvider>
+      <View style={styles.container}>
+        <Heading size="lg" style={styles.heading}>
+          Adicionar itens à comanda: {id_comanda}
+        </Heading>
 
-        <TouchableOpacity onPress={buscarItens}>
+        <TouchableOpacity onPress={buscarItens} style={styles.inputContainer}>
           <Input
-            style={styles.inp}
-            backgroundColor={'blue.100'}
-            placeholderTextColor={"black"}
-            justifyContent={"center"}
-            h="50"
-            marginTop={5}
-            marginBottom={5}
             placeholder="Selecione o Item"
-            keyboardType="numeric"
-            value={`Item: ${itemNome}`}
+            value={itemNome}
             isReadOnly
-            overflow='hidden'
+            style={styles.input}
           />
         </TouchableOpacity>
 
-        <Modal visible={mostrarModal} animationType="slide" onRequestClose={() => setMostrarModal(false)}>
-          <View style={{ padding: 20 }}>
+        <Modal
+          visible={mostrarModal}
+          animationType="slide"
+          onRequestClose={() => setMostrarModal(false)}
+        >
+          <View style={styles.modalContainer}>
             <FlatList
               data={itens}
               keyExtractor={(item) => item.id_item.toString()}
               renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => { setId_item(item.id_item); setItemNome(item.nome); setMostrarModal(false); }}>
-                  <Text>{`Item: ${item.nome}`} - {`Tipo: ${item.tipo}`} - {`Preço: ${item.preco}`}</Text>
+                <TouchableOpacity
+                  style={styles.itemContainer}
+                  onPress={() => {
+                    setId_item(item.id_item);
+                    setItemNome(item.nome);
+                    setPrecoItem(item.preco);
+                    setMostrarModal(false);
+                  }}
+                >
+                  <Text style={styles.itemText}>{`${item.nome} - R$ ${item.preco}`}</Text>
                 </TouchableOpacity>
               )}
             />
-            <Button onPress={() => setMostrarModal(false)}>Fechar</Button>
+            <Button onPress={() => setMostrarModal(false)} style={styles.closeButton}>
+              Fechar
+            </Button>
           </View>
         </Modal>
 
         <Input
-          style={styles.inp}
-          backgroundColor={'blue.100'}
-          placeholderTextColor={"black"}
-          justifyContent={"center"}
-          h="50"
-          marginTop={5}
-          marginBottom={5}
           placeholder="Quantidade"
           keyboardType="numeric"
           value={`Unidade(s): ${quantidade}`}
@@ -184,39 +152,93 @@ function AdicionarItensComanda() {
             const apenasInteiro = text.replace(/[^0-9]/g, '');
             setQuantidade(apenasInteiro);
           }}
-          overflow='hidden'
+          style={styles.input}
         />
 
-        <Input
-          style={styles.inp}
-          backgroundColor={'gray.200'}
-          placeholderTextColor={"black"}
-          justifyContent={"center"}
-          h="50"
-          marginTop={5}
-          marginBottom={5}
-          placeholder="Total"
-          value={`Preço Total: R$ ${total}`}
-          isReadOnly={true}
-          overflow='hidden'
-        />
+        <Input placeholder="Total" value={`R$ ${total}`} isReadOnly style={styles.input} />
 
-        <Button
-          style={{
-            width: '50%',
-            alignItems: 'center',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            marginTop: 30,
-          }}
-          isLoading={loading}
-          onPress={adicionaritem}
-        >
-          Adicionar itens na comanda
+        <Button onPress={adicionarAoCarrinho} style={styles.button}>
+          Adicionar ao Carrinho
         </Button>
-      </NativeBaseProvider>
-    </View>
+
+        <FlatList
+          data={carrinho}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <View style={styles.cartItem}>
+              <Text style={styles.cartText}>
+                {`${item.itemNome} - ${item.quantidade}x - R$ ${item.total.toFixed(2).replace('.', ',')}`}
+              </Text>              
+              <Button size="sm" colorScheme="red" onPress={() => removerDoCarrinho(index)}>
+                Remover
+              </Button>
+            </View>
+          )}
+        />
+        <Button onPress={enviarPedidos} isLoading={loading} style={styles.submitButton}>
+          Enviar Pedidos
+        </Button>
+      </View>
+    </NativeBaseProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    gap: 16,
+    backgroundColor: "#f5f5f5",
+  },
+  heading: {
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  inputContainer: {
+    marginBottom: 1,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 8,
+  },
+  button: {
+    backgroundColor: "#007BFF",
+    marginVertical: 8,
+  },
+  modalContainer: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: "#fff",
+  },
+  itemContainer: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  itemText: {
+    fontSize: 16,
+  },
+  closeButton: {
+    marginTop: 16,
+  },
+  cartItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  cartText: {
+    flex: 1,
+    fontSize: 14,
+  },
+  submitButton: {
+    marginTop: 16,
+    backgroundColor: "#28a745",
+  },
+});
 
 export default AdicionarItensComanda;
