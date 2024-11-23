@@ -246,6 +246,11 @@ const VisualizarComandaCompleta = () => {
                                     setModalVisivel(false);
                                     navigation.navigate('Alterar itens da comanda', {
                                         id_pedido: pedidoSelecionado?.id_pedido,
+                                        id_comanda: pedidoSelecionado?.id_comanda,
+                                        iditemcapturado: pedidoSelecionado?.id_item,
+                                        itemnomecapturado: pedidoSelecionado?.nome_item,
+                                        quantidadecapturado: pedidoSelecionado?.quantidade,
+                                        statuspedidocapturado: pedidoSelecionado?.status_pedido,
                                     });
                                 }}
                             />

@@ -1,234 +1,221 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
-import { NativeBaseProvider, Heading, Select, CheckIcon, Input, Button, Modal } from "native-base";
-import CurrencyInput from 'react-native-currency-input';
+import { View, Text, Modal, FlatList, TouchableOpacity, StyleSheet } from "react-native";
+import { NativeBaseProvider, Heading, Input, Button, Select, CheckIcon } from "native-base";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from 'axios';
-import { meuIPv4 } from "./index";
-import { dominioAzure} from './index';
-import styles from "./Design/Estilos"
-import { useNavigation, useRoute } from '@react-navigation/native';
 
-//NÃO ESTÁ FUNCIONANDO AINDA, CAMPO DE ITEM NÃO ESTÁ ABRINDO O MODAL
+import { dominioAzure } from "./index";s
 
-const AlterarPedidoComanda = () => {
-    const [id_pedido, setId_pedido] = useState('');
-    const [id_comanda, setId_comanda] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [id_item, setId_item] = useState("");
-    const [itemNome, setItemNome] = useState("");
-    const [itemNomeArmazenar, setItemNomeArmazenar] = useState("");
-    const [quantidade, setQuantidade] = useState(1);
-    const [precoItem, setPrecoItem] = useState(0);
-    const [total, setTotal] = useState(0);
-    const [somaprecototal, setSomaprecototal] = useState(0);
-    const [status, setStatus] = useState('');
-    const [destino, setDestino] = useState('');
-    const [comandaStatus, setComandaStatus] = useState('');
-    const [itens, setItens] = useState([]);
-    const [mostrarModal, setMostrarModal] = useState(false);
+function AlterarItensComanda() {
+  const navigation = useNavigation();
 
-    const route = useRoute();
-    const navigation = useNavigation();
-    const { id_pedido: pedidoId } = route.params || {};
+  const [id_comanda, setId_comanda] = useState("");
+  const [id_item, setId_item] = useState("");
+  const [itemNome, setItemNome] = useState("");
+  const [quantidade, setQuantidade] = useState("");
+  const [precoItem, setPrecoItem] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [itens, setItens] = useState([]);
+  const [pedidostatus, setPedidostatus] = useState("Registrado");
+  const [exibirStatus, setExibirStatus] = useState(true);
 
-    useEffect(() => {
-        if (pedidoId) {
-            setId_pedido(pedidoId);
-        }
-    }, [pedidoId]);
+  const route = useRoute();
 
-    useEffect(() => {
-        if (pedidoId) {
-            axios.get(`${dominioAzure}/pedido/${pedidoId}`)
-                .then(response => {
-                    if (response.data) {
-                        setId_item(response.data.id_item || "");
-                        setId_comanda(response.data.id_comanda || "");
-                        setQuantidade(response.data.quantidade || 1);
-                        setSomaprecototal(response.data.somaprecototal || 0);
-                        setStatus(response.data.status || "");
-                        setDestino(response.data.destino || "");
-                    }
-                })
-                .catch(error => console.error('Erro ao buscar item do pedido', error));
-        }
-    }, [pedidoId]);
+  const { 
+    id_comanda: comandaId, 
+    id_pedido: pedidoId, 
+    iditemcapturado, 
+    itemnomecapturado, 
+    quantidadecapturado,
+    statuspedidocapturado,
+  } = route.params || {};
 
-    useEffect(() => {
-        if (id_item) {
-            axios.get(`${dominioAzure}/itemcardapio/${id_item}`)
-                .then(response => {
-                    if (response.data) {
-                        setPrecoItem(response.data.preco);
-                        setItemNome(response.data.nome);
-                    }
-                })
-                .catch(error => console.error('Erro ao buscar o preço do item', error));
-        }
-    }, [id_item]);
+  useEffect(() => {
+    if (comandaId) {
+      setId_comanda(comandaId);
+    }
+    if (iditemcapturado) {
+      setId_item(iditemcapturado);
+      setExibirStatus(false); 
+    }
+    if (itemnomecapturado) {
+      setItemNome(itemnomecapturado);
+    }
+    if (quantidadecapturado) {
+      setQuantidade(quantidadecapturado);
+    }
+    if (statuspedidocapturado) {
+      setPedidostatus(statuspedidocapturado);
+    }
+  }, [comandaId, iditemcapturado, itemnomecapturado, quantidadecapturado, statuspedidocapturado]);
 
-    useEffect(() => {
-        if (id_comanda) {
-            axios.get(`${dominioAzure}/comanda/${id_comanda}`)
-                .then(response => {
-                    if (response.data) {
-                        setComandaStatus(response.data.status || "");
-                    }
-                })
-                .catch(error => console.error('Erro ao buscar status da comanda', error));
-        }
-    }, [id_comanda]);
+  console.log(comandaId);
 
-    useEffect(() => {
-        const totalPreco = quantidade * precoItem;
-        setTotal(totalPreco.toFixed(2));
-    }, [quantidade, precoItem]);
 
-    const buscarItens = async () => {
-        try {
-            const response = await axios.get(`${dominioAzure}/itemcardapio`);
-            setItens(response.data || []);
-            setMostrarModal(true);
-        } catch (error) {
-            console.error('Erro ao buscar itens', error);
-        }
-    };
+  useEffect(() => {
+    const totalPreco = quantidade ? precoItem * parseInt(quantidade, 10) : 0;
+    setTotal(totalPreco.toFixed(2));
+  }, [quantidade, precoItem]);
 
-    const alterarItem = async () => {
-        if (comandaStatus === 'Fechada') {
-            alert("Não é possível alterar itens de uma comanda fechada");
-            return;
-        }
+  const buscarItens = async () => {
+    try {
+      const response = await axios.get(`${dominioAzure}/itemcardapio`);
+      setItens(response.data);
+      setMostrarModal(true);
+    } catch (error) {
+      console.error("Erro ao buscar itens", error);
+    }
+  };
 
-        if (!id_pedido) {
-            alert("Deve informar o Id do Pedido");
-            return;
-        }
-
-        setLoading(true);
-
-        try {
-            await axios.put(`${dominioAzure}/pedido/${pedidoId}`, {
-                id_item,
-                quantidade,
-                status,
-                destino
-            });
-            alert("Item alterado na comanda!");
-        } catch (error) {
-            alert("Erro ao vincular item à comanda");
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <View style={styles.NavigationContainer}>
-          <NativeBaseProvider style={styles.base}>
-            <Heading margin={5}>Alterar itens Comanda: {id_comanda} Pedido: {pedidoId}</Heading>
-            <TouchableOpacity onPress={buscarItens}>
-              <Input
-                style={styles.inp}
-                backgroundColor={'blue.100'}
-                placeholderTextColor={"black"}
-                justifyContent={"center"}
-                h="50"
-                marginTop={5}
-                marginBottom={5}
-                placeholder="Selecione o Item"
-                keyboardType="numeric"
-                value={`Item: ${itemNome}`}
-                isReadOnly
-                overflow='hidden'
-              />
-            </TouchableOpacity>
-    
-            <Modal visible={mostrarModal} animationType="slide" onRequestClose={() => setMostrarModal(false)}>
-              <View style={{ padding: 20 }}>
-                <FlatList
-                  data={itens}
-                  keyExtractor={(item) => item.id_item.toString()}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => { setId_item(item.id_item); setItemNome(item.nome); setMostrarModal(false); }}>
-                      <Text>{`Item: ${item.nome}`} - {`Tipo: ${item.tipo}`} - {`Preço: ${item.preco}`}</Text>
-                    </TouchableOpacity>
-                  )}
-                />
-                <Button onPress={() => setMostrarModal(false)}>Fechar</Button>
-              </View>
-            </Modal>
-    
-            <Input
-              style={styles.inp}
-              backgroundColor={'blue.100'}
-              placeholderTextColor={"black"}
-              justifyContent={"center"}
-              h="50"
-              marginTop={5}
-              marginBottom={5}
-              placeholder="Quantidade"
-              keyboardType="numeric"
-              value={`Unidade(s): ${quantidade}`}
-              onChangeText={(text) => {
-                const apenasInteiro = text.replace(/[^0-9]/g, '');
-                setQuantidade(apenasInteiro);
-              }}
-              overflow='hidden'
-            />
-    
-            <Input
-              style={styles.inp}
-              backgroundColor={'gray.200'}
-              placeholderTextColor={"black"}
-              justifyContent={"center"}
-              h="50"
-              marginTop={5}
-              marginBottom={5}
-              placeholder="Total"
-              value={`Preço Total: R$ ${total}`}
-              isReadOnly={true}
-              overflow='hidden'
-            />
-    
-            <Select
-              style={styles.inp}
-              backgroundColor={'blue.100'}
-              placeholderTextColor={"black"}
-              justifyContent={"center"}
-              h="50"
-              marginTop={5}
-              marginBottom={5}
-              placeholder="Status: Selecionar"
-              selectedValue={status}
-              onValueChange={setStatus}
-              overflow='hidden'
-              _selectedItem={{
-                bg: "blue.200",
-                endIcon: <CheckIcon size="5" />,
-              }}
-            >
-              <Select.Item label="Produzindo" value={"Produzindo"} />
-              <Select.Item label="Entregue" value="Entregue" />
-            </Select>
-    
-            <Button
-              style={{
-                width: '50%',
-                alignItems: 'center',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                marginTop: 30,
-              }}
-              isLoading={loading}
-              onPress={alterarItem}
-            >
-              Adicionar itens na comanda
-            </Button>
-          </NativeBaseProvider>
-        </View>
-      );
+  const alterarPedido = async () => {
+    if (!id_item || !quantidade) {
+      alert("Selecione um item e quantidade válidos.");
+      return;
     }
 
-export default AlterarPedidoComanda;
+    const data = {
+      id_comanda: comandaId,
+      id_item: id_item,
+      quantidade: quantidade,
+      status: pedidostatus, 
+    };
+
+    try {
+      if (pedidoId) {
+        await axios.put(`${dominioAzure}/pedido/${pedidoId}`, data);
+        alert("Pedido alterado com sucesso!");
+        navigation.navigate("Visualizar Comanda Completa", { id_comanda: comandaId });
+        setId_comanda("");
+        setItemNome("");
+        setQuantidade("");
+        setTotal("");
+        setPedidostatus("");
+      } else {
+        alert("ID do pedido não encontrado.");
+      }
+    } catch (error) {
+      alert("Erro ao alterar pedido.");
+      console.error(error);
+    }
+  };
+
+  return (
+    <NativeBaseProvider>
+      <View style={styles.container}>
+        <Heading size="lg" style={styles.heading}>
+          Alterar item do Pedido: {pedidoId || "Novo Pedido"}
+        </Heading>
+
+        <TouchableOpacity onPress={buscarItens} style={styles.inputContainer}>
+          <Input
+            placeholder={`Item Atual: ${itemnomecapturado}`}
+            value={itemNome}
+            isReadOnly
+            style={styles.input}
+          />
+        </TouchableOpacity>
+
+        <Modal
+          visible={mostrarModal}
+          animationType="slide"
+          onRequestClose={() => setMostrarModal(false)}
+        >
+          <View style={styles.modalContainer}>
+            <FlatList
+              data={itens}
+              keyExtractor={(item) => item.id_item.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.itemContainer}
+                  onPress={() => {
+                    setId_item(item.id_item);
+                    setItemNome(item.nome);
+                    setPrecoItem(item.preco);
+                    setMostrarModal(false);
+                  }}
+                >
+                  <Text style={styles.itemText}>{`${item.nome} - R$ ${item.preco}`}</Text>
+                </TouchableOpacity>
+              )}
+            />
+            <Button onPress={() => setMostrarModal(false)} style={styles.closeButton}>
+              Fechar
+            </Button>
+          </View>
+        </Modal>
+
+        <Input
+          placeholder="Quantidade"
+          keyboardType="numeric"
+          value={quantidade}
+          onChangeText={(text) => {
+            const apenasInteiro = text.replace(/[^0-9]/g, "");
+            setQuantidade(apenasInteiro);
+          }}
+          style={styles.input}
+        />
+
+        <Input placeholder="Total" value={`R$ ${total}`} isReadOnly style={styles.input} />
+
+        <Button onPress={alterarPedido} style={styles.button}>
+          Alterar Pedido
+        </Button>
+      </View>
+    </NativeBaseProvider>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    gap: 16,
+    backgroundColor: "#f5f5f5",
+  },
+  heading: {
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  inputContainer: {
+    marginBottom: 1,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 8,
+  },
+  button: {
+    backgroundColor: "#007BFF",
+    marginVertical: 8,
+  },
+  modalContainer: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: "#fff",
+  },
+  itemContainer: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  itemText: {
+    fontSize: 16,
+  },
+  closeButton: {
+    marginTop: 16,
+  },
+  statusContainer: {
+    marginVertical: 8,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+  },
+  select: {
+    marginTop: 4,
+  },
+});
+
+export default AlterarItensComanda;
