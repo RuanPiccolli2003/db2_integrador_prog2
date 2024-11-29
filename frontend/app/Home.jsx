@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, FlatList, StyleSheet, Text, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { meuIPv4 } from './index';
 import axios from 'axios';
 import { dominioAzure} from './index';
@@ -22,7 +22,7 @@ function TelaHome() {
       const response = await axios.get(`${dominioAzure}/comandaBuscarAbertaFechadaHoje`);
       const data = response.data[0];
       setComandasTotais({
-        abertas: parseInt(data.comandas_abertas, 10),
+        abertas: parseInt(data.comandas_abertura, 10),
         fechadas: parseInt(data.comandas_fechadas, 10),
       });
     } catch (error) {
@@ -65,7 +65,8 @@ function TelaHome() {
     setOutrosDados(data);
   }
 
-  useEffect(() => {
+  useFocusEffect(
+    React.useCallback(() => {
     buscarTotalComandas();
     buscarPedidosAtrasados();
     buscarOutrosDados();
@@ -75,7 +76,7 @@ function TelaHome() {
       buscarOutrosDados();
     }, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, []));
 
   return (
     <View style={styles.container}>

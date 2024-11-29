@@ -5,7 +5,7 @@ import Axios from 'axios';
 import { Link, router } from 'expo-router'; 
 import styles from './Design/Estilos'; 
 
-export const dominioAzure = 'https://integradorbancoprog2restaurante-grgsebahfmhuhsfx.brazilsouth-01.azurewebsites.net';
+export const dominioAzure = 'http://localhost:3000';
 
 
 function Login() {
