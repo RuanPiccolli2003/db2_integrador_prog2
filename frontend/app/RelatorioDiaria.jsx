@@ -1,17 +1,8 @@
-import { Text, View } from "react-native"
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Dimensions } from 'react-native';
+import { BarChart } from 'react-native-chart-kit';
+import axios from 'axios';
 
+const Relatorio_Diaria = () => {};
 
-export default function Relatorio_Diaria(){
-    return(
-        <View style={{flex: 1, alignItems: 'center',justifyContent: 'center'}}>
-            <Text>Aqui vai o relatorio</Text>
-          
-        
-        </View>
-
-       
-
-
-
-    )
-}
+export default Relatorio_Diaria;

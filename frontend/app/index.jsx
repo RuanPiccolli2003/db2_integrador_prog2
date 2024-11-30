@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { NativeBaseProvider, Box, Heading, Input, Button, Text as NativeBaseText } from 'native-base';
 import Axios from 'axios';
-import { Link, router } from 'expo-router'; 
+import { Link, router, useNavigation } from 'expo-router'; 
 import styles from './Design/Estilos'; 
+import Cadastro_Usuarios from './CadastroUsuarios.jsx'
 
 export const dominioAzure = 'http://localhost:3000';
-
 
 function Login() {
   const [email, setEmail] = useState('');

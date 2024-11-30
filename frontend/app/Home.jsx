@@ -80,14 +80,27 @@ function TelaHome() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TextInput style={styles.searchInput} placeholder="Buscar..." />
-        <TouchableOpacity style={styles.comandaButton}>
-          <MaterialIcons name="receipt-long" size={30} color="black"
-            onPress={() => {
-              navigation.navigate('Gerenciar Comandas Abertas');
-            }}
-          />
+      <View style={styles.footer}>
+        <TouchableOpacity style={styles.footerButton}
+          onPress={() => {
+            navigation.navigate('Gerenciar Comandas Abertas');
+          }} >
+          <Text style={styles.footerButtonText}>Comandas </Text>
+          <MaterialIcons name="receipt-long" size={24} color="black" />
+        </TouchableOpacity>
+       
+       <TouchableOpacity style={styles.footerButton} onPress={() => {
+          navigation.navigate('Relatorios');
+        }}>
+          <Text style={styles.footerButtonText}>Relatórios { }</Text>
+          <MaterialIcons name="bar-chart" size={24} color="black" />        
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.footerButton} onPress={() => {
+          navigation.navigate('Cadastrar Itens');
+        }}>
+          <Text style={styles.footerButtonText}>Novos Itens { }</Text>
+          <MaterialIcons name="add" size={24} color="black" />
         </TouchableOpacity>
       </View>
 
@@ -101,7 +114,7 @@ function TelaHome() {
           </View>
 
           <View style={styles.card}>
-            <MaterialIcons name="restaurant" size={30} color="black" />
+            <MaterialIcons name="alarm" size={30} color="black" />
             <Text style={styles.cardTitle}>Pedidos Atrasados</Text>
             {pedidosAtrasados.length > 0 ? (
               pedidosAtrasados.map((pedido) => (

@@ -198,12 +198,12 @@ WHERE
     AND CURRENT_TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' - 
         (p.data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo') > INTERVAL '30 minutes';
 `;
-try {
-    const [resultados] = await conexao.query(query);
-    res.status(200).json(resultados);
-} catch (erro) {
-    res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
-}
+    try {
+        const [resultados] = await conexao.query(query);
+        res.status(200).json(resultados);
+    } catch (erro) {
+        res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
+    }
 }
 
 async function BuscarPedidosRejeitados(req, res) {
@@ -214,12 +214,47 @@ WHERE status = 'Rejeitado'
   AND DATE(data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo') = 
       DATE(CURRENT_TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo');
 `;
-try {
-    const [resultados] = await conexao.query(query);
-    res.status(200).json(resultados);
-} catch (erro) {
-    res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
-}
+    try {
+        const [resultados] = await conexao.query(query);
+        res.status(200).json(resultados);
+    } catch (erro) {
+        res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
+    }
 }
 
-export default { listar, selecionar, criar, alterar, excluir, buscarPedidosProduzindoCopa, buscarPedidosProduzindoCozinha, BuscarPedidosAtrasados };
+async function BuscarTotalVendidoQuantidade(req, res) {
+    const query = `
+    SELECT 
+        item_vendido.nome AS nome_item,
+        SUM(pedido.quantidade * item_vendido.preco) AS total_vendido,
+        TO_CHAR(pedido.data_abertura_pedido, 'YYYY-MM-DD') AS data_pedido
+    FROM 
+        pedido pedido
+    JOIN 
+        item_cardapio item_vendido ON pedido.id_item = item_vendido.id_item
+    WHERE 
+        pedido.status NOT IN ('Cancelado', 'Rejeitado')
+        AND pedido.data_abertura_pedido >=
+            CASE 
+                WHEN 'diario' = 'diario' THEN CURRENT_DATE - INTERVAL '1 day'
+                WHEN 'semanal' = 'semanal' THEN CURRENT_DATE - INTERVAL '1 week'
+                WHEN 'mensal' = 'mensal' THEN CURRENT_DATE - INTERVAL '1 month'
+                WHEN 'anual' = 'anual' THEN CURRENT_DATE - INTERVAL '1 year'
+                ELSE '1900-01-01'
+            END
+    GROUP BY 
+        item_vendido.nome, TO_CHAR(pedido.data_abertura_pedido, 'YYYY-MM-DD')
+    ORDER BY 
+        total_vendido DESC
+    LIMIT 10;
+    `;
+    try {
+        const [resultados] = await conexao.query(query);
+        res.status(200).json(resultados);
+    } catch (erro) {
+        res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
+    }
+}
+
+
+export default { listar, selecionar, criar, alterar, excluir, buscarPedidosProduzindoCopa, buscarPedidosProduzindoCozinha, BuscarPedidosAtrasados, BuscarTotalVendidoQuantidade };
