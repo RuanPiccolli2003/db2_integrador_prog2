@@ -125,7 +125,7 @@ async function listarComandaDetalhada(req, res) {
     if (!id_comanda) {
         return res.status(400).send("ID da comanda é obrigatório.");
     }
-
+//dk: adc sum
     const query = `
             SELECT 
                 comanda.id_comanda,
@@ -136,7 +136,10 @@ async function listarComandaDetalhada(req, res) {
                 item.nome AS nome_item,
                 item.tipo AS tipo_item,
                 pedido.quantidade,
-                pedido.somaprecototal
+                pedido.somaprecototal,
+                SUM(pedido.somaprecototal) 
+                    FILTER (WHERE pedido.status NOT IN ('Rejeitado', 'Cancelado')) 
+                    OVER () AS total_comanda
             FROM 
                 comanda
             JOIN 
@@ -144,8 +147,10 @@ async function listarComandaDetalhada(req, res) {
             JOIN 
                 item_cardapio item ON pedido.id_item = item.id_item
             WHERE 
-                comanda.id_comanda = :id_comanda;
+                comanda.id_comanda = :id_comanda
+                AND pedido.status NOT IN ('Rejeitado', 'Cancelado'); -- dk: Filtra os itens inválidos
         `;
+
 
     try {
         const resultados = await conexao.query(query, {
