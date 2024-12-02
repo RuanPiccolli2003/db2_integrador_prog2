@@ -224,29 +224,48 @@ WHERE status = 'Rejeitado'
 
 async function BuscarTotalVendidoQuantidade(req, res) {
     const query = `
-    SELECT 
-        item_vendido.nome AS nome_item,
-        SUM(pedido.quantidade * item_vendido.preco) AS total_vendido,
-        TO_CHAR(pedido.data_abertura_pedido, 'YYYY-MM-DD') AS data_pedido
-    FROM 
-        pedido pedido
-    JOIN 
-        item_cardapio item_vendido ON pedido.id_item = item_vendido.id_item
-    WHERE 
-        pedido.status NOT IN ('Cancelado', 'Rejeitado')
-        AND pedido.data_abertura_pedido >=
-            CASE 
-                WHEN 'diario' = 'diario' THEN CURRENT_DATE - INTERVAL '1 day'
-                WHEN 'semanal' = 'semanal' THEN CURRENT_DATE - INTERVAL '1 week'
-                WHEN 'mensal' = 'mensal' THEN CURRENT_DATE - INTERVAL '1 month'
-                WHEN 'anual' = 'anual' THEN CURRENT_DATE - INTERVAL '1 year'
-                ELSE '1900-01-01'
-            END
-    GROUP BY 
-        item_vendido.nome, TO_CHAR(pedido.data_abertura_pedido, 'YYYY-MM-DD')
-    ORDER BY 
-        total_vendido DESC
-    LIMIT 10;
+    SELECT
+    COUNT(*) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= DATE_TRUNC('day', CURRENT_DATE AT TIME ZONE 'America/Sao_Paulo')
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < DATE_TRUNC('day', CURRENT_DATE AT TIME ZONE 'America/Sao_Paulo' + INTERVAL '1 day')
+    ) AS pedidos_abertos_hoje,
+
+    SUM(somaprecototal) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= DATE_TRUNC('day', CURRENT_DATE AT TIME ZONE 'America/Sao_Paulo')
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < DATE_TRUNC('day', CURRENT_DATE AT TIME ZONE 'America/Sao_Paulo' + INTERVAL '1 day')
+    ) AS total_abertos_hoje,
+
+    COUNT(*) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= CURRENT_DATE - INTERVAL '7 days'
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < CURRENT_DATE
+    ) AS pedidos_abertos_7_dias,
+
+    SUM(somaprecototal) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= CURRENT_DATE - INTERVAL '7 days'
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < CURRENT_DATE
+    ) AS total_abertos_7_dias,
+
+    COUNT(*) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= CURRENT_DATE - INTERVAL '15 days'
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < CURRENT_DATE
+    ) AS pedidos_abertos_15_dias,
+
+    SUM(somaprecototal) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= CURRENT_DATE - INTERVAL '15 days'
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < CURRENT_DATE
+    ) AS total_abertos_15_dias,
+
+    COUNT(*) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= CURRENT_DATE - INTERVAL '30 days'
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < CURRENT_DATE
+    ) AS pedidos_abertos_30_dias,
+
+    SUM(somaprecototal) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= CURRENT_DATE - INTERVAL '30 days'
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < CURRENT_DATE
+    ) AS total_abertos_30_dias
+FROM pedido
+WHERE status NOT IN ('Cancelado', 'Rejeitado');
     `;
     try {
         const [resultados] = await conexao.query(query);
@@ -255,6 +274,7 @@ async function BuscarTotalVendidoQuantidade(req, res) {
         res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
     }
 }
+
 
 
 export default { listar, selecionar, criar, alterar, excluir, buscarPedidosProduzindoCopa, buscarPedidosProduzindoCozinha, BuscarPedidosAtrasados, BuscarTotalVendidoQuantidade };
