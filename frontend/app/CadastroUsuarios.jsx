@@ -5,6 +5,7 @@ import axios from "axios";
 import styles from "./Design/Estilos"; 
 import { NavigationContainer } from "@react-navigation/native";
 import Stack from "./Export/stack";
+import { router } from 'expo-router'; 
 import { useNavigation } from '@react-navigation/native';
 import { meuIPv4 } from "./index";
 import { dominioAzure} from './index';
@@ -38,7 +39,7 @@ function Cadastro_Usuarios() {
       setSenha("");
       setConfirmarSenha("");
       setEmail("");
-      navigation.navigate('Cadastro_Usuarios');
+      router.replace("/");
     } catch (error) {
       alert("Erro ao cadastrar usuário.");
       console.error(error);
@@ -119,8 +120,10 @@ function Cadastro_Usuarios() {
 
 export default function App_cadUser() {
   return (
+    <NavigationContainer>
     <Stack.Navigator>
       <Stack.Screen name="Cadastro" component={Cadastro_Usuarios} />
     </Stack.Navigator>
+    </NavigationContainer>
   );
 }

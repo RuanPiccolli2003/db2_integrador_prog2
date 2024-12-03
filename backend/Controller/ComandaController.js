@@ -165,13 +165,16 @@ async function listarComandaDetalhada(req, res) {
 
 async function BuscarTotalComandasAbertasFechadas(req, res) {
     const query = `
-    SELECT 
-    COUNT(*) FILTER (WHERE status = 'Aberta') AS comandas_abertas,
-    COUNT(*) FILTER (
-        WHERE status = 'Fechada' 
-        AND DATE(data_fechamento) = CURRENT_DATE
-    ) AS comandas_fechadas
-FROM comanda;       
+    SELECT
+	COUNT(*) FILTER (
+		WHERE data_abertura AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= DATE_TRUNC('day', CURRENT_DATE AT TIME ZONE 'America/Sao_Paulo') 
+        AND data_abertura AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < DATE_TRUNC('day', CURRENT_DATE AT TIME ZONE 'America/Sao_Paulo' + INTERVAL '1 day')
+	) AS comandas_abertura,
+	COUNT(*) FILTER (
+		WHERE data_fechamento AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= DATE_TRUNC('day', CURRENT_DATE AT TIME ZONE 'America/Sao_Paulo') 
+        AND data_fechamento AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < DATE_TRUNC('day', CURRENT_DATE AT TIME ZONE 'America/Sao_Paulo' + INTERVAL '1 day')
+	) AS comandas_fechadas
+from comanda;       
     `;
 
     try {

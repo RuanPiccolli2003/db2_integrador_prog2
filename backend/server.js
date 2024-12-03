@@ -88,6 +88,7 @@ app.delete("/pedido/:id_pedido", pedido.excluir);
 app.get("/pedidoOrdenCopa", pedido.buscarPedidosProduzindoCopa);
 app.get("/pedidoOrdenCozinha", pedido.buscarPedidosProduzindoCozinha);
 app.get("/pedidoBuscarAtrasado", pedido.BuscarPedidosAtrasados);
+app.get("/pedidoBuscarTotalVendidoQuantidade", pedido.BuscarTotalVendidoQuantidade);
 
 
 app.listen(PORT, () => {

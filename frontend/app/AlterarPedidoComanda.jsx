@@ -4,7 +4,7 @@ import { NativeBaseProvider, Heading, Input, Button, Select, CheckIcon } from "n
 import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from 'axios';
 
-import { dominioAzure } from "./index";s
+import { dominioAzure } from "./index";
 
 function AlterarItensComanda() {
   const navigation = useNavigation();
@@ -85,12 +85,12 @@ function AlterarItensComanda() {
       if (pedidoId) {
         await axios.put(`${dominioAzure}/pedido/${pedidoId}`, data);
         alert("Pedido alterado com sucesso!");
-        navigation.navigate("Visualizar Comanda Completa", { id_comanda: comandaId });
         setId_comanda("");
         setItemNome("");
         setQuantidade("");
         setTotal("");
         setPedidostatus("");
+        navigation.navigate("Visualizar Comanda Completa", { id_comanda: comandaId });
       } else {
         alert("ID do pedido não encontrado.");
       }

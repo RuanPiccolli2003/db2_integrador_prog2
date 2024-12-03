@@ -12,6 +12,7 @@ import AbrirComanda from './AbrirComanda';
 import AdicionarItensComanda from './AdicionarItensComanda';
 import FecharComanda from './FecharComanda';
 import ComandaPrincipal from './Comanda';
+import Login from './index';
 import VisualizarComandaCompleta from './VisualizarComandaCompleta'
 import { Box, Button, NativeBaseProvider } from 'native-base';
 import AlterarItensComanda from './AlterarPedidoComanda';
@@ -93,6 +94,13 @@ function Home() {
         <Drawer.Screen 
         name='Tela Home' 
         component={TelaHome}
+        options={{
+          drawerItemStyle: { display: 'none' },
+        }
+        } />
+        <Drawer.Screen 
+        name='Login' 
+        component={Login}
         options={{
           drawerItemStyle: { display: 'none' },
         }

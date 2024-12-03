@@ -198,12 +198,12 @@ WHERE
     AND CURRENT_TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' - 
         (p.data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo') > INTERVAL '30 minutes';
 `;
-try {
-    const [resultados] = await conexao.query(query);
-    res.status(200).json(resultados);
-} catch (erro) {
-    res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
-}
+    try {
+        const [resultados] = await conexao.query(query);
+        res.status(200).json(resultados);
+    } catch (erro) {
+        res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
+    }
 }
 
 async function BuscarPedidosRejeitados(req, res) {
@@ -214,12 +214,67 @@ WHERE status = 'Rejeitado'
   AND DATE(data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo') = 
       DATE(CURRENT_TIMESTAMP AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo');
 `;
-try {
-    const [resultados] = await conexao.query(query);
-    res.status(200).json(resultados);
-} catch (erro) {
-    res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
-}
+    try {
+        const [resultados] = await conexao.query(query);
+        res.status(200).json(resultados);
+    } catch (erro) {
+        res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
+    }
 }
 
-export default { listar, selecionar, criar, alterar, excluir, buscarPedidosProduzindoCopa, buscarPedidosProduzindoCozinha, BuscarPedidosAtrasados };
+async function BuscarTotalVendidoQuantidade(req, res) {
+    const query = `
+    SELECT
+    COUNT(*) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= DATE_TRUNC('day', CURRENT_DATE AT TIME ZONE 'America/Sao_Paulo')
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < DATE_TRUNC('day', CURRENT_DATE AT TIME ZONE 'America/Sao_Paulo' + INTERVAL '1 day')
+    ) AS pedidos_abertos_hoje,
+
+    SUM(somaprecototal) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= DATE_TRUNC('day', CURRENT_DATE AT TIME ZONE 'America/Sao_Paulo')
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < DATE_TRUNC('day', CURRENT_DATE AT TIME ZONE 'America/Sao_Paulo' + INTERVAL '1 day')
+    ) AS total_abertos_hoje,
+
+    COUNT(*) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= CURRENT_DATE - INTERVAL '7 days'
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < CURRENT_DATE
+    ) AS pedidos_abertos_7_dias,
+
+    SUM(somaprecototal) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= CURRENT_DATE - INTERVAL '7 days'
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < CURRENT_DATE
+    ) AS total_abertos_7_dias,
+
+    COUNT(*) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= CURRENT_DATE - INTERVAL '15 days'
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < CURRENT_DATE
+    ) AS pedidos_abertos_15_dias,
+
+    SUM(somaprecototal) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= CURRENT_DATE - INTERVAL '15 days'
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < CURRENT_DATE
+    ) AS total_abertos_15_dias,
+
+    COUNT(*) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= CURRENT_DATE - INTERVAL '30 days'
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < CURRENT_DATE
+    ) AS pedidos_abertos_30_dias,
+
+    SUM(somaprecototal) FILTER (
+        WHERE data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' >= CURRENT_DATE - INTERVAL '30 days'
+        AND data_abertura_pedido AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo' < CURRENT_DATE
+    ) AS total_abertos_30_dias
+FROM pedido
+WHERE status NOT IN ('Cancelado', 'Rejeitado');
+    `;
+    try {
+        const [resultados] = await conexao.query(query);
+        res.status(200).json(resultados);
+    } catch (erro) {
+        res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
+    }
+}
+
+
+
+export default { listar, selecionar, criar, alterar, excluir, buscarPedidosProduzindoCopa, buscarPedidosProduzindoCozinha, BuscarPedidosAtrasados, BuscarTotalVendidoQuantidade };

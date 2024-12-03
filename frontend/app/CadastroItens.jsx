@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TextInput, } from "react-native";
-import { NativeBaseProvider, Heading, Input, Button, Select, CheckIcon } from "native-base";
+import { View, TextInput, StyleSheet } from "react-native";
+import { NativeBaseProvider, Heading, Button, VStack } from "native-base";
 import CurrencyInput from 'react-native-currency-input';
 import axios from 'axios';
-import { meuIPv4 } from "./index";
-import { dominioAzure} from './index';
+import { dominioAzure } from './index';
 import { useNavigation } from '@react-navigation/native';
-import styles from "./Design/Estilos";
 
 function CadastroItem() {
   const navigation = useNavigation();
@@ -24,7 +22,7 @@ function CadastroItem() {
 
     setLoading(true);
     try {
-      const response = await axios.post(`${dominioAzure}/itemcardapio`, {
+      await axios.post(`${dominioAzure}/itemcardapio`, {
         nome: nome,
         tipo: tipo,
         preco: preco,
@@ -44,33 +42,42 @@ function CadastroItem() {
   };
 
   return (
-    <View style={styles.NavigationContainer}>
-      <NativeBaseProvider style={styles.base}>
-        <Heading margin={10}>Cadastrar Item</Heading>
+    <View style={styles.container}>
+      <NativeBaseProvider>
+        <Heading style={styles.heading}>Cadastrar Item</Heading>
 
         <TextInput
-          style={styles.inp}
+          style={styles.input}
           placeholder="Nome do Item"
           value={nome}
           onChangeText={setNome}
         />
 
-        <Select
-          style={styles.inp}
-          placeholder="Tipo: Selecionar"
-          selectedValue={tipo}
-          onValueChange={setTipo}
-          _selectedItem={{
-            bg: "gray.200",
-            endIcon: <CheckIcon size="5" />,
-          }}
-        >
-          <Select.Item label="Bebida" value="Bebida" />
-          <Select.Item label="Prato" value="Prato" />
-        </Select>
+        <VStack space={4}>
+          <View style={styles.buttonGroup}>
+            <Button
+              style={[
+                styles.buttonTipo,
+                tipo === "Bebida" ? styles.buttonSelected : null,
+              ]}
+              onPress={() => setTipo("Bebida")}
+            >
+              Bebida
+            </Button>
+            <Button
+              style={[
+                styles.buttonTipo,
+                tipo === "Prato" ? styles.buttonSelected : null,
+              ]}
+              onPress={() => setTipo("Prato")}
+            >
+              Prato
+            </Button>
+          </View>
+        </VStack>
 
         <CurrencyInput
-          style={styles.inp}
+          style={styles.input}
           placeholder="Valor R$ 0,00"
           value={preco}
           onChangeValue={setPreco}
@@ -83,7 +90,7 @@ function CadastroItem() {
         <Button
           onPress={cadastrarItem}
           isLoading={loading}
-          style={styles.button}
+          style={styles.buttonSubmit}
           _text={{ fontWeight: "bold" }}
         >
           Cadastrar Item
@@ -93,6 +100,54 @@ function CadastroItem() {
   );
 }
 
-
-
 export default CadastroItem;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+    padding: 20,
+    justifyContent: "center",
+  },
+  heading: {
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#333",
+  },
+  input: {
+    height: 50,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    fontSize: 16,
+    width: "100%",
+  },
+  buttonGroup: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 15,
+  },
+  buttonTipo: {
+    flex: 1,
+    height: 50,
+    marginHorizontal: 5,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    justifyContent: "center",
+    backgroundColor: "#f0f0f0",
+  },
+  buttonSelected: {
+    backgroundColor: "#007bff",
+    borderColor: "#0056b3",
+  },
+  buttonSubmit: {
+    marginTop: 20,
+    backgroundColor: "#28a745",
+    paddingVertical: 15,
+    borderRadius: 8,
+  },
+});
