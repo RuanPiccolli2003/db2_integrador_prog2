@@ -2,7 +2,6 @@ import comanda from "../Model/comanda.js"
 import conexao from "../banco/conexao_db.js";
 import { Sequelize } from "sequelize";
 
-
 async function listar(req, res) {
     const status = req.query.status;
     const filter = status ? { status } : {};
@@ -125,7 +124,7 @@ async function listarComandaDetalhada(req, res) {
     if (!id_comanda) {
         return res.status(400).send("ID da comanda é obrigatório.");
     }
-//dk: adc sum
+
     const query = `
             SELECT 
                 comanda.id_comanda,
@@ -136,10 +135,7 @@ async function listarComandaDetalhada(req, res) {
                 item.nome AS nome_item,
                 item.tipo AS tipo_item,
                 pedido.quantidade,
-                pedido.somaprecototal,
-                SUM(pedido.somaprecototal) 
-                    FILTER (WHERE pedido.status NOT IN ('Rejeitado', 'Cancelado')) 
-                    OVER () AS total_comanda
+                pedido.somaprecototal
             FROM 
                 comanda
             JOIN 
@@ -147,10 +143,8 @@ async function listarComandaDetalhada(req, res) {
             JOIN 
                 item_cardapio item ON pedido.id_item = item.id_item
             WHERE 
-                comanda.id_comanda = :id_comanda
-                AND pedido.status NOT IN ('Rejeitado', 'Cancelado'); -- dk: Filtra os itens inválidos
+                comanda.id_comanda = :id_comanda;
         `;
-
 
     try {
         const resultados = await conexao.query(query, {
@@ -177,6 +171,8 @@ async function BuscarTotalComandasAbertasFechadas(req, res) {
 from comanda;       
     `;
 
+    
+
     try {
         const [resultados] = await conexao.query(query);
         res.status(200).json(resultados);
@@ -185,5 +181,48 @@ from comanda;
     }
 }
 
+// dk: Função para listar pedidos válidos e calcular o total da comanda
+async function listarComandaValida(req, res) {
+    const id_comanda = req.params.id_comanda;
 
-export default { listarComandaDetalhada, listar, selecionar, criar, alterar, excluir, fecharComanda, BuscarTotalComandasAbertasFechadas };
+    if (!id_comanda) {
+        return res.status(400).send("ID da comanda é obrigatório.");
+    }
+
+    // dk: Query para listar pedidos válidos e calcular o total
+    const query = `
+        SELECT 
+            pedido.id_pedido,
+            item.nome AS nome_item,
+            item.tipo AS tipo_item,
+            pedido.quantidade,
+            pedido.somaprecototal,
+            pedido.status AS status_pedido,
+            pedido.destino,
+            SUM(pedido.somaprecototal) 
+                OVER () AS total_comanda -- dk: Calcula o total de todos os pedidos válidos
+        FROM 
+            pedido
+        JOIN 
+            item_cardapio item ON pedido.id_item = item.id_item
+        WHERE 
+            pedido.id_comanda = :id_comanda
+            AND pedido.status NOT IN ('Rejeitado', 'Cancelado'); -- dk: Filtra apenas itens válidos
+    `;
+
+    try {
+        const resultados = await conexao.query(query, {
+            replacements: { id_comanda },
+            type: Sequelize.QueryTypes.SELECT,
+        });
+
+
+        res.status(200).json(resultados);
+    } catch (erro) {
+
+        console.error("Erro ao buscar pedidos válidos da comanda:", erro.message);
+        res.status(500).json({ message: 'Erro ao buscar pedidos válidos da comanda.', error: erro.message });
+    }
+}
+
+export default { listarComandaDetalhada, listar, selecionar, criar, alterar, excluir, fecharComanda, BuscarTotalComandasAbertasFechadas, listarComandaValida };
