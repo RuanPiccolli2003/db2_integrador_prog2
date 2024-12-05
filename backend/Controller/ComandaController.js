@@ -172,6 +172,8 @@ async function BuscarTotalComandasAbertasFechadas(req, res) {
 from comanda;       
     `;
 
+    
+
     try {
         const [resultados] = await conexao.query(query);
         res.status(200).json(resultados);
