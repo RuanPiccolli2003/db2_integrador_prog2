@@ -33,4 +33,6 @@ PORT =
 
 7 - Gerar arquivo APK através uma build no expo: Logar no expo pelo console e utilizar o comando: eas build --platform android --profile production. No site do expo é possível acompanhar e verificar se funciounou ou houve falhas, o APK estará disponível nessa página para o download.
 
-8 - Para verificar as requisições através do insominia para o backend, no caminho backend>ImportarRequisicaoInsominia.json e importar para o insominia para realizar os testes.
+8 - Ao gerar a BUILD deve ter certeza que em app/index.jsx está definido a URL do servidor para conseguir fazer as requisiçoes do frontend para o backend.
+
+8 - Para verificar as requisições através do insominia para o backend, no caminho backend>ImportarRequisicaoInsominia.json e importar para o insominia para realizar os testes. Está definido em localhost basta alterar para a URL-DOMINIO/Requisição.

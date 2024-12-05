@@ -1,9 +1,11 @@
-CREATE OR REPLACE FUNCTION verificar_data_fechamento()
+CREATE OR REPLACE FUNCTION log_alteracao_status_pedido()
 RETURNS TRIGGER AS $$
 BEGIN
-    -- Checar se a data_fechamento é maior que a data_abertura, caso a data_fechamento seja alterada
-    IF NEW.data_fechamento IS NOT NULL AND NEW.data_fechamento <= NEW.data_abertura THEN
-        RAISE EXCEPTION 'A data de fechamento deve ser maior que a data de abertura.';
+    IF NEW.status IS DISTINCT FROM OLD.status THEN
+        INSERT INTO log_pedido_status (id_pedido, status_anterior, status_novo, data_alteracao)
+        VALUES (OLD.id_pedido, OLD.status, NEW.status, CURRENT_TIMESTAMP AT TIME ZONE 'America/Sao_Paulo');
     END IF;
+
     RETURN NEW;
 END;
+$$ LANGUAGE plpgsql;

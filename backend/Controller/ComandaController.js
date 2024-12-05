@@ -2,7 +2,6 @@ import comanda from "../Model/comanda.js"
 import conexao from "../banco/conexao_db.js";
 import { Sequelize } from "sequelize";
 
-
 async function listar(req, res) {
     const status = req.query.status;
     const filter = status ? { status } : {};

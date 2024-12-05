@@ -39,6 +39,15 @@ CREATE TABLE pedido (
     CONSTRAINT fk_item FOREIGN KEY (id_item) REFERENCES item_cardapio(id_item) ON DELETE CASCADE
 );
 
+CREATE TABLE log_pedido_status (
+    id_log SERIAL PRIMARY KEY,
+    id_pedido INT NOT NULL,
+    status_anterior VARCHAR(50),
+    status_novo VARCHAR(50),
+    data_alteracao TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'America/Sao_Paulo'),
+    CONSTRAINT fk_pedido_log FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido) ON DELETE CASCADE
+);
+
 
 -- Índices para otimização
 CREATE INDEX idx_comanda_status ON comanda (status);

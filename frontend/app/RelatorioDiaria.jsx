@@ -111,7 +111,7 @@ function Relatorio_Diaria() {
                         style={styles.card}
                         onPress={() => setModalMaisVendidosDiarioAberto(true)}
                     >
-                        <MaterialIcons name="attach-money" size={30} color="black" />
+                        <MaterialIcons name="attach-money" size={28} color="black" />
                         <Text style={styles.cardTitle}>Itens mais vendidos Diário</Text>
                     </TouchableOpacity>
 
@@ -119,7 +119,7 @@ function Relatorio_Diaria() {
                         style={styles.card}
                         onPress={() => setModalMaisVendidosAberto(true)}
                     >
-                        <MaterialIcons name="attach-money" size={30} color="black" />
+                        <MaterialIcons name="attach-money" size={28} color="black" />
                         <Text style={styles.cardTitle}>Itens mais vendidos</Text>
                     </TouchableOpacity>
 
@@ -225,7 +225,6 @@ function Relatorio_Diaria() {
                             <Text style={styles.closeButtonText}>Fechar</Text>
                         </TouchableOpacity>
 
-                        {/* Modal interno */}
                         <Modal
                             animationType="slide"
                             transparent={true}

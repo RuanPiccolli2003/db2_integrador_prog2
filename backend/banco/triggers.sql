@@ -1,5 +1,4 @@
-CREATE TRIGGER trigger_verificar_data_fechamento
-BEFORE UPDATE ON comanda
+CREATE TRIGGER trigger_log_status_pedido
+AFTER UPDATE ON pedido
 FOR EACH ROW
-WHEN (NEW.data_fechamento IS NOT NULL)  -- Checa apenas quando a data de fechamento é atualizada
-EXECUTE FUNCTION verificar_data_fechamento();
+EXECUTE FUNCTION log_alteracao_status_pedido();

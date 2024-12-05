@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, FlatList, Button, StyleSheet, Modal, TouchableOpacity, Animated } from 'react-native';
 import axios from 'axios';
 import { meuIPv4 } from './index';
-import { dominioAzure} from './index';
+import { dominioAzure } from './index';
 import { TextInput } from 'react-native-gesture-handler';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 
@@ -16,6 +16,8 @@ const VisualizarComandaCompleta = () => {
     const [modalVisible, setModalVisivel] = useState(false);
     const [pedidoSelecionado, setPedidoSelecionado] = useState(null);
     const [paginaAtual, setPaginaAtual] = useState(1);
+    const [logControlePedidosStatus, setLogControlePedidosStatus] = useState([]);
+    const [modalLog, setModalLog] = useState([]);
     const navigation = useNavigation();
     const route = useRoute();
     const { id_comanda: comandaId } = route.params || {};
@@ -150,6 +152,17 @@ const VisualizarComandaCompleta = () => {
         }
     };
 
+    const controlePedidoStatus = async (id_pedido) => {
+        if (id_pedido) {
+            try {
+                const response = await axios.get(`${dominioAzure}/logpedidostatusPedido/${id_pedido}`);
+                setLogControlePedidosStatus(response.data);
+            } catch (error) {
+                console.error('Erro ao buscar o log de controle de status do pedido:', error);
+            }
+        }
+    };
+
     const ultimoPedido = paginaAtual * pedidosPorPagina;
     const primeiroPedido = ultimoPedido - pedidosPorPagina;
     const pedidosPaginaAtual = pedidosBarraDePesquisa.slice(primeiroPedido, ultimoPedido);
@@ -254,7 +267,39 @@ const VisualizarComandaCompleta = () => {
                                     });
                                 }}
                             />
-                             <Button
+                            <Button
+                                title="Controle Pedido"
+                                onPress={() => {
+                                    controlePedidoStatus(pedidoSelecionado?.id_pedido);
+                                    setModalLog(true);
+                                }}
+                            />
+                            <Modal
+                                visible={modalLog}
+                                animationType="slide"
+                                transparent={true}
+                                onRequestClose={() => setModalLog(false)}
+                            >
+                                <View style={styles.modalOverlay}>
+                                    <View style={styles.modalContent}>
+                                        <Text>Log de Controle de Status:</Text>
+                                        <FlatList
+                                            data={logControlePedidosStatus}
+                                            keyExtractor={(item, index) => index.toString()}
+                                            renderItem={({ item }) => (
+                                                <View style={{ padding: 5 }}>
+                                                    <Text>Status Anterior: {item.status_anterior}</Text>
+                                                    <Text>Status Atual: {item.status_novo}</Text>
+                                                    <Text>Data de Alteração: {new Date(item.data_alteracao).toLocaleString()}</Text>
+                                                </View>
+                                            )}
+                                        />
+                                        <Button title="Fechar" onPress={() => setModalLog(false)} />
+                                    </View>
+                                </View>
+                            </Modal>
+
+                            <Button
                                 title="Cancelar Pedido"
                                 onPress={() => alterarPedidoParaCancelado(pedidoSelecionado?.id_pedido)}
                             />

@@ -12,6 +12,8 @@ import comanda from "./Controller/ComandaController.js"
 
 import pedido from "./Controller/PedidoController.js"
 
+import log_pedido_status from "./Controller/LogPedidoStatusController.js";
+
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -92,6 +94,10 @@ app.get("/pedidoOrdenCopa", pedido.buscarPedidosProduzindoCopa);
 app.get("/pedidoOrdenCozinha", pedido.buscarPedidosProduzindoCozinha);
 app.get("/pedidoBuscarAtrasado", pedido.BuscarPedidosAtrasados);
 app.get("/pedidoBuscarTotalVendidoQuantidade", pedido.BuscarTotalVendidoQuantidade);
+
+app.get("/logpedidostatus", log_pedido_status.listar);
+app.get("/logpedidostatus/:id_log", log_pedido_status.selecionar);
+app.get("/logpedidostatusPedido/:id_pedido", log_pedido_status.BuscarPorIdPedido);
 
 
 app.listen(PORT, () => {
