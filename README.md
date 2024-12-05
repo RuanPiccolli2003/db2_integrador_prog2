@@ -36,3 +36,5 @@ PORT =
 8 - Ao gerar a BUILD deve ter certeza que em app/index.jsx está definido a URL do servidor para conseguir fazer as requisiçoes do frontend para o backend.
 
 8 - Para verificar as requisições através do insominia para o backend, no caminho backend>ImportarRequisicaoInsominia.json e importar para o insominia para realizar os testes. Está definido em localhost basta alterar para a URL-DOMINIO/Requisição.
+
+9 - No diretório backend de o comando npm run migrate para criar as tabelas e demais funções por migração.

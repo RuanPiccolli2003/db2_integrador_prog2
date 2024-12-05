@@ -11,7 +11,7 @@ const config = UsarBancoDeDadosAzure
       password: process.env.DB_AZURE_PASSWORD,
       host: process.env.DB_AZURE_HOST,
       port: process.env.DB_AZURE_PORT,
-      dialect: process.env.DB_AZURE_DIALECT,
+      dialect: process.env.DB_AZURE_DIALECT || 'postgres',
       timezone: '-06:00',
       dialectOptions: {
         ssl: {
@@ -26,7 +26,7 @@ const config = UsarBancoDeDadosAzure
       password: process.env.DB_PASSWORD,
       host: process.env.DB_HOST,
       port: process.env.PGPORT,
-      dialect: process.env.DB_DIALECT,
+      dialect: process.env.DB_DIALECT || 'postgres',
     };
 
 const conexao = new Sequelize(

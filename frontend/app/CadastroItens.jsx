@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     borderRadius: 8,
     justifyContent: "center",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "gray",
   },
   buttonSelected: {
     backgroundColor: "#007bff",
