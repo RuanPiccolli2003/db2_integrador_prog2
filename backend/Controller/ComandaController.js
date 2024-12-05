@@ -94,30 +94,24 @@ async function excluir(req, res) {
 }
 
 async function fecharComanda(req, res) {
-
     if (!req.body.id_usuario) {
-        res.status(500).send("Parametro Id comanda é obrigatório.");
+        return res.status(500).send("Parametro Id comanda é obrigatório.");
     }
-
     if (!req.body.data_fechamento) {
         req.body.data_fechamento = new Date();
     }
 
-    await comanda
-        .update({
-            id_usuario: req.body.id_usuario,
-            status: req.body.status = 'Fechada',
-            data_fechamento: req.body.data_fechamento,
-        },
-            {
-                where: {
-                    id_comanda: req.params.id_comanda
-                }
-            })
-        .then(resultado => { res.status(200).json(resultado) })
-        .catch(erro => { res.status(500).json(erro) });
+    try {
+        await conexao.query('CALL fechar_comanda(:id_comanda)', {
+            replacements: { id_comanda: req.params.id_comanda },
+            type: Sequelize.QueryTypes.RAW
+        });
+        res.status(200).json({ message: 'Comanda fechada com sucesso!' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erro ao fechar a comanda', details: error.message });
+    }
 }
-
 async function listarComandaDetalhada(req, res) {
     const id_comanda = req.params.id_comanda;
 
