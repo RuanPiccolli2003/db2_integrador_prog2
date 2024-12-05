@@ -12,6 +12,8 @@ import comanda from "./Controller/ComandaController.js"
 
 import pedido from "./Controller/PedidoController.js"
 
+import log_pedido_status from "./Controller/LogPedidoStatusController.js";
+
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -69,6 +71,9 @@ app.get("/itemcardapio/:id_item", item_cardapio.selecionar);
 app.post("/itemcardapio", item_cardapio.criar);
 app.put("/itemcardapio/:id_item", item_cardapio.alterar);
 app.delete("/itemcardapio/:id_item", item_cardapio.excluir);
+app.get("/itemcardapioItensMaisVendido", item_cardapio.ItensMaisVendidos);
+app.get("/itemcardapioItensMaisVendidosDiario", item_cardapio.ItensMaisVendidosDiário);
+app.get("/itemcardapioItensMaisVendidosPorIntervalo", item_cardapio.ItensMaisVendidosPorIntervalo);
 
 app.get("/comanda", comanda.listar);
 app.get("/comanda/:id_comanda", comanda.selecionar);
@@ -78,7 +83,8 @@ app.delete("/comanda/:id_comanda", comanda.excluir);
 app.put("/comanda/fecharcomanda/:id_comanda", comanda.fecharComanda);
 app.get("/comandadetalhes/:id_comanda", comanda.listarComandaDetalhada);
 app.get("/comandaBuscarAbertaFechadaHoje", comanda.BuscarTotalComandasAbertasFechadas);
-
+// dk: Nova rota para listar itens válidos de uma comanda e calcular o total 
+app.get("/comanda/validos/:id_comanda", comanda.listarComandaValida);
 
 app.get("/pedido", pedido.listar);
 app.get("/pedido/:id_pedido", pedido.selecionar);
@@ -89,6 +95,10 @@ app.get("/pedidoOrdenCopa", pedido.buscarPedidosProduzindoCopa);
 app.get("/pedidoOrdenCozinha", pedido.buscarPedidosProduzindoCozinha);
 app.get("/pedidoBuscarAtrasado", pedido.BuscarPedidosAtrasados);
 app.get("/pedidoBuscarTotalVendidoQuantidade", pedido.BuscarTotalVendidoQuantidade);
+
+app.get("/logpedidostatus", log_pedido_status.listar);
+app.get("/logpedidostatus/:id_log", log_pedido_status.selecionar);
+app.get("/logpedidostatusPedido/:id_pedido", log_pedido_status.BuscarPorIdPedido);
 
 
 app.listen(PORT, () => {
