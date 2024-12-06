@@ -17,7 +17,6 @@ import VisualizarComandaCompleta from './VisualizarComandaCompleta'
 import { Box, Button, NativeBaseProvider } from 'native-base';
 import AlterarItensComanda from './AlterarPedidoComanda';
 import TelaHome from './Home';
-// 3 horas para descobrir como deixar os menus ocultos PQP
 
 function Home() {
   return (

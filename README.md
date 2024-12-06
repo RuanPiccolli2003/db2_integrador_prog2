@@ -39,3 +39,7 @@ PORT =
 8 - Para verificar as requisições através do insominia para o backend, no caminho backend>ImportarRequisicaoInsominia.json e importar para o insominia para realizar os testes. Está definido em localhost basta alterar para a URL-DOMINIO/Requisição.
 
 9 - No diretório backend de o comando npm run migrate para criar as tabelas e demais funções por migração.
+
+10 - Na pasta raiz possui o arquivo integrador_restaurante.apk para instalar no emulador ou celular android para testar basta habilitar instalação de aplicativos de fora da Play Store. Ativado até 15/12/2024 o servidor.
+
+

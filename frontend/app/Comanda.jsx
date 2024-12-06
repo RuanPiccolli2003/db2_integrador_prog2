@@ -39,7 +39,7 @@ const ComandaPrincipal = () => {
         });
 
         return () => focusListener();
-    }, [navigation]); //Tem que escrever código até para o programa lembrar que tem que usar os botao pqp
+    }, [navigation]); 
 
 
 
@@ -60,7 +60,7 @@ const ComandaPrincipal = () => {
         });
 
         return focusListener;
-    }, [navigation]); // Para quando clicar e sair da pagina ele funcione novamente os botoes e não fique travado o modal no expo, porco dio nene que tem que ajustar até o reset dos botao
+    }, [navigation]);
 
 
 

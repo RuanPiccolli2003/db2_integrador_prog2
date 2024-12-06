@@ -7,7 +7,6 @@ import axios from 'axios';
 import { dominioAzure} from './index';
 
 
-//Consultas está funcionando para comandas, mas os demais está com problema por conta do fuso horario
 
 function TelaHome() {
   const navigation = useNavigation();
@@ -75,10 +74,6 @@ function TelaHome() {
       console.error('Erro ao buscar total de valores e quantidades por periodo:', error);
     }
   };
-
-
-    //DAQUI PRA BAIXO É APENAS TESTES PARA APARECER NA PAGINA INICIAL, SÓ PARA VER COMO FICAVA KKKKKKKKKKKKKKK 
-
 
   async function buscarOutrosDados() {
     const data = {
