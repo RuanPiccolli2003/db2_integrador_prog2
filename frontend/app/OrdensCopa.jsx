@@ -235,8 +235,8 @@ const Ordens_Copa = () => {
                         >
 
                             <Text>Pedido: {item.id_pedido}</Text>
+                            <Text>Comanda: {item.id_comanda}</Text>
                             <Text>Status: {item.status}</Text>
-                            <Text>Destino: {item.destino}</Text>
                             <Text>Item: {item.nome_item}</Text>
                             <Text>Quantidade: {`${item.quantidade} Unidade(s)`}</Text>
                             <Text>Total do Pedido: {`R$ ${item.somaprecototal}`}</Text>

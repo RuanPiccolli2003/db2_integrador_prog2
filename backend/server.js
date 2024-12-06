@@ -83,6 +83,7 @@ app.delete("/comanda/:id_comanda", comanda.excluir);
 app.put("/comanda/fecharcomanda/:id_comanda", comanda.fecharComanda);
 app.get("/comandadetalhes/:id_comanda", comanda.listarComandaDetalhada);
 app.get("/comandaBuscarAbertaFechadaHoje", comanda.BuscarTotalComandasAbertasFechadas);
+app.get("/comandaBuscarTotalValorComanda", comanda.BuscarTotalValorComanda);
 
 
 app.get("/pedido", pedido.listar);

@@ -164,9 +164,6 @@ async function BuscarTotalComandasAbertasFechadas(req, res) {
 	) AS comandas_fechadas
 from comanda;       
     `;
-
-    
-
     try {
         const [resultados] = await conexao.query(query);
         res.status(200).json(resultados);
@@ -175,5 +172,36 @@ from comanda;
     }
 }
 
+async function BuscarTotalValorComanda(req, res) {
+    const { id_comanda } = req.query;
 
-export default { listarComandaDetalhada, listar, selecionar, criar, alterar, excluir, fecharComanda, BuscarTotalComandasAbertasFechadas };
+    const query = `
+        SELECT
+            comanda.id_comanda AS id_da_comanda, 
+            pedido.id_pedido, 
+            item_cardapio.nome AS nome_do_item, 
+            pedido.quantidade, 
+            pedido.somaprecototal AS total_do_pedido, 
+            SUM(pedido.somaprecototal) OVER (PARTITION BY comanda.id_comanda) AS total_da_comanda 
+        FROM
+            comanda
+        JOIN
+            pedido ON comanda.id_comanda = pedido.id_comanda
+        JOIN
+            item_cardapio ON pedido.id_item = item_cardapio.id_item
+        WHERE
+            pedido.status IN ('Produzindo', 'Pronto', 'Entregue') 
+            AND comanda.id_comanda = $1
+        ORDER BY
+            pedido.id_pedido;
+    `;
+
+    try {
+        const [resultados] = await conexao.query(query, {bind: [id_comanda]});
+        res.status(200).json(resultados);
+    } catch (erro) {
+        res.status(500).json({ message: 'Erro ao buscar comandas', error: erro.message });
+    }
+}
+
+export default { listarComandaDetalhada, listar, selecionar, criar, alterar, excluir, fecharComanda, BuscarTotalComandasAbertasFechadas, BuscarTotalValorComanda };

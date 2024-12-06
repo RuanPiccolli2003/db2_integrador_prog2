@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Modal, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
-import { meuIPv4 } from './index';
-import { dominioAzure} from './index';
+import { dominioAzure } from './index';
+import { useFocusEffect } from 'expo-router';
 
 const FecharComanda = () => {
   const [id_usuario, setId_usuario] = useState('');
@@ -11,7 +11,10 @@ const FecharComanda = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigation = useNavigation();
-
+  const [modalBuscarDetalhesComanda, setModalBuscarDetalhesComanda] = useState(false);
+  const [valorTotalComanda, setValorTotalComanda] = useState(0);
+  const [total_da_comanda, setTotal_da_comanda] = useState('');
+  const [pedidosComanda, setPedidosComanda] = useState([]);
   const route = useRoute();
   const { id_comanda: comandaId } = route.params || {};
 
@@ -30,7 +33,27 @@ const FecharComanda = () => {
     return limparCampos;
   }, [navigation]);
 
+  const BuscarDetalhesComanda = async () => {
+    if (!comandaId) {
+      setError('Por favor, informe o ID da comanda');
+      return;
+    }
 
+    try {
+      const response = await axios.get(`${dominioAzure}/comandaBuscarTotalValorComanda`, {
+        params: { id_comanda: comandaId }
+      });
+      setValorTotalComanda(response.data);
+    } catch (error) {
+      console.error('Erro ao buscar valor total da comanda:', error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      BuscarDetalhesComanda();
+    }, [comandaId]) 
+  );
 
   const FecharComanda = async () => {
     if (!id_usuario) {
@@ -45,7 +68,6 @@ const FecharComanda = () => {
 
     setLoading(true);
     setError('');
-
 
     try {
       const response = await axios.put(`${dominioAzure}/comanda/fecharcomanda/${id_comanda}`, {
@@ -86,6 +108,46 @@ const FecharComanda = () => {
         onChangeText={setId_comanda}
       />
 
+      <TextInput
+        style={styles.input}
+        placeholder={`Valor Total: R$ ${valorTotalComanda[0]?.total_da_comanda || '0'}`}
+        keyboardType="numeric"
+        value={new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valorTotalComanda[0]?.total_da_comanda || 0)}
+        readOnly
+        onChangeText={() => { }}
+      />
+
+      <TouchableOpacity
+        onPress={() => setModalBuscarDetalhesComanda(true)}
+      >
+        <Text style={styles.input}>Abrir Pedidos</Text>
+      </TouchableOpacity>
+
+      <Modal
+        visible={modalBuscarDetalhesComanda}
+        animationType="slide"
+        transparente={true}
+        onRequestClose={() => setModalBuscarDetalhesComanda(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text>Pedidos</Text>
+            <FlatList
+              data={valorTotalComanda}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <View style={{ padding: 5 }}>
+                  <Text>Item: {item.nome_do_item}</Text>
+                  <Text>Quantidade: {item.quantidade}</Text>
+                  <Text>Total Pedido: {item.total_do_pedido}</Text>
+                </View>
+              )}
+            />
+            <Button title="Fechar" onPress={() => setModalBuscarDetalhesComanda(false)} />
+          </View>
+        </View>
+      </Modal>
+
       <Button
         title={loading ? 'Fechando Comanda...' : 'Fechar Comanda'}
         onPress={FecharComanda}
@@ -99,7 +161,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: 'white' 
+    backgroundColor: 'white'
   },
   title: {
     fontSize: 24,
@@ -119,6 +181,19 @@ const styles = StyleSheet.create({
     color: 'red',
     marginBottom: 8,
     textAlign: 'center',
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+    alignItems: 'center',
   },
 });
 
