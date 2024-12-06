@@ -6,7 +6,7 @@ import { Link, router, useNavigation } from 'expo-router';
 import styles from './Design/Estilos'; 
 import Cadastro_Usuarios from './CadastroUsuarios.jsx'
 
-export const dominioAzure = 'http://localhost:3000';
+export const dominioAzure = 'https://homologacaointegradorbdprog2-abe3hvc4brc2gydp.brazilsouth-01.azurewebsites.net';
 
 function Login() {
   const [email, setEmail] = useState('');

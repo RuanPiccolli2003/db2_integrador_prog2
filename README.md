@@ -20,6 +20,7 @@ DB_AZURE_DIALECT = 'postgres'
 DB_AZURE_SSL = 'true'
 
 USAR_BD_AZURE='false' // ou true se tiver o BD Azure Postgres
+NODE_ENV=production ou development para indicar qual banco vai ser utilizado a migração.
 
 PORT = 
 
