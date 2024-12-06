@@ -12,6 +12,7 @@ import AbrirComanda from './AbrirComanda';
 import AdicionarItensComanda from './AdicionarItensComanda';
 import FecharComanda from './FecharComanda';
 import ComandaPrincipal from './Comanda';
+import ComandaPrincipalFechada from './ComandaFechadas';
 import Login from './index';
 import VisualizarComandaCompleta from './VisualizarComandaCompleta'
 import { Box, Button, NativeBaseProvider } from 'native-base';
@@ -47,6 +48,7 @@ function Home() {
       >
         <Drawer.Screen name='Menu Principal' component={TelaHome} />
         <Drawer.Screen name='Gerenciar Comandas Abertas' component={ComandaPrincipal} />
+        <Drawer.Screen name='Comandas Fechadas' component={ComandaPrincipalFechada} />
 
         <Drawer.Screen
           name='Visualizar Comanda Completa'
